@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'war'
+    id "io.freefair.lombok" version "5.2.1"
 }
 
 group 'com.epam'
@@ -23,4 +24,5 @@ dependencies {
     implementation 'javax.servlet:javax.servlet-api:3.0.1'
 
     implementation project(':core')
+    implementation project(':api')
 }
