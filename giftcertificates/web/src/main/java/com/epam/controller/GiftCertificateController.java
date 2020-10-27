@@ -3,6 +3,7 @@ package com.epam.controller;
 import com.epam.entity.GiftCertificate;
 import com.epam.model.GiftCertificateModel;
 import com.epam.model.GiftCertificateModelForCreate;
+import com.epam.model.SortParams;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,26 @@ public class GiftCertificateController {
 
     @DeleteMapping("/certificate/delete/{id}")
     public ResponseEntity<Boolean> certificateDelete(@PathVariable Integer id) {
+        return null;
+    }
+
+    @GetMapping("/certificate/show-by-tag-name/{tagName}")
+    public ResponseEntity<List<GiftCertificate>> certificateShowByTagName(@PathVariable String tagName) {
+        return null;
+    }
+
+    @GetMapping("/certificate/show-by-part-name/{partName}/{partDescription}")
+    public ResponseEntity<GiftCertificate> certificateShowByPartName(
+            @PathVariable String partName,
+            @PathVariable String partDescription
+    ) {
+        return null;
+    }
+
+    @GetMapping("/certificate/sort-by")
+    public ResponseEntity<List<GiftCertificate>> certificateSortBy(
+            @RequestBody SortParams sortParams
+    ) {
         return null;
     }
 
