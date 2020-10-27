@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'war'
     id "io.freefair.lombok" version "5.2.1"
+    id "com.github.sahara3.tomcat-runner" version "0.2.1"
 }
 
 group 'com.epam'

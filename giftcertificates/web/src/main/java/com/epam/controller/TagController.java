@@ -1,5 +1,7 @@
 package com.epam.controller;
 
+import com.epam.service.TagService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.epam.entity.Tag;
@@ -7,7 +9,10 @@ import com.epam.entity.Tag;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class TagController {
+
+    private final TagService tagService;
 
     @PutMapping("/tag/create/{name}")
     public ResponseEntity<Boolean> tagCreate(@PathVariable String name) {
@@ -21,6 +26,6 @@ public class TagController {
 
     @GetMapping("/tag/show-all")
     public ResponseEntity<List<Tag>> showAll() {
-        return null;
+        return ResponseEntity.ok(tagService.findAll());
     }
 }
