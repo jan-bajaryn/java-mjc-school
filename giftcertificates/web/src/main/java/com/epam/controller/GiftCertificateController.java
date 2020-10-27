@@ -3,7 +3,7 @@ package com.epam.controller;
 import com.epam.entity.GiftCertificate;
 import com.epam.model.GiftCertificateModel;
 import com.epam.model.GiftCertificateModelForCreate;
-import com.epam.model.SortParams;
+import com.epam.model.sort.SortParams;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.epam.model;
+package com.epam.model.sort;
 
 import com.epam.model.sort.FieldName;
 import lombok.Data;
