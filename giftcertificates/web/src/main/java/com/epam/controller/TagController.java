@@ -16,12 +16,12 @@ public class TagController {
 
     @PutMapping("/tag/create/{name}")
     public ResponseEntity<Boolean> tagCreate(@PathVariable String name) {
-        return null;
+        return ResponseEntity.ok(tagService.createByName(name));
     }
 
     @DeleteMapping("/tag/delete/{id}")
-    public ResponseEntity<Boolean> tagDelete(@PathVariable Integer id) {
-        return null;
+    public ResponseEntity<Boolean> tagDelete(@PathVariable Long id) {
+        return ResponseEntity.ok(tagService.deleteById(id));
     }
 
     @GetMapping("/tag/show-all")
