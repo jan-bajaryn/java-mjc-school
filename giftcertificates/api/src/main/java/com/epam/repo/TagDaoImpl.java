@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class TagDao {
+public class TagDaoImpl implements TagDao {
 
     private static final String FIND_ALL = "SELECT id,name FROM tag;";
 

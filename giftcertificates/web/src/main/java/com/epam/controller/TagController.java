@@ -1,10 +1,10 @@
 package com.epam.controller;
 
+import com.epam.entity.Tag;
 import com.epam.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.epam.entity.Tag;
 
 import java.util.List;
 
