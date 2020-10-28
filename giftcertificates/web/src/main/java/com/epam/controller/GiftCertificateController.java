@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class GiftCertificateController {
 
-    @PutMapping("/certificate/create")
+    @PostMapping("/certificate/create")
     public ResponseEntity<Boolean> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
@@ -24,7 +24,7 @@ public class GiftCertificateController {
         return null;
     }
 
-    @PostMapping("/certificate/update")
+    @PutMapping("/certificate/update")
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         return null;
     }
@@ -40,7 +40,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/certificate/show-by-part-name/{partName}/{partDescription}")
-    public ResponseEntity<GiftCertificate> certificateShowByPartName(
+    public ResponseEntity<List<GiftCertificate>> certificateShowByPartName(
             @PathVariable String partName,
             @PathVariable String partDescription
     ) {

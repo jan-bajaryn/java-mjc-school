@@ -16,6 +16,7 @@ import java.util.List;
 public class GiftCertificate {
 
     private Long id;
+    private String name;
     private String description;
     private BigDecimal price;
     private LocalDateTime createDate;

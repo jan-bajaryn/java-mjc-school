@@ -16,7 +16,7 @@ CREATE TABLE gift_certificate
     price          decimal,
     createDate     datetime,
     lastUpdateDate datetime,
-    Duration       int,
+    duration       int,
     CONSTRAINT pk_gift_certificate PRIMARY KEY (id)
 );
 

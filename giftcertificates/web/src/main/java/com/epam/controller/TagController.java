@@ -14,7 +14,7 @@ public class TagController {
 
     private final TagService tagService;
 
-    @PutMapping("/tag/create/{name}")
+    @PostMapping("/tag/create/{name}")
     public ResponseEntity<Boolean> tagCreate(@PathVariable String name) {
         return ResponseEntity.ok(tagService.createByName(name));
     }
