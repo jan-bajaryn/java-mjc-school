@@ -10,36 +10,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/certificate")
 public class GiftCertificateController {
 
-    @PostMapping("/certificate/create")
+    @PostMapping("/create")
     public ResponseEntity<Boolean> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
         return null;
     }
 
-    @GetMapping("/certificate/showAll")
+    @GetMapping("/")
     public ResponseEntity<List<GiftCertificate>> certificateShowAll() {
         return null;
     }
 
-    @PutMapping("/certificate/update")
+    @PutMapping("/update")
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         return null;
     }
 
-    @DeleteMapping("/certificate/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> certificateDelete(@PathVariable Integer id) {
         return null;
     }
 
-    @GetMapping("/certificate/show-by-tag-name/{tagName}")
+    @GetMapping("/show-by-tag-name/{tagName}")
     public ResponseEntity<List<GiftCertificate>> certificateShowByTagName(@PathVariable String tagName) {
         return null;
     }
 
-    @GetMapping("/certificate/show-by-part-name/{partName}/{partDescription}")
+    @GetMapping("/show-by-part-name/{partName}/{partDescription}")
     public ResponseEntity<List<GiftCertificate>> certificateShowByPartName(
             @PathVariable String partName,
             @PathVariable String partDescription
@@ -47,7 +48,7 @@ public class GiftCertificateController {
         return null;
     }
 
-    @GetMapping("/certificate/sort-by")
+    @GetMapping("/sort-by")
     public ResponseEntity<List<GiftCertificate>> certificateSortBy(
             @RequestBody SortParams sortParams
     ) {

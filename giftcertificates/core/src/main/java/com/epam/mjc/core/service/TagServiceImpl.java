@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,11 @@ public class TagServiceImpl implements TagService {
         }
 
         return tagDao.delete(Tag.builder().id(id).build());
+    }
+
+    @Override
+    public Optional<Tag> findById(Long id) {
+        return tagDao.findById(id);
     }
 
 }
