@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'java-library'
     id "io.freefair.lombok" version "5.2.1"
 }
 
@@ -15,6 +16,5 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    implementation 'org.springframework:spring-context:5.0.5.RELEASE'
-
+    api "org.springframework:spring-context:${springVersion}"
 }
