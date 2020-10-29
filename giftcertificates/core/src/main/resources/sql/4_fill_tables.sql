@@ -1,4 +1,4 @@
-use giftcertificates;
+\connect giftcertificates;
 
 INSERT INTO tag(id, name)
 values (1, 'Antoshka'),
