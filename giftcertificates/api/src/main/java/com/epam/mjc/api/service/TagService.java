@@ -16,7 +16,9 @@ public interface TagService {
 
     List<Tag> findAllByGiftCertificateId(Long id);
 
-    List<Tag> saveAll(List<Tag> tags);
+    List<Tag> findOrCreateAll(List<Tag> tags);
 
-    Tag save(Tag tag);
+    Tag findOrCreate(Tag tag);
+
+    Optional<Tag> findByTagName(String name);
 }

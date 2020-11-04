@@ -44,7 +44,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificate create(GiftCertificate giftCertificate) {
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
-        tagService.saveAll(created.getTags());
+        tagService.findOrCreateAll(created.getTags());
         for (Tag tag : created.getTags()) {
             giftCertificateDao.addTag(giftCertificate, tag);
         }

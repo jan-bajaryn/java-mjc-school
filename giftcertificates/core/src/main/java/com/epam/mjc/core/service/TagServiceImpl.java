@@ -57,19 +57,21 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> saveAll(List<Tag> tags) {
+    public List<Tag> findOrCreateAll(List<Tag> tags) {
         return tags.stream()
-                .map(this::save)
+                .map(this::findOrCreate)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Tag save(Tag tag) {
-        if (tag.getId() == null) {
-            return createByName(tag.getName());
-        } else {
-            return tag;
-        }
+    public Tag findOrCreate(Tag tag) {
+        Optional<Tag> byTagName = findByTagName(tag.getName());
+        return byTagName.orElseGet(() -> createByName(tag.getName()));
+    }
+
+    @Override
+    public Optional<Tag> findByTagName(String name) {
+        return tagDao.findByTagName(name);
     }
 
 }

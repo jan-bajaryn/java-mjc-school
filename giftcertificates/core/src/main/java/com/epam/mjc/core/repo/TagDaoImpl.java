@@ -30,6 +30,7 @@ public class TagDaoImpl implements TagDao {
     private static final String FIND_BY_ID_SQL = "SELECT id,name FROM tag WHERE id=?";
     private static final String ID = "id";
     private static final String FIND_BY_CERTIFICATE_ID = "SELECT tag.id, tag.name FROM tag INNER JOIN gift_certificate_tag ON tag.id = gift_certificate_tag.tag_id WHERE gift_certificate_id = ?;";
+    private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name = ?;";
 
     private final JdbcTemplate template;
     private final RowMapper<Tag> rowMapper;
@@ -79,5 +80,11 @@ public class TagDaoImpl implements TagDao {
     @Override
     public List<Tag> findAllByGiftCertificateId(Long id) {
         return template.query(FIND_BY_CERTIFICATE_ID, new Object[]{id}, rowMapper);
+    }
+
+    @Override
+    public Optional<Tag> findByTagName(String name) {
+        Tag tag = template.queryForObject(FIND_BY_TAG_NAME, new Object[]{name}, rowMapper);
+        return Optional.ofNullable(tag);
     }
 }
