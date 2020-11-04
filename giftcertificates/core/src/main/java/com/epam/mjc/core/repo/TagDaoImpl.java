@@ -3,6 +3,8 @@ package com.epam.mjc.core.repo;
 import com.epam.mjc.api.entity.Tag;
 import com.epam.mjc.api.repo.TagDao;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -22,10 +24,13 @@ public class TagDaoImpl implements TagDao {
     private final JdbcTemplate template;
     private final RowMapper<Tag> rowMapper;
 
+    private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
 
     @Override
     public List<Tag> findAll() {
-        return template.query(FIND_ALL_SQL, rowMapper);
+        List<Tag> query = template.query(FIND_ALL_SQL, rowMapper);
+        log.debug("findAll: query = {}", query);
+        return query;
     }
 
     @Override

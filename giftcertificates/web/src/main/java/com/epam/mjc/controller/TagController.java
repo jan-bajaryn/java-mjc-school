@@ -26,7 +26,7 @@ public class TagController {
         return ResponseEntity.ok(tagService.deleteById(id));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Tag>> showAll() {
         return ResponseEntity.ok(tagService.findAll());
     }
