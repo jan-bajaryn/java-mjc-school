@@ -1,9 +1,12 @@
 package com.epam.mjc.controller;
 
 import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.model.GiftCertificateModel;
 import com.epam.mjc.model.GiftCertificateModelForCreate;
+import com.epam.mjc.model.mapper.GiftCertificateMapper;
 import com.epam.mjc.model.sort.SortParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +16,34 @@ import java.util.List;
 @RequestMapping("/certificate")
 public class GiftCertificateController {
 
-    @PostMapping("/create")
-    public ResponseEntity<Boolean> certificateCreate(
-            @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
-    ) {
-        return null;
+    private final GiftCertificateService giftCertificateService;
+    private final GiftCertificateMapper giftCertificateMapper;
+
+    @Autowired
+    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateMapper giftCertificateMapper) {
+        this.giftCertificateService = giftCertificateService;
+        this.giftCertificateMapper = giftCertificateMapper;
     }
 
-    @GetMapping("/")
+    @PostMapping("/create")
+    public ResponseEntity<GiftCertificate> certificateCreate(
+            @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
+    ) {
+        return ResponseEntity.ok(
+                giftCertificateService.create(
+                        giftCertificateMapper.toGiftCertificate(giftCertificateModelForCreate)
+                )
+        );
+    }
+
+    @GetMapping
     public ResponseEntity<List<GiftCertificate>> certificateShowAll() {
-        return null;
+        return ResponseEntity.ok(giftCertificateService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GiftCertificate> showById(@PathVariable Long id) {
+        return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
     @PutMapping("/update")
@@ -31,8 +52,8 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> certificateDelete(@PathVariable Integer id) {
-        return null;
+    public ResponseEntity<Boolean> certificateDelete(@PathVariable Long id) {
+        return ResponseEntity.ok(giftCertificateService.deleteById(id));
     }
 
     @GetMapping("/show-by-tag-name/{tagName}")

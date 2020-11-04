@@ -3,6 +3,8 @@ package com.epam.mjc.controller;
 import com.epam.mjc.api.entity.Tag;
 import com.epam.mjc.api.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,11 @@ public class TagController {
 
     private final TagService tagService;
 
+    private static final Logger log = LoggerFactory.getLogger(TagController.class);
+
     @PostMapping("/create/{name}")
-    public ResponseEntity<Boolean> tagCreate(@PathVariable String name) {
+    public ResponseEntity<Tag> tagCreate(@PathVariable String name) {
+        log.debug("tagCreate: name = {}", name);
         return ResponseEntity.ok(tagService.createByName(name));
     }
 

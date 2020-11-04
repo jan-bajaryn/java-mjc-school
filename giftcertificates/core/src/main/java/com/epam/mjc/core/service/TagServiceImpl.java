@@ -3,11 +3,15 @@ package com.epam.mjc.core.service;
 import com.epam.mjc.api.entity.Tag;
 import com.epam.mjc.api.repo.TagDao;
 import com.epam.mjc.api.service.TagService;
+import com.epam.mjc.core.service.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,17 +19,21 @@ public class TagServiceImpl implements TagService {
 
     private final TagDao tagDao;
 
+    private static final Logger log = LoggerFactory.getLogger(TagServiceImpl.class);
+
     @Override
     public List<Tag> findAll() {
         return tagDao.findAll();
     }
 
     @Override
-    public boolean createByName(String name) {
+    public Tag createByName(String name) {
+        log.debug("createByName entered");
         if (name == null) {
-            return false;
+            log.debug("name == null");
+            throw new ServiceException();
         }
-
+        log.debug("name != null");
         return tagDao.create(Tag.builder().name(name).build());
     }
 
@@ -41,6 +49,27 @@ public class TagServiceImpl implements TagService {
     @Override
     public Optional<Tag> findById(Long id) {
         return tagDao.findById(id);
+    }
+
+    @Override
+    public List<Tag> findAllByGiftCertificateId(Long id) {
+        return tagDao.findAllByGiftCertificateId(id);
+    }
+
+    @Override
+    public List<Tag> saveAll(List<Tag> tags) {
+        return tags.stream()
+                .map(this::save)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Tag save(Tag tag) {
+        if (tag.getId() == null) {
+            return createByName(tag.getName());
+        } else {
+            return tag;
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.epam.mjc.api.repo;
 
 import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.entity.Tag;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface GiftCertificateDao {
     List<GiftCertificate> findAllByTagName(String tagName);
 
     List<GiftCertificate> findAllByPartNameAndPartDescription(String partName, String partDescription);
+
+    boolean addTag(GiftCertificate giftCertificate, Tag tag);
 
     // TODO ADD SORTED BY
 }

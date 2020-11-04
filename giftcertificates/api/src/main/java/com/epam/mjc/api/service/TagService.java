@@ -8,9 +8,15 @@ import java.util.Optional;
 public interface TagService {
     List<Tag> findAll();
 
-    boolean createByName(String name);
+    Tag createByName(String name);
 
     boolean deleteById(Long id);
 
     Optional<Tag> findById(Long id);
+
+    List<Tag> findAllByGiftCertificateId(Long id);
+
+    List<Tag> saveAll(List<Tag> tags);
+
+    Tag save(Tag tag);
 }

@@ -1,16 +1,24 @@
 package com.epam.mjc.core.repo;
 
 import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.entity.Tag;
 import com.epam.mjc.api.repo.GiftCertificateDao;
-import com.epam.mjc.api.repo.exception.DaoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
@@ -20,8 +28,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String DELETE_SQL = "DELETE FROM gift_certificate WHERE id=?;";
     private static final String FIND_ALL_BY_TAG_NAME = "SELECT gift_certificate.id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id WHERE tag.name = ?;";
     private static final String FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name LIKE '%\\?%' AND description LIKE '%\\?%';";
-    private static final String CREATE_SQL = "INSERT INTO gift_certificate (id, name, description, price, createDate, lastUpdateDate, duration) VALUES (?,?,?,?,?,?,?);";
+    private static final String CREATE_SQL = "INSERT INTO gift_certificate (name, description, price, createDate, lastUpdateDate, duration) VALUES (?,?,?,?,?,?);";
     private static final String UPDATE_SQL = "UPDATE gift_certificate SET  name = ?, description = ?, price = ?, createDate = ?, lastUpdateDate = ?, duration = ? WHERE id = ?;";
+
+    private static final Logger log = LoggerFactory.getLogger(GiftCertificateDaoImpl.class);
+    private static final String ID = "id";
 
     private final JdbcTemplate template;
     private final RowMapper<GiftCertificate> rowMapper;
@@ -34,25 +45,30 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate) {
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        template.update(
-                CREATE_SQL,
-                giftCertificate.getId(),
-                giftCertificate.getName(),
-                giftCertificate.getDescription(),
-                giftCertificate.getPrice(),
-                giftCertificate.getCreateDate(),
-                giftCertificate.getLastUpdateDate()
-                , keyHolder
-        );
+        try {
+            template.update(connection -> {
+                PreparedStatement ps = connection
+                        .prepareStatement(CREATE_SQL, Statement.RETURN_GENERATED_KEYS);
 
-        Number key = keyHolder.getKey();
-        if (key != null) {
-            giftCertificate.setId(key.longValue());
-            return giftCertificate;
+                LocalDateTime now = LocalDateTime.now();
+
+                ps.setString(1, giftCertificate.getName());
+                ps.setString(2, giftCertificate.getDescription());
+                ps.setBigDecimal(3, giftCertificate.getPrice());
+                ps.setTimestamp(4, Timestamp.valueOf(now));
+                ps.setTimestamp(5, Timestamp.valueOf(now));
+                ps.setInt(6, giftCertificate.getDuration());
+                return ps;
+            }, keyHolder);
+        } catch (DataAccessException e) {
+            log.error("message: ", e);
         }
-        throw new DaoException();
+        giftCertificate.setId((Long) Objects.requireNonNull(keyHolder.getKeys().get(ID)));
+        return giftCertificate;
+
     }
 
     @Override
@@ -98,5 +114,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 new Object[]{partName, partDescription},
                 rowMapper
         );
+    }
+
+    @Override
+    public boolean addTag(GiftCertificate giftCertificate, Tag tag) {
+        int update = template.update("INSERT INTO gift_certificate_tag (tag_id, gift_certificate_id) VALUES (?,?);", tag.getId(), giftCertificate.getId());
+        return update != 0;
     }
 }

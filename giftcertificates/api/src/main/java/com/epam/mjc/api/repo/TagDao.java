@@ -8,9 +8,11 @@ import java.util.Optional;
 public interface TagDao {
     List<Tag> findAll();
 
-    boolean create(Tag tag);
+    Tag create(Tag tag);
 
     boolean delete(Tag tag);
 
     Optional<Tag> findById(Long id);
+
+    List<Tag> findAllByGiftCertificateId(Long id);
 }

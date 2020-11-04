@@ -1,7 +1,7 @@
 \c giftcertificates
 CREATE TABLE tag
 (
-    id   BIGSERIAL PRIMARY KEY ,
+    id   BIGSERIAL PRIMARY KEY,
     name varchar(100),
     CONSTRAINT uk_tag UNIQUE (name)
 );
@@ -9,7 +9,7 @@ CREATE TABLE tag
 \c giftcertificates
 CREATE TABLE gift_certificate
 (
-    id             BIGSERIAL PRIMARY KEY ,
+    id             BIGSERIAL PRIMARY KEY,
     name           varchar(255),
     description    varchar(500),
     price          decimal,
@@ -25,5 +25,5 @@ CREATE TABLE gift_certificate_tag
     tag_id              bigint,
     gift_certificate_id bigint,
     CONSTRAINT fk_tag_id FOREIGN KEY (tag_id) REFERENCES tag (id),
-    CONSTRAINT fk_gift_certificate_id FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate (id)
+    CONSTRAINT fk_gift_certificate_id FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate (id) ON DELETE CASCADE
 )
