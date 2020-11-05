@@ -2,7 +2,7 @@ package com.epam.mjc.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +16,16 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource("classpath:persistence.properties")
 @ComponentScan("com.epam.mjc")
-@RequiredArgsConstructor
 public class PersistenceConfig {
 
     private static final int MAX_POOL_SIZE = 50;
 
     private final Environment environment;
+
+    @Autowired
+    public PersistenceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource dataSource() {
