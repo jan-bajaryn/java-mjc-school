@@ -1,8 +1,8 @@
-package com.epam.mjc.core.repo;
+package com.epam.mjc.core.dao;
 
-import com.epam.mjc.api.entity.GiftCertificate;
-import com.epam.mjc.api.entity.Tag;
-import com.epam.mjc.api.repo.GiftCertificateDao;
+import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.dao.GiftCertificateDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

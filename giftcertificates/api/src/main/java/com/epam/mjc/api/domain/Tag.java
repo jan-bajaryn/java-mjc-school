@@ -1,4 +1,4 @@
-package com.epam.mjc.api.entity;
+package com.epam.mjc.api.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

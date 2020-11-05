@@ -1,9 +1,9 @@
 package com.epam.mjc.core.service;
 
-import com.epam.mjc.api.entity.Tag;
-import com.epam.mjc.api.repo.TagDao;
+import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.dao.TagDao;
 import com.epam.mjc.api.service.TagService;
-import com.epam.mjc.core.service.exception.ServiceException;
+import com.epam.mjc.api.service.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

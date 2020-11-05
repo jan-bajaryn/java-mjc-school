@@ -1,7 +1,7 @@
-package com.epam.mjc.core.repo;
+package com.epam.mjc.core.dao;
 
-import com.epam.mjc.api.entity.Tag;
-import com.epam.mjc.api.repo.TagDao;
+import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.dao.TagDao;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

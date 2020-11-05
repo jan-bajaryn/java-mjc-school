@@ -1,6 +1,6 @@
-package com.epam.mjc.core.repo.rowMapper;
+package com.epam.mjc.core.dao.rowMapper;
 
-import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.domain.GiftCertificate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

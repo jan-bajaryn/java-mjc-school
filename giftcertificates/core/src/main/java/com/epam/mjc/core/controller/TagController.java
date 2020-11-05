@@ -1,6 +1,6 @@
 package com.epam.mjc.core.controller;
 
-import com.epam.mjc.api.entity.Tag;
+import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

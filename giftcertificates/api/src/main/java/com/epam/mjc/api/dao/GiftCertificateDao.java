@@ -1,7 +1,7 @@
-package com.epam.mjc.api.repo;
+package com.epam.mjc.api.dao;
 
-import com.epam.mjc.api.entity.GiftCertificate;
-import com.epam.mjc.api.entity.Tag;
+import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.domain.Tag;
 
 import java.util.List;
 

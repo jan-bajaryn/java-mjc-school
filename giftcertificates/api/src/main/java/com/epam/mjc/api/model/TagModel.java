@@ -1,4 +1,4 @@
-package com.epam.mjc.core.controller.model;
+package com.epam.mjc.api.model;
 
 import lombok.Data;
 

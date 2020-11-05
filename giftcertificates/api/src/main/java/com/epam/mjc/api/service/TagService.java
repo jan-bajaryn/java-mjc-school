@@ -1,6 +1,6 @@
 package com.epam.mjc.api.service;
 
-import com.epam.mjc.api.entity.Tag;
+import com.epam.mjc.api.domain.Tag;
 
 import java.util.List;
 import java.util.Optional;

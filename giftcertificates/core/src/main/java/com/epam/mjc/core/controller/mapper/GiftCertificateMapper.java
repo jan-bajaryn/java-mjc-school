@@ -1,7 +1,7 @@
-package com.epam.mjc.core.controller.model.mapper;
+package com.epam.mjc.core.controller.mapper;
 
-import com.epam.mjc.api.entity.GiftCertificate;
-import com.epam.mjc.core.controller.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

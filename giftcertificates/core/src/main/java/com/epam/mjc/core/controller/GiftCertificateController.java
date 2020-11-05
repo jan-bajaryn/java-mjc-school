@@ -1,11 +1,11 @@
 package com.epam.mjc.core.controller;
 
-import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.service.GiftCertificateService;
-import com.epam.mjc.core.controller.model.GiftCertificateModel;
-import com.epam.mjc.core.controller.model.GiftCertificateModelForCreate;
-import com.epam.mjc.core.controller.model.mapper.GiftCertificateMapper;
-import com.epam.mjc.core.controller.model.sort.SortParams;
+import com.epam.mjc.api.model.GiftCertificateModel;
+import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.core.controller.mapper.GiftCertificateMapper;
+import com.epam.mjc.api.model.sort.SortParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

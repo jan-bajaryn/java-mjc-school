@@ -1,8 +1,8 @@
 package com.epam.mjc.core.service;
 
-import com.epam.mjc.api.entity.GiftCertificate;
-import com.epam.mjc.api.entity.Tag;
-import com.epam.mjc.api.repo.GiftCertificateDao;
+import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;

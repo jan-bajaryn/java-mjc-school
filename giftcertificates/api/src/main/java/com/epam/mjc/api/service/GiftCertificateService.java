@@ -1,6 +1,6 @@
 package com.epam.mjc.api.service;
 
-import com.epam.mjc.api.entity.GiftCertificate;
+import com.epam.mjc.api.domain.GiftCertificate;
 
 import java.util.List;
 
