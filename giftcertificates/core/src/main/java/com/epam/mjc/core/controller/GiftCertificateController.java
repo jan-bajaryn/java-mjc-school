@@ -50,7 +50,7 @@ public class GiftCertificateController {
 
     @PutMapping
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
-        return null;
+        return ResponseEntity.ok(giftCertificateService.update(giftCertificateMapper.toGiftCertificate(giftCertificateModel)));
     }
 
     @DeleteMapping("/{id}")

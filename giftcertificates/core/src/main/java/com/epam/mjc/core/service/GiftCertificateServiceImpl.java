@@ -56,6 +56,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return giftCertificateDao.delete(GiftCertificate.builder().id(id).build());
     }
 
+    @Override
+    public boolean update(GiftCertificate toGiftCertificate) {
+        // TODO REALIZE
+        return false;
+    }
+
     private void buildAllRelations(List<GiftCertificate> all) {
         for (GiftCertificate giftCertificate : all) {
             buildRelations(giftCertificate);

@@ -12,4 +12,6 @@ public interface GiftCertificateService {
     GiftCertificate create(GiftCertificate giftCertificate);
 
     boolean deleteById(Long id);
+
+    boolean update(GiftCertificate toGiftCertificate);
 }
