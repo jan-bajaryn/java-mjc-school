@@ -7,6 +7,7 @@ import com.epam.mjc.model.GiftCertificateModelForCreate;
 import com.epam.mjc.model.mapper.GiftCertificateMapper;
 import com.epam.mjc.model.sort.SortParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +30,11 @@ public class GiftCertificateController {
     public ResponseEntity<GiftCertificate> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
-        return ResponseEntity.ok(
+        return new ResponseEntity<>(
                 giftCertificateService.create(
                         giftCertificateMapper.toGiftCertificate(giftCertificateModelForCreate)
-                )
+                ),
+                HttpStatus.CREATED
         );
     }
 

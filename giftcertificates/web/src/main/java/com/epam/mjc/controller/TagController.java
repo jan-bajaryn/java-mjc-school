@@ -5,6 +5,7 @@ import com.epam.mjc.api.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class TagController {
     @PostMapping("/create/{name}")
     public ResponseEntity<Tag> tagCreate(@PathVariable String name) {
         log.debug("tagCreate: name = {}", name);
-        return ResponseEntity.ok(tagService.createByName(name));
+        return new ResponseEntity<>(tagService.createByName(name), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
