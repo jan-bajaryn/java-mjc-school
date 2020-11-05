@@ -26,7 +26,7 @@ public class GiftCertificateController {
         this.giftCertificateMapper = giftCertificateMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<GiftCertificate> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
@@ -48,12 +48,12 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         return null;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> certificateDelete(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.deleteById(id));
     }

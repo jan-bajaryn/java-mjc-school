@@ -21,13 +21,13 @@ public class TagController {
 
     private static final Logger log = LoggerFactory.getLogger(TagController.class);
 
-    @PostMapping("/create/{name}")
+    @PostMapping("/{name}")
     public ResponseEntity<Tag> tagCreate(@PathVariable String name) {
         log.debug("tagCreate: name = {}", name);
         return new ResponseEntity<>(tagService.createByName(name), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> tagDelete(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.deleteById(id));
     }
