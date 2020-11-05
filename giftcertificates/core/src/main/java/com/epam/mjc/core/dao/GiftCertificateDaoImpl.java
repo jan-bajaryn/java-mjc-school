@@ -3,6 +3,8 @@ package com.epam.mjc.core.dao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.dao.GiftCertificateDao;
+import com.epam.mjc.api.util.SearchParams;
+import com.epam.mjc.core.dao.builder.SearchQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,15 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String FIND_BY_ID_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE id = ?;";
     private static final String FIND_ALL_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate;";
     private static final String DELETE_SQL = "DELETE FROM gift_certificate WHERE id=?;";
-    private static final String FIND_ALL_BY_TAG_NAME = "SELECT gift_certificate.id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id WHERE tag.name = ?;";
-    private static final String FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name LIKE '%\\?%' AND description LIKE '%\\?%';";
+    private static final String FIND_ALL_BY_TAG_NAME_SQL = "SELECT gift_certificate.id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id WHERE tag.name = ?;";
+    private static final String FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name LIKE '%\\?%' AND description LIKE '%\\?%';";
     private static final String CREATE_SQL = "INSERT INTO gift_certificate (name, description, price, createDate, lastUpdateDate, duration) VALUES (?,?,?,?,?,?);";
     private static final String UPDATE_SQL = "UPDATE gift_certificate SET  name = ?, description = ?, price = ?, createDate = ?, lastUpdateDate = ?, duration = ? WHERE id = ?;";
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateDaoImpl.class);
     private static final String ID = "id";
+    private static final String ADD_TAG_SQL = "INSERT INTO gift_certificate_tag (tag_id, gift_certificate_id) VALUES (?,?);";
+    private static final String DELETE_TAG_SQL = "DELETE FROM gift_certificate_tag WHERE tag_id = ? AND gift_certificate_id = ?;";
 
     private final JdbcTemplate template;
     private final RowMapper<GiftCertificate> rowMapper;
@@ -104,13 +108,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> findAllByTagName(String tagName) {
-        return template.query(FIND_ALL_BY_TAG_NAME, new Object[]{tagName}, rowMapper);
+        return template.query(FIND_ALL_BY_TAG_NAME_SQL, new Object[]{tagName}, rowMapper);
     }
 
     @Override
     public List<GiftCertificate> findAllByPartNameAndPartDescription(String partName, String partDescription) {
         return template.query(
-                FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION,
+                FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION_SQL,
                 new Object[]{partName, partDescription},
                 rowMapper
         );
@@ -118,7 +122,18 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public boolean addTag(GiftCertificate giftCertificate, Tag tag) {
-        int update = template.update("INSERT INTO gift_certificate_tag (tag_id, gift_certificate_id) VALUES (?,?);", tag.getId(), giftCertificate.getId());
+        int update = template.update(ADD_TAG_SQL, tag.getId(), giftCertificate.getId());
         return update != 0;
+    }
+
+    @Override
+    public boolean deleteTag(GiftCertificate giftCertificate, Tag tag) {
+        int update = template.update(DELETE_TAG_SQL, tag.getId(), giftCertificate.getId());
+        return update != 0;
+    }
+
+    @Override
+    public List<GiftCertificate> search(SearchParams searchParams) {
+        return template.query(SearchQueryBuilder.builder().searchParams(searchParams).build(), rowMapper);
     }
 }

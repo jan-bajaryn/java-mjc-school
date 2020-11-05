@@ -1,11 +1,12 @@
 package com.epam.mjc.core.controller;
 
 import com.epam.mjc.api.domain.GiftCertificate;
-import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.core.controller.mapper.GiftCertificateMapper;
 import com.epam.mjc.api.model.sort.SortParams;
+import com.epam.mjc.api.service.GiftCertificateService;
+import com.epam.mjc.api.util.SearchParams;
+import com.epam.mjc.core.controller.mapper.GiftCertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,11 @@ public class GiftCertificateController {
 
     @PutMapping
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
-        return ResponseEntity.ok(giftCertificateService.update(giftCertificateMapper.toGiftCertificate(giftCertificateModel)));
+        return ResponseEntity.ok(
+                giftCertificateService.update(
+                        giftCertificateMapper.toGiftCertificate(giftCertificateModel)
+                )
+        );
     }
 
     @DeleteMapping("/{id}")
@@ -58,24 +63,14 @@ public class GiftCertificateController {
         return ResponseEntity.ok(giftCertificateService.deleteById(id));
     }
 
-    @GetMapping("/show-by-tag-name/{tagName}")
-    public ResponseEntity<List<GiftCertificate>> certificateShowByTagName(@PathVariable String tagName) {
-        return null;
-    }
-
-    @GetMapping("/show-by-part-name/{partName}/{partDescription}")
-    public ResponseEntity<List<GiftCertificate>> certificateShowByPartName(
-            @PathVariable String partName,
-            @PathVariable String partDescription
+    @GetMapping
+    public ResponseEntity<List<GiftCertificate>> certificateSearch(
+            @RequestParam(required = false) String tagName,
+            @RequestParam(required = false) String partName,
+            @RequestParam(required = false) String partDescription,
+            @RequestParam(required = false) SortParams sortParams
     ) {
-        return null;
-    }
-
-    @GetMapping("/sort-by")
-    public ResponseEntity<List<GiftCertificate>> certificateSortBy(
-            @RequestBody SortParams sortParams
-    ) {
-        return null;
+        return ResponseEntity.ok(giftCertificateService.search(new SearchParams(tagName,partName,partDescription,sortParams)));
     }
 
 }

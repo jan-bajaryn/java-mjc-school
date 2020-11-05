@@ -1,6 +1,7 @@
 package com.epam.mjc.api.service;
 
 import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.util.SearchParams;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface GiftCertificateService {
     boolean deleteById(Long id);
 
     boolean update(GiftCertificate toGiftCertificate);
+
+    List<GiftCertificate> search(SearchParams searchParams);
 }

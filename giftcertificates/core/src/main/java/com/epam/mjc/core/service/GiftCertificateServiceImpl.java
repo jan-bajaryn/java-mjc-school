@@ -5,11 +5,15 @@ import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.service.TagService;
+import com.epam.mjc.api.service.exception.ServiceException;
+import com.epam.mjc.api.util.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -57,9 +61,63 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public boolean update(GiftCertificate toGiftCertificate) {
-        // TODO REALIZE
-        return false;
+    @Transactional
+    public boolean update(GiftCertificate certificate) {
+
+        buildTagsByNames(certificate);
+
+        GiftCertificate toUpdate = findById(certificate.getId());
+
+        List<Tag> prevTags = toUpdate.getTags();
+
+        toUpdate.setName(certificate.getName() == null ? null : certificate.getName());
+        toUpdate.setDescription(certificate.getDescription() == null ? null : certificate.getDescription());
+        toUpdate.setPrice(certificate.getPrice() == null ? null : certificate.getPrice());
+        toUpdate.setDuration(certificate.getDuration() == null ? null : certificate.getDuration());
+        toUpdate.setTags(certificate.getTags() == null ? null : certificate.getTags());
+
+        return doUpdate(toUpdate, prevTags);
+    }
+
+    @Override
+    public List<GiftCertificate> search(SearchParams searchParams) {
+        return giftCertificateDao.search(searchParams);
+    }
+
+    private void buildTagsByNames(GiftCertificate certificate) {
+        List<Tag> result = certificate.getTags().stream()
+                .map(t -> {
+                    Optional<Tag> byId = tagService.findByTagName(t.getName());
+                    return byId.orElseGet(() -> tagService.createByName(t.getName()));
+
+                })
+                .collect(Collectors.toList());
+
+        certificate.setTags(result);
+    }
+
+
+    public boolean doUpdate(GiftCertificate toUpdate, List<Tag> prevTags) {
+        boolean update = giftCertificateDao.update(toUpdate);
+        if (!update) {
+            throw new ServiceException();
+        }
+        tagsForDelete(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.deleteTag(toUpdate, t));
+        tagsForAdd(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.addTag(toUpdate, t));
+        return true;
+    }
+
+
+    private List<Tag> tagsForAdd(List<Tag> prevTags, List<Tag> tags) {
+        return tags.stream()
+                .filter(prevTags::contains)
+                .collect(Collectors.toList());
+    }
+
+    private List<Tag> tagsForDelete(List<Tag> prevTags, List<Tag> tags) {
+        return tags.stream()
+                .filter(t -> !prevTags.contains(t))
+                .collect(Collectors.toList());
     }
 
     private void buildAllRelations(List<GiftCertificate> all) {
