@@ -1,4 +1,4 @@
-package com.epam.mjc.controller;
+package com.epam.mjc.core.controller;
 
 import com.epam.mjc.api.entity.Tag;
 import com.epam.mjc.api.service.TagService;

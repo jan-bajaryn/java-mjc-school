@@ -1,4 +1,4 @@
-package com.epam.mjc.controller;
+package com.epam.mjc.core.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

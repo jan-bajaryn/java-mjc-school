@@ -1,7 +1,7 @@
-package com.epam.mjc.model.mapper;
+package com.epam.mjc.core.controller.model.mapper;
 
 import com.epam.mjc.api.entity.Tag;
-import com.epam.mjc.model.TagModel;
+import com.epam.mjc.core.controller.model.TagModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
