@@ -1,6 +1,11 @@
 package com.epam.mjc.core.controller.errhandle;
 
-import com.epam.mjc.api.service.exception.*;
+import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
+import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
+import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
+import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
+import com.epam.mjc.api.service.exception.TagNotFoundException;
+import com.epam.mjc.api.service.exception.TagValidatorException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

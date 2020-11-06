@@ -11,7 +11,7 @@ import java.util.List;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("com.epam.mjc")
+@ComponentScan({"com.epam.mjc.api.controller", "com.epam.mjc.core.controller"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
