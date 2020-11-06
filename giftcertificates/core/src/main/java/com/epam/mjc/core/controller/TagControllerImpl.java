@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class TagControllerImpl implements TagController {
     private static final Logger log = LoggerFactory.getLogger(TagControllerImpl.class);
 
     @Override
-    public ResponseEntity<Tag> tagCreate(String name) {
+    public ResponseEntity<Tag> tagCreate(@PathVariable String name) {
         log.debug("tagCreate: name = {}", name);
         return new ResponseEntity<>(tagService.createByName(name), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Boolean> tagDelete(Long id) {
+    public ResponseEntity<Boolean> tagDelete(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.deleteById(id));
     }
 
@@ -38,7 +39,7 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
-    public ResponseEntity<Tag> showById(Long id) {
+    public ResponseEntity<Tag> showById(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.findById(id));
     }
 

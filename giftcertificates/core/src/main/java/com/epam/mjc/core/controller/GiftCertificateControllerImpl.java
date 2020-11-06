@@ -1,5 +1,6 @@
 package com.epam.mjc.core.controller;
 
+import com.epam.mjc.api.controller.GiftCertificateController;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
@@ -16,18 +17,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/certificate")
-public class GiftCertificateController {
+public class GiftCertificateControllerImpl implements GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
     private final GiftCertificateMapperImpl giftCertificateMapper;
 
     @Autowired
-    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateMapperImpl giftCertificateMapper) {
+    public GiftCertificateControllerImpl(GiftCertificateService giftCertificateService, GiftCertificateMapperImpl giftCertificateMapper) {
         this.giftCertificateService = giftCertificateService;
         this.giftCertificateMapper = giftCertificateMapper;
     }
 
-    @PostMapping
+    @Override
     public ResponseEntity<GiftCertificate> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
@@ -39,12 +40,12 @@ public class GiftCertificateController {
         );
     }
 
-    @GetMapping("/{id}")
+    @Override
     public ResponseEntity<GiftCertificate> showById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));
     }
 
-    @PutMapping
+    @Override
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         return ResponseEntity.ok(
                 giftCertificateService.update(
@@ -53,12 +54,12 @@ public class GiftCertificateController {
         );
     }
 
-    @DeleteMapping("/{id}")
+    @Override
     public ResponseEntity<Boolean> certificateDelete(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.deleteById(id));
     }
 
-    @GetMapping
+    @Override
     public ResponseEntity<List<GiftCertificate>> certificateSearch(
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
