@@ -25,6 +25,8 @@ public interface GiftCertificateDao {
 
     boolean addTag(GiftCertificate giftCertificate, Tag tag);
 
+    boolean addTags(GiftCertificate giftCertificate, List<Tag> tag);
+
     boolean deleteTag(GiftCertificate toUpdate, Tag t);
 
     List<GiftCertificate> search(SearchParams searchParams);

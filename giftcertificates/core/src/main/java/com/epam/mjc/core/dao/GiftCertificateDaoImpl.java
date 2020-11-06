@@ -1,8 +1,8 @@
 package com.epam.mjc.core.dao;
 
+import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Tag;
-import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.util.SearchParams;
 import com.epam.mjc.core.dao.builder.SearchQueryBuilder;
 import org.slf4j.Logger;
@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,9 +18,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -132,6 +135,29 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public boolean addTag(GiftCertificate giftCertificate, Tag tag) {
         int update = template.update(ADD_TAG_SQL, tag.getId(), giftCertificate.getId());
         return update != 0;
+    }
+
+    // TODO TEST IT
+    @Override
+    public boolean addTags(GiftCertificate giftCertificate, List<Tag> tags) {
+        int[] updateCounts = template.batchUpdate(
+                ADD_TAG_SQL,
+                new BatchPreparedStatementSetter() {
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setLong(1, tags.get(i).getId());
+                        ps.setLong(2, giftCertificate.getId());
+                    }
+
+                    public int getBatchSize() {
+                        return tags.size();
+                    }
+                });
+        return didUpdated(updateCounts);
+    }
+
+    private boolean didUpdated(int[] updateCounts) {
+        return Arrays.stream(updateCounts)
+                .allMatch(i -> i != 0);
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +28,9 @@ public class TagDaoImpl implements TagDao {
     private static final String ID = "id";
     private static final String FIND_BY_CERTIFICATE_ID = "SELECT tag.id, tag.name FROM tag INNER JOIN gift_certificate_tag ON tag.id = gift_certificate_tag.tag_id WHERE gift_certificate_id = ?;";
     private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name =?;";
+    private static final String FIND_EXISTING_SQL = "SELECT id,name FROM tag WHERE name IN (%s)";
+    private static final String COMMA = ",";
+    private static final String QUESTION_MARK = "?";
     private final JdbcTemplate template;
     private final RowMapper<Tag> rowMapper;
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
@@ -87,6 +91,34 @@ public class TagDaoImpl implements TagDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Tag> findAllExistingByNames(List<Tag> tags) {
+        String[] names = tags.stream()
+                .map(Tag::getName)
+                .toArray(String[]::new);
+        String inSql = String.join(COMMA, Collections.nCopies(names.length, QUESTION_MARK));
+
+        return template.query(
+                String.format(FIND_EXISTING_SQL, inSql),
+                names,
+                rowMapper);
+    }
+
+    @Override
+    public void createAll(List<Tag> toAdd) {
+//        int[] updateCounts = template.batchUpdate(
+//                CREATE_SQL,
+//                new BatchPreparedStatementSetter() {
+//                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+//                        ps.setString(1, toAdd.get(i).getName());
+//                    }
+//
+//                    public int getBatchSize() {
+//                        return toAdd.size();
+//                    }
+//                });
     }
 
     public TagDaoImpl(final JdbcTemplate template, final RowMapper<Tag> rowMapper) {

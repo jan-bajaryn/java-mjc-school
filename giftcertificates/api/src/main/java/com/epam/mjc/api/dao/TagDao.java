@@ -17,4 +17,8 @@ public interface TagDao {
     List<Tag> findAllByGiftCertificateId(Long id);
 
     Optional<Tag> findByTagName(String name);
+
+    List<Tag> findAllExistingByNames(List<Tag> tags);
+
+    void createAll(List<Tag> toAdd);
 }

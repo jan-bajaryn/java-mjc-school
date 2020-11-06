@@ -72,9 +72,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
         tagService.findOrCreateAll(created.getTags());
-        for (Tag tag : created.getTags()) {
-            giftCertificateDao.addTag(giftCertificate, tag);
-        }
+
+        giftCertificateDao.addTags(giftCertificate,created.getTags());
+
         return created;
     }
 

@@ -77,7 +77,21 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public List<Tag> findOrCreateAll(List<Tag> tags) {
+
+// waiting for batchUpdate with generated keys
+//        List<Tag> existing = tagDao.findAllExistingByNames(tags);
+//        List<Tag> toAdd = new ArrayList<>(tags);
+//        toAdd.removeAll(existing);
+//        createAllByName(toAdd);
+
         return tags.stream().map(this::findOrCreate).collect(Collectors.toList());
+    }
+
+    private void createAllByName(List<Tag> toAdd) {
+//        tagDao.createAll(toAdd);
+        for (Tag tag : toAdd) {
+            createByName(tag.getName());
+        }
     }
 
     @Override
