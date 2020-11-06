@@ -1,7 +1,6 @@
 package com.epam.mjc.core.controller.errhandle;
 
-import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
-import com.epam.mjc.api.service.exception.TagValidatorException;
+import com.epam.mjc.api.service.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +13,38 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TagValidatorException.class)
     public ResponseEntity<Object> handleTagValidatorException(TagValidatorException ex) {
-        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.TAG_CODE);
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.TAG_VALIDATOR);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(GiftCertificateValidatorException.class)
     public ResponseEntity<Object> handleGiftCertificateValidatorException(GiftCertificateValidatorException ex) {
-        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.GIFT_CODE);
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.GIFT_VALIDATOR);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(GiftCertificateAlreadyExists.class)
+    public ResponseEntity<Object> handleGiftCertificateAlreadyExists(GiftCertificateAlreadyExists ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.GIFT_DUPLICATE);//
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GiftCertificateNotFoundException.class)
+    public ResponseEntity<Object> handleGiftCertificateNotFoundException(GiftCertificateNotFoundException ex) {
+        String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.GIFT_NOT_FOUND);//
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TagAlreadyExistsException.class)
+    public ResponseEntity<Object> handleTagAlreadyExistsException(TagAlreadyExistsException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.TAG_DUPLICATE);//
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TagNotFoundException.class)
+    public ResponseEntity<Object> handleTagNotFoundException(TagNotFoundException ex) {
+        String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.TAG_NOT_FOUND);//
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 
