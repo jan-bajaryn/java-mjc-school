@@ -7,9 +7,9 @@ import com.epam.mjc.api.util.sort.SortParams;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,7 +24,7 @@ public interface GiftCertificateController {
     @GetMapping("/{id}")
     ResponseEntity<GiftCertificate> showById(@PathVariable Long id);
 
-    @PutMapping
+    @PatchMapping
     ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel);
 
     @DeleteMapping("/{id}")
