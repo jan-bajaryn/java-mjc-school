@@ -4,6 +4,7 @@ import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.util.sort.SortParams;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,25 +13,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
 public interface GiftCertificateController {
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<GiftCertificate> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     );
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<GiftCertificate> showById(@PathVariable Long id);
 
     @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel);
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<Boolean> certificateDelete(@PathVariable Long id);
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<GiftCertificate>> certificateSearch(
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
