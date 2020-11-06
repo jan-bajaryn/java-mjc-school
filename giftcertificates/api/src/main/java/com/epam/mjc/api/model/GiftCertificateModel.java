@@ -115,9 +115,7 @@ public class GiftCertificateModel {
         this.tags = tags;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof GiftCertificateModel;
-    }
+
 
     @Override
     public String toString() {

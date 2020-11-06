@@ -54,47 +54,28 @@ public class GiftCertificateModelForCreate {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof GiftCertificateModelForCreate)) return false;
-        final GiftCertificateModelForCreate other = (GiftCertificateModelForCreate) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description)) return false;
-        final Object this$price = this.getPrice();
-        final Object other$price = other.getPrice();
-        if (this$price == null ? other$price != null : !this$price.equals(other$price)) return false;
-        final Object this$duration = this.getDuration();
-        final Object other$duration = other.getDuration();
-        if (this$duration == null ? other$duration != null : !this$duration.equals(other$duration)) return false;
-        final Object this$tags = this.getTags();
-        final Object other$tags = other.getTags();
-        if (this$tags == null ? other$tags != null : !this$tags.equals(other$tags)) return false;
-        return true;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof GiftCertificateModelForCreate;
+        GiftCertificateModelForCreate that = (GiftCertificateModelForCreate) o;
+
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+            return false;
+        if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) return false;
+        if (getDuration() != null ? !getDuration().equals(that.getDuration()) : that.getDuration() != null)
+            return false;
+        return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        final Object $price = this.getPrice();
-        result = result * PRIME + ($price == null ? 43 : $price.hashCode());
-        final Object $duration = this.getDuration();
-        result = result * PRIME + ($duration == null ? 43 : $duration.hashCode());
-        final Object $tags = this.getTags();
-        result = result * PRIME + ($tags == null ? 43 : $tags.hashCode());
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getDuration() != null ? getDuration().hashCode() : 0);
+        result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
         return result;
     }
 

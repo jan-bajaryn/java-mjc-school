@@ -147,62 +147,36 @@ public class GiftCertificate {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof GiftCertificate)) return false;
-        final GiftCertificate other = (GiftCertificate) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description)) return false;
-        final Object this$price = this.getPrice();
-        final Object other$price = other.getPrice();
-        if (this$price == null ? other$price != null : !this$price.equals(other$price)) return false;
-        final Object this$createDate = this.getCreateDate();
-        final Object other$createDate = other.getCreateDate();
-        if (this$createDate == null ? other$createDate != null : !this$createDate.equals(other$createDate)) return false;
-        final Object this$lastUpdateDate = this.getLastUpdateDate();
-        final Object other$lastUpdateDate = other.getLastUpdateDate();
-        if (this$lastUpdateDate == null ? other$lastUpdateDate != null : !this$lastUpdateDate.equals(other$lastUpdateDate)) return false;
-        final Object this$duration = this.getDuration();
-        final Object other$duration = other.getDuration();
-        if (this$duration == null ? other$duration != null : !this$duration.equals(other$duration)) return false;
-        final Object this$tags = this.getTags();
-        final Object other$tags = other.getTags();
-        if (this$tags == null ? other$tags != null : !this$tags.equals(other$tags)) return false;
-        return true;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof GiftCertificate;
+        GiftCertificate that = (GiftCertificate) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+            return false;
+        if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) return false;
+        if (getCreateDate() != null ? !getCreateDate().equals(that.getCreateDate()) : that.getCreateDate() != null)
+            return false;
+        if (getLastUpdateDate() != null ? !getLastUpdateDate().equals(that.getLastUpdateDate()) : that.getLastUpdateDate() != null)
+            return false;
+        if (getDuration() != null ? !getDuration().equals(that.getDuration()) : that.getDuration() != null)
+            return false;
+        return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        final Object $price = this.getPrice();
-        result = result * PRIME + ($price == null ? 43 : $price.hashCode());
-        final Object $createDate = this.getCreateDate();
-        result = result * PRIME + ($createDate == null ? 43 : $createDate.hashCode());
-        final Object $lastUpdateDate = this.getLastUpdateDate();
-        result = result * PRIME + ($lastUpdateDate == null ? 43 : $lastUpdateDate.hashCode());
-        final Object $duration = this.getDuration();
-        result = result * PRIME + ($duration == null ? 43 : $duration.hashCode());
-        final Object $tags = this.getTags();
-        result = result * PRIME + ($tags == null ? 43 : $tags.hashCode());
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
+        result = 31 * result + (getLastUpdateDate() != null ? getLastUpdateDate().hashCode() : 0);
+        result = 31 * result + (getDuration() != null ? getDuration().hashCode() : 0);
+        result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
         return result;
     }
 

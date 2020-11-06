@@ -24,29 +24,20 @@ public class SortParam {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof SortParam)) return false;
-        final SortParam other = (SortParam) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$fieldName = this.getFieldName();
-        final Object other$fieldName = other.getFieldName();
-        if (this$fieldName == null ? other$fieldName != null : !this$fieldName.equals(other$fieldName)) return false;
-        if (this.isAsc() != other.isAsc()) return false;
-        return true;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof SortParam;
+        SortParam sortParam = (SortParam) o;
+
+        if (isAsc() != sortParam.isAsc()) return false;
+        return getFieldName() == sortParam.getFieldName();
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $fieldName = this.getFieldName();
-        result = result * PRIME + ($fieldName == null ? 43 : $fieldName.hashCode());
-        result = result * PRIME + (this.isAsc() ? 79 : 97);
+        int result = getFieldName() != null ? getFieldName().hashCode() : 0;
+        result = 31 * result + (isAsc() ? 1 : 0);
         return result;
     }
 

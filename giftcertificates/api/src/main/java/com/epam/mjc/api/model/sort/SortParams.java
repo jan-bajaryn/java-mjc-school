@@ -17,28 +17,18 @@ public class SortParams {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof SortParams)) return false;
-        final SortParams other = (SortParams) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$sortParams = this.getSortParams();
-        final Object other$sortParams = other.getSortParams();
-        if (this$sortParams == null ? other$sortParams != null : !this$sortParams.equals(other$sortParams)) return false;
-        return true;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof SortParams;
+        SortParams that = (SortParams) o;
+
+        return getSortParams() != null ? getSortParams().equals(that.getSortParams()) : that.getSortParams() == null;
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $sortParams = this.getSortParams();
-        result = result * PRIME + ($sortParams == null ? 43 : $sortParams.hashCode());
-        return result;
+        return getSortParams() != null ? getSortParams().hashCode() : 0;
     }
 
     @Override

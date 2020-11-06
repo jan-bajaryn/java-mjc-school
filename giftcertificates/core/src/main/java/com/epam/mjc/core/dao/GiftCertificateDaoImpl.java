@@ -25,11 +25,11 @@ import java.util.Objects;
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
-    private static final String FIND_BY_ID_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE id = ?;";
-    private static final String FIND_ALL_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate;";
+    private static final String FIND_BY_ID_SQL = "SELECT id,name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE id = ?;";
+    private static final String FIND_ALL_SQL = "SELECT id,name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate;";
     private static final String DELETE_SQL = "DELETE FROM gift_certificate WHERE id=?;";
-    private static final String FIND_ALL_BY_TAG_NAME_SQL = "SELECT gift_certificate.id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id WHERE tag.name = ?;";
-    private static final String FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION_SQL = "SELECT id,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name LIKE '%\\?%' AND description LIKE '%\\?%';";
+    private static final String FIND_ALL_BY_TAG_NAME_SQL = "SELECT gift_certificate.id,gift_certificate.name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id WHERE tag.name = ?;";
+    private static final String FIND_ALL_BY_PART_NAME_AND_PART_DESCRIPTION_SQL = "SELECT id,name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name LIKE '%\\?%' AND description LIKE '%\\?%';";
     private static final String CREATE_SQL = "INSERT INTO gift_certificate (name, description, price, createDate, lastUpdateDate, duration) VALUES (?,?,?,?,?,?);";
     private static final String UPDATE_SQL = "UPDATE gift_certificate SET  name = ?, description = ?, price = ?, createDate = ?, lastUpdateDate = ?, duration = ? WHERE id = ?;";
 

@@ -15,28 +15,18 @@ public class TagModel {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof TagModel)) return false;
-        final TagModel other = (TagModel) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        return true;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof TagModel;
+        TagModel tagModel = (TagModel) o;
+
+        return getName() != null ? getName().equals(tagModel.getName()) : tagModel.getName() == null;
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        return result;
+        return getName() != null ? getName().hashCode() : 0;
     }
 
     @Override
