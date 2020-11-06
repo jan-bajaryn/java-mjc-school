@@ -12,7 +12,7 @@ public interface TagService {
 
     boolean deleteById(Long id);
 
-    Optional<Tag> findById(Long id);
+    Tag findById(Long id);
 
     List<Tag> findAllByGiftCertificateId(Long id);
 

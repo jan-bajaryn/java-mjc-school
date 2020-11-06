@@ -1,9 +1,10 @@
 package com.epam.mjc.core.service;
 
-import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.dao.TagDao;
+import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.service.TagService;
-import com.epam.mjc.api.service.exception.ServiceException;
+import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
+import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.validator.TagValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,27 +37,32 @@ public class TagServiceImpl implements TagService {
 
         tagValidator.validateTagName(name);
 
-        log.debug("createByName entered");
-        if (name == null) {
-            log.debug("name == null");
-            throw new ServiceException();
+        Optional<Tag> byTagName = findByTagName(name);
+        if (byTagName.isPresent()) {
+            throw new TagAlreadyExistsException("Tag already exists with name = " + name);
         }
-        log.debug("name != null");
+
         return tagDao.create(Tag.builder().name(name).build());
     }
 
     @Override
+    @Transactional
     public boolean deleteById(Long id) {
 
         tagValidator.validateTagId(id);
 
-        return tagDao.delete(Tag.builder().id(id).build());
+        Tag toDelete = findById(id);
+        return tagDao.delete(toDelete);
     }
 
     @Override
-    public Optional<Tag> findById(Long id) {
+    public Tag findById(Long id) {
         tagValidator.validateTagId(id);
-        return tagDao.findById(id);
+        Optional<Tag> byId = tagDao.findById(id);
+        if (!byId.isPresent()) {
+            throw new TagNotFoundException("Tag not found with id = " + id);
+        }
+        return byId.get();
     }
 
     @Override

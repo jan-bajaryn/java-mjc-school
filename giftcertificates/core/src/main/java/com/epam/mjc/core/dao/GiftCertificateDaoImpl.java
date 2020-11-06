@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
@@ -37,6 +38,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String ID = "id";
     private static final String ADD_TAG_SQL = "INSERT INTO gift_certificate_tag (tag_id, gift_certificate_id) VALUES (?,?);";
     private static final String DELETE_TAG_SQL = "DELETE FROM gift_certificate_tag WHERE tag_id = ? AND gift_certificate_id = ?;";
+    private static final String FIND_BY_NAME_SQL = "SELECT id,name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate WHERE name = ?;";
 
     private final JdbcTemplate template;
     private final RowMapper<GiftCertificate> rowMapper;
@@ -91,8 +93,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public GiftCertificate findById(Long id) {
-        return template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
+    public Optional<GiftCertificate> findById(Long id) {
+        GiftCertificate giftCertificate = template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
+        return Optional.ofNullable(giftCertificate);
     }
 
     @Override
@@ -135,5 +138,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> search(SearchParams searchParams) {
         return template.query(SearchQueryBuilder.builder().searchParams(searchParams).build(), rowMapper);
+    }
+
+    @Override
+    public Optional<GiftCertificate> findByName(String name) {
+        GiftCertificate giftCertificate = template.queryForObject(FIND_BY_NAME_SQL, new Object[]{name}, rowMapper);
+        return Optional.ofNullable(giftCertificate);
     }
 }

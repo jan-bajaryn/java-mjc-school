@@ -39,11 +39,6 @@ public class GiftCertificateController {
         );
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<GiftCertificate>> certificateShowAll() {
-//        return ResponseEntity.ok(giftCertificateService.findAll());
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificate> showById(@PathVariable Long id) {
         return ResponseEntity.ok(giftCertificateService.findById(id));

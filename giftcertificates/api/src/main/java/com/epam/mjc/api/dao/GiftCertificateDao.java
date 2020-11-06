@@ -5,6 +5,7 @@ import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.util.SearchParams;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GiftCertificateDao {
 
@@ -12,7 +13,7 @@ public interface GiftCertificateDao {
 
     boolean update(GiftCertificate giftCertificate);
 
-    GiftCertificate findById(Long id);
+    Optional<GiftCertificate> findById(Long id);
 
     List<GiftCertificate> findAll();
 
@@ -28,5 +29,5 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> search(SearchParams searchParams);
 
-    // TODO ADD SORTED BY
+    Optional<GiftCertificate> findByName(String name);
 }
