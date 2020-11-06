@@ -6,6 +6,7 @@ import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.service.TagService;
 import com.epam.mjc.api.service.exception.ServiceException;
+import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import com.epam.mjc.api.util.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private final GiftCertificateDao giftCertificateDao;
     private final TagService tagService;
+    private final GiftCertificateValidator giftCertificateValidator;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagService tagService) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagService tagService, GiftCertificateValidator giftCertificateValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagService = tagService;
+        this.giftCertificateValidator = giftCertificateValidator;
     }
 
     @Override
@@ -40,6 +43,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional(readOnly = true)
     public GiftCertificate findById(Long id) {
+        giftCertificateValidator.validateGiftCertificateId(id);
+
         GiftCertificate byId = giftCertificateDao.findById(id);
         buildRelations(byId);
         return byId;
@@ -49,6 +54,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate create(GiftCertificate giftCertificate) {
+
+        giftCertificateValidator.validateGiftCertificate(giftCertificate);
+
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
         tagService.findOrCreateAll(created.getTags());
         for (Tag tag : created.getTags()) {
@@ -60,12 +68,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public boolean deleteById(Long id) {
-        return giftCertificateDao.delete(GiftCertificate.builder().id(id).build());
+        giftCertificateValidator.validateGiftCertificateId(id);
+        GiftCertificate byId = giftCertificateDao.findById(id);
+        return giftCertificateDao.delete(byId);
     }
 
     @Override
     @Transactional
     public boolean update(GiftCertificate certificate) {
+
+        giftCertificateValidator.validateGiftCertificate(certificate);
 
         buildTagsByNames(certificate);
 
