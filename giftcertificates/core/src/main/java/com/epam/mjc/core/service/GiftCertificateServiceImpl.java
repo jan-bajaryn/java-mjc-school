@@ -53,7 +53,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         Optional<GiftCertificate> byId = giftCertificateDao.findById(id);
         if (!byId.isPresent()) {
-            throw new GiftCertificateNotFoundException("GiftCertificate not found with id = " + id);
+            throw new GiftCertificateNotFoundException("certificate.not-found-id");
         }
         GiftCertificate giftCertificate = byId.get();
 
@@ -83,7 +83,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         log.debug("create: byName.isPresent() = {}", byName.isPresent());
 
         if (byName.isPresent()) {
-            throw new GiftCertificateAlreadyExists("Gift certificate aldready exists with name = " + giftCertificate.getName());
+            throw new GiftCertificateAlreadyExists("certificate.exists");
         }
     }
 
@@ -139,7 +139,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         boolean update = giftCertificateDao.update(toUpdate);
         // TODO test this case
         if (!update) {
-            throw new UnexpectedServiceException("Can't update giftcertificate with id = " + toUpdate.getId());
+            throw new UnexpectedServiceException("certificate.unexpected.cant-update");
         }
         tagsForDelete(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.deleteTag(toUpdate, t));
         tagsForAdd(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.addTag(toUpdate, t));

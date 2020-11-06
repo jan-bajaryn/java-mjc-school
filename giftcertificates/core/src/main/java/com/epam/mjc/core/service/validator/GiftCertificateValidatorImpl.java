@@ -19,7 +19,7 @@ public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
     @Override
     public void validateGiftCertificate(GiftCertificate giftCertificate) {
         if (giftCertificate == null) {
-            throw new GiftCertificateValidatorException("GiftCertificate is null");
+            throw new GiftCertificateValidatorException("certificate.null");
         }
 
         validateGiftCertificateName(giftCertificate.getName());
@@ -32,31 +32,31 @@ public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
     @Override
     public void validateGiftCertificateId(Long id) {
         if (id == null || id < ID_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("Id is wrong");
+            throw new GiftCertificateValidatorException("certificate.wrong-id");
         }
     }
 
     private void validateGiftCertificateDuration(Integer duration) {
         if (duration == null || duration < DURATION_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("Duration is wrong");
+            throw new GiftCertificateValidatorException("certificate.wrong-duration");
         }
     }
 
     private void validateGiftCertificatePrice(BigDecimal price) {
         if (price == null || price.compareTo(BigDecimal.ZERO) < PRICE_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("Price is wrong.");
+            throw new GiftCertificateValidatorException("certificate.wrong-price");
         }
     }
 
     private void validateGiftCertificateDescription(String description) {
         if (description == null || description.isEmpty() || description.length() > DESCRIPTION_MAX_LENGTH) {
-            throw new GiftCertificateValidatorException("Description is wrong");
+            throw new GiftCertificateValidatorException("certificate.wrong-description");
         }
     }
 
     private void validateGiftCertificateName(String name) {
         if (name == null || name.isEmpty() || name.length() > NAME_MAX_LENGTH) {
-            throw new GiftCertificateValidatorException("Name is wrong");
+            throw new GiftCertificateValidatorException("certificate.wrong-name");
         }
     }
 

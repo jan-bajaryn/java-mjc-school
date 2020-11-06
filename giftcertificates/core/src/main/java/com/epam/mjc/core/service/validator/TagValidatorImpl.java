@@ -13,14 +13,14 @@ public class TagValidatorImpl implements TagValidator {
     @Override
     public void validateTagName(String name) {
         if (name == null || name.length() > NAME_MAX_LENGTH) {
-            throw new TagValidatorException("Tag name is wrong.");
+            throw new TagValidatorException("tag.wrong-name");
         }
     }
 
     @Override
     public void validateTagId(Long id) {
         if (id == null || id < ID_MIN_VALUE) {
-            throw new TagValidatorException("Id is wrong.");
+            throw new TagValidatorException("tag.wrong-id");
         }
     }
 }

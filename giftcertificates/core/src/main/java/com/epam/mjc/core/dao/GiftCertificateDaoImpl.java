@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -94,8 +95,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public Optional<GiftCertificate> findById(Long id) {
-        GiftCertificate giftCertificate = template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
-        return Optional.ofNullable(giftCertificate);
+        try {
+            GiftCertificate giftCertificate = template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
+            return Optional.ofNullable(giftCertificate);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -142,7 +147,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public Optional<GiftCertificate> findByName(String name) {
-        GiftCertificate giftCertificate = template.queryForObject(FIND_BY_NAME_SQL, new Object[]{name}, rowMapper);
-        return Optional.ofNullable(giftCertificate);
+        try {
+            GiftCertificate giftCertificate = template.queryForObject(FIND_BY_NAME_SQL, new Object[]{name}, rowMapper);
+            return Optional.ofNullable(giftCertificate);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }

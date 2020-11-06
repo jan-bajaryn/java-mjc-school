@@ -1,15 +1,17 @@
 package com.epam.mjc.core.dao;
 
-import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.dao.TagDao;
+import com.epam.mjc.api.domain.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -24,7 +26,7 @@ public class TagDaoImpl implements TagDao {
     private static final String FIND_BY_ID_SQL = "SELECT id,name FROM tag WHERE id=?";
     private static final String ID = "id";
     private static final String FIND_BY_CERTIFICATE_ID = "SELECT tag.id, tag.name FROM tag INNER JOIN gift_certificate_tag ON tag.id = gift_certificate_tag.tag_id WHERE gift_certificate_id = ?;";
-    private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name = ?;";
+    private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name =?;";
     private final JdbcTemplate template;
     private final RowMapper<Tag> rowMapper;
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
@@ -62,18 +64,29 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> findById(Long id) {
-        return Optional.ofNullable(template.queryForObject(FIND_BY_ID_SQL, new Object[] {id}, rowMapper));
+        try {
+            Tag tag = template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
+            return Optional.ofNullable(tag);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+
     }
 
     @Override
     public List<Tag> findAllByGiftCertificateId(Long id) {
-        return template.query(FIND_BY_CERTIFICATE_ID, new Object[] {id}, rowMapper);
+        return template.query(FIND_BY_CERTIFICATE_ID, new Object[]{id}, rowMapper);
     }
 
     @Override
     public Optional<Tag> findByTagName(String name) {
-        Tag tag = template.queryForObject(FIND_BY_TAG_NAME, new Object[] {name}, rowMapper);
-        return Optional.ofNullable(tag);
+        try {
+            Tag tag = template.queryForObject(FIND_BY_TAG_NAME, new Object[]{name}, rowMapper);
+            log.debug("findByTagName: tag = {}", tag);
+            return Optional.ofNullable(tag);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public TagDaoImpl(final JdbcTemplate template, final RowMapper<Tag> rowMapper) {

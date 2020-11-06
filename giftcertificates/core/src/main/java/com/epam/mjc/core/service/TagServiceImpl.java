@@ -38,8 +38,10 @@ public class TagServiceImpl implements TagService {
         tagValidator.validateTagName(name);
 
         Optional<Tag> byTagName = findByTagName(name);
+        log.debug("createByName: byTagName.isPresent() = {}", byTagName.isPresent());
+        System.out.println(byTagName.isPresent());
         if (byTagName.isPresent()) {
-            throw new TagAlreadyExistsException("Tag already exists with name = " + name);
+            throw new TagAlreadyExistsException("tag.exists");
         }
 
         return tagDao.create(Tag.builder().name(name).build());
@@ -60,7 +62,7 @@ public class TagServiceImpl implements TagService {
         tagValidator.validateTagId(id);
         Optional<Tag> byId = tagDao.findById(id);
         if (!byId.isPresent()) {
-            throw new TagNotFoundException("Tag not found with id = " + id);
+            throw new TagNotFoundException("tag.not-found-id");
         }
         return byId.get();
     }

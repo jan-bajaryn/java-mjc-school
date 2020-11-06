@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ResourceBundle;
+
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("message");
+
 
     @ExceptionHandler(TagValidatorException.class)
     public ResponseEntity<Object> handleTagValidatorException(TagValidatorException ex) {
@@ -33,7 +38,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(GiftCertificateNotFoundException.class)
     public ResponseEntity<Object> handleGiftCertificateNotFoundException(GiftCertificateNotFoundException ex) {
         String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.GIFT_NOT_FOUND);//
-        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+        return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TagAlreadyExistsException.class)
@@ -45,15 +50,19 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<Object> handleTagNotFoundException(TagNotFoundException ex) {
         String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.TAG_NOT_FOUND);//
-        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+        return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
     }
 
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleRemainException(Exception exception) {
+        logger.error("Exception: ", exception);
         String errorCode = formatCode(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.REMAIN_CODE);
-        return getResponseEntity(exception, errorCode, HttpStatus.INTERNAL_SERVER_ERROR);
+        String message = bundle.getString("unexpected.error");
+        ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
+        return new ResponseEntity<>(info, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     private String formatCode(int httpPrefix, ErrorCodes giftCode) {
         return String.format("%s%s", httpPrefix, giftCode.getCode());
@@ -61,7 +70,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 
     private ResponseEntity<Object> getResponseEntity(Exception exception, String errorCode, HttpStatus httpStatus) {
-        String message = exception.getMessage();
+        logger.error("Exception: ", exception);
+        String message = bundle.getString(exception.getMessage());
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
     }
