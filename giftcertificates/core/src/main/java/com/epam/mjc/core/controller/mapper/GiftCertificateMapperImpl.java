@@ -1,5 +1,6 @@
 package com.epam.mjc.core.controller.mapper;
 
+import com.epam.mjc.api.controller.mapper.GiftCertificateMapper;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
@@ -7,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GiftCertificateMapper {
+public class GiftCertificateMapperImpl implements GiftCertificateMapper {
 
-    private final TagMapper tagMapper;
+    private final TagMapperImpl tagMapper;
 
     @Autowired
-    public GiftCertificateMapper(TagMapper tagMapper) {
+    public GiftCertificateMapperImpl(TagMapperImpl tagMapper) {
         this.tagMapper = tagMapper;
     }
 

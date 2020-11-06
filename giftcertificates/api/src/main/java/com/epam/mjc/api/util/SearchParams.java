@@ -1,6 +1,6 @@
 package com.epam.mjc.api.util;
 
-import com.epam.mjc.api.model.sort.SortParams;
+import com.epam.mjc.api.util.sort.SortParams;
 
 public class SearchParams {
 

@@ -1,4 +1,4 @@
-package com.epam.mjc.api.model.sort;
+package com.epam.mjc.api.util.sort;
 
 public enum FieldName {
     NAME("name"), LAST_UPDATE("lastUpdateDate");

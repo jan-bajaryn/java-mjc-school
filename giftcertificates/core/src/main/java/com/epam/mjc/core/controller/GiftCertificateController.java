@@ -3,10 +3,10 @@ package com.epam.mjc.core.controller;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.api.model.sort.SortParams;
+import com.epam.mjc.api.util.sort.SortParams;
 import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.util.SearchParams;
-import com.epam.mjc.core.controller.mapper.GiftCertificateMapper;
+import com.epam.mjc.core.controller.mapper.GiftCertificateMapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +19,10 @@ import java.util.List;
 public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
-    private final GiftCertificateMapper giftCertificateMapper;
+    private final GiftCertificateMapperImpl giftCertificateMapper;
 
     @Autowired
-    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateMapper giftCertificateMapper) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftCertificateMapperImpl giftCertificateMapper) {
         this.giftCertificateService = giftCertificateService;
         this.giftCertificateMapper = giftCertificateMapper;
     }

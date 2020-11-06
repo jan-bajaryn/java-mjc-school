@@ -1,7 +1,7 @@
 package com.epam.mjc.core.dao.builder;
 
-import com.epam.mjc.api.model.sort.SortParam;
-import com.epam.mjc.api.model.sort.SortParams;
+import com.epam.mjc.api.util.sort.SortParam;
+import com.epam.mjc.api.util.sort.SortParams;
 import com.epam.mjc.api.util.SearchParams;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.springframework.stereotype.Service;
