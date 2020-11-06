@@ -28,6 +28,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GiftCertificate> findAll() {
         List<GiftCertificate> all = giftCertificateDao.findAll();
 
@@ -37,6 +38,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GiftCertificate findById(Long id) {
         GiftCertificate byId = giftCertificateDao.findById(id);
         buildRelations(byId);
@@ -56,6 +58,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional
     public boolean deleteById(Long id) {
         return giftCertificateDao.delete(GiftCertificate.builder().id(id).build());
     }
@@ -80,6 +83,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GiftCertificate> search(SearchParams searchParams) {
         return giftCertificateDao.search(searchParams);
     }

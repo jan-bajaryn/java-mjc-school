@@ -4,9 +4,10 @@ import com.epam.mjc.api.util.sort.SortParam;
 import com.epam.mjc.api.util.sort.SortParams;
 import com.epam.mjc.api.util.SearchParams;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class SearchQueryBuilder {
 
     // language=SQL

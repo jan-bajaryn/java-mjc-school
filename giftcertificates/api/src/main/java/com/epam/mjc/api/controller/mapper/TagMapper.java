@@ -10,5 +10,5 @@ public interface TagMapper {
     Tag toTag(TagModel tagModel);
 
     List<Tag> toTag(List<TagModel> tagModels);
-    
+
 }
