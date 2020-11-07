@@ -19,4 +19,9 @@ dependencies {
 
     api "org.springframework:spring-webmvc:${springVersion}"
     api 'javax.servlet:javax.servlet-api:3.0.1'
+
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }

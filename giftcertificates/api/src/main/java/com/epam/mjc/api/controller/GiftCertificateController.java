@@ -1,8 +1,8 @@
 package com.epam.mjc.api.controller;
 
-import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.util.sort.SortParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ import java.util.List;
 public interface GiftCertificateController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<GiftCertificate> certificateCreate(
+    ResponseEntity<GiftCertificateDto> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     );
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<GiftCertificate> showById(@PathVariable Long id);
+    ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id);
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
@@ -38,7 +38,7 @@ public interface GiftCertificateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<GiftCertificate>> certificateSearch(
+    ResponseEntity<List<GiftCertificateDto>> certificateSearch(
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,

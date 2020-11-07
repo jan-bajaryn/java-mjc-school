@@ -1,7 +1,7 @@
 package com.epam.mjc.api.controller;
 
-import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.model.TagForCreate;
+import com.epam.mjc.api.model.dto.TagDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 public interface TagController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Tag> tagCreate(@RequestBody TagForCreate tagForCreate);
+    ResponseEntity<TagDto> tagCreate(@RequestBody TagForCreate tagForCreate);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -26,9 +26,9 @@ public interface TagController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<Tag>> showAll();
+    ResponseEntity<List<TagDto>> showAll();
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Tag> showById(@PathVariable Long id);
+    ResponseEntity<TagDto> showById(@PathVariable Long id);
 }

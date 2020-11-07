@@ -1,9 +1,11 @@
 package com.epam.mjc.core.controller;
 
 import com.epam.mjc.api.controller.GiftCertificateController;
+import com.epam.mjc.api.controller.mapper.GiftCertificateDtoMapper;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.util.sort.SortParams;
 import com.epam.mjc.api.service.GiftCertificateService;
 import com.epam.mjc.api.util.SearchParams;
@@ -21,28 +23,33 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
 
     private final GiftCertificateService giftCertificateService;
     private final GiftCertificateMapperImpl giftCertificateMapper;
+    private final GiftCertificateDtoMapper giftCertificateDtoMapper;
 
     @Autowired
-    public GiftCertificateControllerImpl(GiftCertificateService giftCertificateService, GiftCertificateMapperImpl giftCertificateMapper) {
+    public GiftCertificateControllerImpl(GiftCertificateService giftCertificateService, GiftCertificateMapperImpl giftCertificateMapper, GiftCertificateDtoMapper giftCertificateDtoMapper) {
         this.giftCertificateService = giftCertificateService;
         this.giftCertificateMapper = giftCertificateMapper;
+        this.giftCertificateDtoMapper = giftCertificateDtoMapper;
     }
 
     @Override
-    public ResponseEntity<GiftCertificate> certificateCreate(
+    public ResponseEntity<GiftCertificateDto> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
+        GiftCertificate giftCertificate = giftCertificateService.create(
+                giftCertificateMapper.toGiftCertificate(giftCertificateModelForCreate)
+        );
         return new ResponseEntity<>(
-                giftCertificateService.create(
-                        giftCertificateMapper.toGiftCertificate(giftCertificateModelForCreate)
-                ),
+                giftCertificateDtoMapper.toGiftCertificateDto(giftCertificate),
                 HttpStatus.CREATED
         );
     }
 
     @Override
-    public ResponseEntity<GiftCertificate> showById(@PathVariable Long id) {
-        return ResponseEntity.ok(giftCertificateService.findById(id));
+    public ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                giftCertificateDtoMapper.toGiftCertificateDto(giftCertificateService.findById(id))
+        );
     }
 
     @Override
@@ -60,13 +67,16 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     }
 
     @Override
-    public ResponseEntity<List<GiftCertificate>> certificateSearch(
+    public ResponseEntity<List<GiftCertificateDto>> certificateSearch(
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
             @RequestParam(required = false) SortParams sortParams
     ) {
-        return ResponseEntity.ok(giftCertificateService.search(new SearchParams(tagName,partName,partDescription,sortParams)));
+        List<GiftCertificate> result = giftCertificateService.search(new SearchParams(tagName, partName, partDescription, sortParams));
+        return ResponseEntity.ok(
+                giftCertificateDtoMapper.toGiftCertificateDto(result)
+        );
     }
 
 }

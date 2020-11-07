@@ -1,8 +1,9 @@
 package com.epam.mjc.core.controller;
 
 import com.epam.mjc.api.controller.TagController;
-import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.controller.mapper.TagDtoMapper;
 import com.epam.mjc.api.model.TagForCreate;
+import com.epam.mjc.api.model.dto.TagDto;
 import com.epam.mjc.api.service.TagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +18,22 @@ import java.util.List;
 @RestController
 public class TagControllerImpl implements TagController {
     private final TagService tagService;
+    private final TagDtoMapper tagDtoMapper;
 
-    public TagControllerImpl(final TagService tagService) {
+    public TagControllerImpl(final TagService tagService, TagDtoMapper tagDtoMapper) {
         this.tagService = tagService;
+        this.tagDtoMapper = tagDtoMapper;
     }
 
     private static final Logger log = LoggerFactory.getLogger(TagControllerImpl.class);
 
     @Override
-    public ResponseEntity<Tag> tagCreate(@RequestBody TagForCreate tagForCreate) {
+    public ResponseEntity<TagDto> tagCreate(@RequestBody TagForCreate tagForCreate) {
         log.debug("tagCreate: name = {}", tagForCreate.getName());
-        return new ResponseEntity<>(tagService.createByName(tagForCreate.getName()), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                tagDtoMapper.toTagDto(tagService.createByName(tagForCreate.getName())),
+                HttpStatus.CREATED
+        );
     }
 
     @Override
@@ -36,13 +42,17 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
-    public ResponseEntity<List<Tag>> showAll() {
-        return ResponseEntity.ok(tagService.findAll());
+    public ResponseEntity<List<TagDto>> showAll() {
+        return ResponseEntity.ok(
+                tagDtoMapper.toTagDto(tagService.findAll())
+        );
     }
 
     @Override
-    public ResponseEntity<Tag> showById(@PathVariable Long id) {
-        return ResponseEntity.ok(tagService.findById(id));
+    public ResponseEntity<TagDto> showById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                tagDtoMapper.toTagDto(tagService.findById(id))
+        );
     }
 
 }
