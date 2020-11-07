@@ -1,7 +1,6 @@
 package com.epam.mjc.core.service;
 
 import com.epam.mjc.api.controller.mapper.GiftCertificateDtoMapper;
-import com.epam.mjc.api.controller.mapper.GiftCertificateMapper;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
@@ -18,20 +17,18 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
     private final GiftCertificateService service;
     private final GiftCertificateDtoMapper giftCertificateDtoMapper;
-    private final GiftCertificateMapper giftCertificateMapper;
 
     @Autowired
-    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, GiftCertificateMapper giftCertificateMapper) {
+    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper) {
         this.service = service;
         this.giftCertificateDtoMapper = giftCertificateDtoMapper;
-        this.giftCertificateMapper = giftCertificateMapper;
     }
 
     @Override
     public GiftCertificateDto create(GiftCertificateModelForCreate giftCertificateModelForCreate) {
         return giftCertificateDtoMapper.toGiftCertificateDto(
                 service.create(
-                        giftCertificateMapper.toGiftCertificate(giftCertificateModelForCreate)
+                        giftCertificateDtoMapper.toGiftCertificate(giftCertificateModelForCreate)
                 )
         );
     }
@@ -46,7 +43,7 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     @Override
     public boolean update(GiftCertificateModel giftCertificateModel) {
         return service.update(
-                giftCertificateMapper.toGiftCertificate(giftCertificateModel)
+                giftCertificateDtoMapper.toGiftCertificate(giftCertificateModel)
         );
     }
 
