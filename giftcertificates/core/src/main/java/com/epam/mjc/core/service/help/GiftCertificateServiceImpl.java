@@ -1,10 +1,10 @@
-package com.epam.mjc.core.service;
+package com.epam.mjc.core.service.help;
 
 import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Tag;
-import com.epam.mjc.api.service.GiftCertificateService;
-import com.epam.mjc.api.service.TagService;
+import com.epam.mjc.api.service.help.GiftCertificateService;
+import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.UnexpectedServiceException;

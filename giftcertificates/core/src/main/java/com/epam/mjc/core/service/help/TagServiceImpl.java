@@ -1,8 +1,8 @@
-package com.epam.mjc.core.service;
+package com.epam.mjc.core.service.help;
 
 import com.epam.mjc.api.dao.TagDao;
 import com.epam.mjc.api.domain.Tag;
-import com.epam.mjc.api.service.TagService;
+import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.validator.TagValidator;
