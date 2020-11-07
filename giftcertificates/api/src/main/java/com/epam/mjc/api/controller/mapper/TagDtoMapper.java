@@ -20,4 +20,5 @@ public interface TagDtoMapper {
     @Mapping(target = "id", ignore = true)
     Tag toTag(TagModel tagModel);
 
-    List<Tag> toTag(List<TagModel> tagModels);}
+    List<Tag> toTag(List<TagModel> tagModels);
+}

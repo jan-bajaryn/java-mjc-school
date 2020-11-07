@@ -89,15 +89,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public boolean deleteById(Long id) {
+    public void deleteById(Long id) {
         giftCertificateValidator.validateGiftCertificateId(id);
         GiftCertificate byId = findById(id);
-        return giftCertificateDao.delete(byId);
+        giftCertificateDao.delete(byId);
     }
 
     @Override
     @Transactional
-    public boolean update(GiftCertificate certificate) {
+    public void update(GiftCertificate certificate) {
 
         giftCertificateValidator.validateGiftCertificate(certificate);
         buildTagsByNames(certificate);
@@ -105,7 +105,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         List<Tag> prevTags = toUpdate.getTags();
         copyFieldsToUpdate(certificate, toUpdate);
 
-        return doUpdate(toUpdate, prevTags);
+        doUpdate(toUpdate, prevTags);
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
@@ -135,7 +135,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
 
-    public boolean doUpdate(GiftCertificate toUpdate, List<Tag> prevTags) {
+    public void doUpdate(GiftCertificate toUpdate, List<Tag> prevTags) {
         boolean update = giftCertificateDao.update(toUpdate);
         // TODO test this case
         if (!update) {
@@ -143,7 +143,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
         tagsForDelete(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.deleteTag(toUpdate, t));
         tagsForAdd(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.addTag(toUpdate, t));
-        return true;
     }
 
 

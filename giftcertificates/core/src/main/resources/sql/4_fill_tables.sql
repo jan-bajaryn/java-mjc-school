@@ -7,7 +7,7 @@ values ('Antoshka'),
        ('Vitsebsk'),
        ('Vasniatsova');
 
-INSERT INTO gift_certificate(name, description, price, createDate, lastUpdateDate, Duration)
+INSERT INTO gift_certificate(name, description, price, createDate, lastUpdateDate, duration)
 VALUES ('First', 'First certificate', 2.3, '2020-03-13 15:55:52.611265', '2020-03-13 15:55:52.611265', 3),
        ('Second', 'Second certificate', 5.34, '2020-02-23 15:55:52.611265', '2020-03-13 15:55:52.611265', 10);
 

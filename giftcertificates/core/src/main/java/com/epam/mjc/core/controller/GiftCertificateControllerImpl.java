@@ -55,14 +55,16 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     @Override
     public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         //
+        giftCertificateReturnService.update(giftCertificateModel);
         return ResponseEntity.ok(
-                giftCertificateReturnService.update(giftCertificateModel)
+                true
         );
     }
 
     @Override
     public ResponseEntity<Boolean> certificateDelete(@PathVariable Long id) {
-        return ResponseEntity.ok(giftCertificateReturnService.deleteById(id));
+        giftCertificateReturnService.deleteById(id);
+        return ResponseEntity.ok(true);
     }
 
     @Override

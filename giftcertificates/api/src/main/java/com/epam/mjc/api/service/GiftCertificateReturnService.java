@@ -10,7 +10,7 @@ import java.util.List;
 public interface GiftCertificateReturnService {
     GiftCertificateDto create(GiftCertificateModelForCreate giftCertificateModelForCreate);
     GiftCertificateDto findById(Long id);
-    boolean update(GiftCertificateModel giftCertificateModel);
-    boolean deleteById(Long id);
+    void update(GiftCertificateModel giftCertificateModel);
+    void deleteById(Long id);
     List<GiftCertificateDto> search(SearchParams searchParams);
 }

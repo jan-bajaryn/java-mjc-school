@@ -94,7 +94,6 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    @Override
     @Transactional
     public Tag findOrCreate(Tag tag) {
         Optional<Tag> byTagName = findByTagName(tag.getName());

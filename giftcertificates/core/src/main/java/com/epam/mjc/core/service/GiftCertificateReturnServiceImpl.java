@@ -41,15 +41,15 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public boolean update(GiftCertificateModel giftCertificateModel) {
-        return service.update(
+    public void update(GiftCertificateModel giftCertificateModel) {
+        service.update(
                 giftCertificateDtoMapper.toGiftCertificate(giftCertificateModel)
         );
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        return service.deleteById(id);
+    public void deleteById(Long id) {
+        service.deleteById(id);
     }
 
     @Override

@@ -13,5 +13,4 @@ repositories {
 }
 
 dependencies {
-    testImplementation "junit:junit:${junitVersion}"
 }
