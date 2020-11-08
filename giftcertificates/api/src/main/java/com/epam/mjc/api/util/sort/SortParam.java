@@ -7,6 +7,11 @@ public class SortParam {
     public SortParam() {
     }
 
+    public SortParam(FieldName fieldName, boolean asc) {
+        this.fieldName = fieldName;
+        this.asc = asc;
+    }
+
     public FieldName getFieldName() {
         return this.fieldName;
     }

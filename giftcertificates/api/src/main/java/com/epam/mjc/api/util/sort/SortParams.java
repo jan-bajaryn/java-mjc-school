@@ -1,9 +1,10 @@
 package com.epam.mjc.api.util.sort;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SortParams {
-    private List<SortParam> sortParams;
+    private List<SortParam> sortParams = new ArrayList<>();
 
     public SortParams() {
     }

@@ -1,11 +1,12 @@
 package com.epam.mjc.core.dao.builder;
 
+import com.epam.mjc.api.util.SearchParams;
 import com.epam.mjc.api.util.sort.SortParam;
 import com.epam.mjc.api.util.sort.SortParams;
-import com.epam.mjc.api.util.SearchParams;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class SearchQueryBuilder {
@@ -15,6 +16,9 @@ public class SearchQueryBuilder {
     // language=SQL
     private static final String DEFAULT_WITHOUT_INNER_JOIN = "SELECT gift_certificate.id as id,gift_certificate.name as name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate ";
 
+    private static final Logger log = LoggerFactory.getLogger(SearchQueryBuilder.class);
+    private static final String COMMA = " , ";
+
     private String tagName;
     private String partName;
     private String partDescription;
@@ -22,7 +26,9 @@ public class SearchQueryBuilder {
 
     private StringBuilder sb;
 
-    boolean whereInserted;
+    private boolean whereInserted;
+    private boolean commaInserted = false;
+
 
     private SearchQueryBuilder() {
     }
@@ -42,16 +48,20 @@ public class SearchQueryBuilder {
         partDescription();
         sortParams();
 
-        return sb.toString();
+        String result = sb.toString();
+        log.debug("result = {}", result);
+        return result;
     }
 
     private void tagName() {
-        if (tagName != null) {
+        if (this.tagName != null) {
+            log.info("tagName !=null");
             sb = new StringBuilder(DEFAULT_WITH_INNER_JOIN);
             insertWhereOrAnd();
-            sb.append(" tag.name = ").append(QueryParser.escape(this.tagName));
+            sb.append(" tag.name = '").append(QueryParser.escape(this.tagName)).append("' ");
+        } else {
+            sb = new StringBuilder(DEFAULT_WITHOUT_INNER_JOIN);
         }
-        sb = new StringBuilder(DEFAULT_WITHOUT_INNER_JOIN);
     }
 
     private void insertWhereOrAnd() {
@@ -60,6 +70,7 @@ public class SearchQueryBuilder {
         } else {
             sb.append(" WHERE ");
         }
+        whereInserted = true;
     }
 
     private void partName() {
@@ -80,17 +91,28 @@ public class SearchQueryBuilder {
         if (this.sortParams != null) {
             sb.append(" ORDER BY ");
             for (SortParam sortParam : sortParams.getSortParams()) {
-                sb.append(sortParam.getFieldName().getColumnName()).append(" ");
-                if (sortParam.isAsc()) {
-                    sb.append(" ASC ");
-                } else {
-                    sb.append(" DESC ");
-                }
+                insertCommaIfNeed();
+                parseParam(sortParam);
             }
 
         }
     }
 
+    private void insertCommaIfNeed() {
+        if (commaInserted) {
+            sb.append(COMMA);
+        }
+        commaInserted = true;
+    }
+
+    private void parseParam(SortParam sortParam) {
+        sb.append(sortParam.getFieldName().getColumnName()).append(" ");
+        if (sortParam.isAsc()) {
+            sb.append(" ASC ");
+        } else {
+            sb.append(" DESC ");
+        }
+    }
 
     public static SearchQueryBuilder builder() {
         return new SearchQueryBuilder();

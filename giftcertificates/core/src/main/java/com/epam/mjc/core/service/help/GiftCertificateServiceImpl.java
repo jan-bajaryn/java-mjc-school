@@ -73,7 +73,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
         created.setTags(tagService.findOrCreateAll(created.getTags()));
 
-        giftCertificateDao.addTags(giftCertificate,created.getTags());
+        giftCertificateDao.addTags(giftCertificate, created.getTags());
 
         return created;
     }
@@ -120,7 +120,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional(readOnly = true)
     public List<GiftCertificate> search(SearchParams searchParams) {
-        return giftCertificateDao.search(searchParams);
+        List<GiftCertificate> search = giftCertificateDao.search(searchParams);
+        buildAllRelations(search);
+        return search;
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {

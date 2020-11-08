@@ -168,7 +168,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> search(SearchParams searchParams) {
-        return template.query(SearchQueryBuilder.builder().searchParams(searchParams).build(), rowMapper);
+        log.debug("searchParams = {}", searchParams);
+        String query = SearchQueryBuilder.builder().searchParams(searchParams).build();
+        log.debug("query = {}", query);
+        return template.query(query, rowMapper);
     }
 
     @Override

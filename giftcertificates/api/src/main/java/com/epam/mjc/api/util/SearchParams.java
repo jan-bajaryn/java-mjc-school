@@ -74,4 +74,14 @@ public class SearchParams {
         result = 31 * result + (getSortParams() != null ? getSortParams().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SearchParams{" +
+                "tagName='" + tagName + '\'' +
+                ", partName='" + partName + '\'' +
+                ", partDescription='" + partDescription + '\'' +
+                ", sortParams=" + sortParams +
+                '}';
+    }
 }
