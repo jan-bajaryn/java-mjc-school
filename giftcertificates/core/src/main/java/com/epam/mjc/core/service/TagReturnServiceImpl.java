@@ -1,11 +1,11 @@
 package com.epam.mjc.core.service;
 
-import com.epam.mjc.api.controller.mapper.TagDtoMapper;
 import com.epam.mjc.api.model.dto.TagDto;
 import com.epam.mjc.api.service.TagReturnService;
 import com.epam.mjc.api.service.help.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.epam.mjc.api.service.mapper.TagDtoMapper;
 
 import java.util.List;
 

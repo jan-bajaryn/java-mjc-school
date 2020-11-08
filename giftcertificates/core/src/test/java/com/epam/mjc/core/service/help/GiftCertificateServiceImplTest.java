@@ -322,6 +322,8 @@ class GiftCertificateServiceImplTest {
         sortParams.getSortParams().add(new SortParam(FieldName.NAME, true));
         searchParams.setSortParams(sortParams);
 
+        log.debug("sortParams = {}", sortParams);
+
 
         List<GiftCertificate> search = giftCertificateService.search(searchParams);
         Assertions.assertEquals(

@@ -3,7 +3,6 @@ package com.epam.mjc.api.controller;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
-import com.epam.mjc.api.util.sort.SortParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,6 +41,6 @@ public interface GiftCertificateController {
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
-            @RequestParam(required = false) SortParams sortParams
+            @RequestParam(required = false) String sort
     );
 }

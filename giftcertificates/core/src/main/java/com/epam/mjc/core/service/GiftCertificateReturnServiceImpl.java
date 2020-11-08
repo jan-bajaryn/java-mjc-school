@@ -1,11 +1,12 @@
 package com.epam.mjc.core.service;
 
-import com.epam.mjc.api.controller.mapper.GiftCertificateDtoMapper;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import com.epam.mjc.api.service.help.GiftCertificateService;
+import com.epam.mjc.api.service.mapper.GiftCertificateDtoMapper;
+import com.epam.mjc.api.service.mapper.SortMapper;
 import com.epam.mjc.api.util.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,13 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
     private final GiftCertificateService service;
     private final GiftCertificateDtoMapper giftCertificateDtoMapper;
+    private final SortMapper sortMapper;
 
     @Autowired
-    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper) {
+    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, SortMapper sortMapper) {
         this.service = service;
         this.giftCertificateDtoMapper = giftCertificateDtoMapper;
+        this.sortMapper = sortMapper;
     }
 
     @Override
@@ -53,9 +56,9 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public List<GiftCertificateDto> search(SearchParams searchParams) {
+    public List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort) {
         return giftCertificateDtoMapper.toGiftCertificateDto(
-                service.search(searchParams)
+                service.search(new SearchParams(tagName, partName, partDescription, sortMapper.toSortParams(sort)))
         );
     }
 }

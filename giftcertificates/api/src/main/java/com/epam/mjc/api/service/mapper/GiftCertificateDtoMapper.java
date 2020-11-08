@@ -1,4 +1,4 @@
-package com.epam.mjc.api.controller.mapper;
+package com.epam.mjc.api.service.mapper;
 
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.model.GiftCertificateModel;

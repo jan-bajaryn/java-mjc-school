@@ -3,10 +3,12 @@ package com.epam.mjc.core.controller;
 import com.epam.mjc.api.controller.GiftCertificateController;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.model.dto.AscDescDto;
+import com.epam.mjc.api.model.dto.FieldNameDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
-import com.epam.mjc.api.util.SearchParams;
-import com.epam.mjc.api.util.sort.SortParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/certificate")
 public class GiftCertificateControllerImpl implements GiftCertificateController {
 
-//    private final GiftCertificateService giftCertificateService;
-//    private final GiftCertificateMapperImpl giftCertificateMapper;
-//    private final GiftCertificateDtoMapper giftCertificateDtoMapper;
-
+    private static final Logger log = LoggerFactory.getLogger(GiftCertificateControllerImpl.class);
     private final GiftCertificateReturnService giftCertificateReturnService;
 
 
@@ -72,11 +72,11 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
             @RequestParam(required = false) String tagName,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
-            @RequestParam(required = false) SortParams sortParams
+            @RequestParam(required = false, name = "sort") String sort
     ) {
-        //
+        log.debug("sort = {}", sort);
         return ResponseEntity.ok(
-                giftCertificateReturnService.search(new SearchParams(tagName, partName, partDescription, sortParams))
+                giftCertificateReturnService.search(tagName, partName, partDescription, sort)
         );
     }
 

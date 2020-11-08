@@ -9,6 +9,10 @@ public class SortParams {
     public SortParams() {
     }
 
+    public SortParams(List<SortParam> sortParams) {
+        this.sortParams = sortParams;
+    }
+
     public List<SortParam> getSortParams() {
         return this.sortParams;
     }
