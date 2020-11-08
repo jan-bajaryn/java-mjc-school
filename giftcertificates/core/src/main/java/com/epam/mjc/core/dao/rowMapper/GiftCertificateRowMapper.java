@@ -11,6 +11,7 @@ import java.sql.SQLException;
 public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
 
     private static final String ID = "id";
+    private static final String NAME = "name";
     private static final String PRICE = "price";
     private static final String DESCRIPTION = "description";
     private static final String CREATE_DATE = "createDate";
@@ -21,6 +22,7 @@ public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
         return GiftCertificate.builder()
                 .id(rs.getLong(ID))
+                .name(rs.getString(NAME))
                 .price(rs.getBigDecimal(PRICE))
                 .description(rs.getString(DESCRIPTION))
                 .createDate(rs.getTimestamp(CREATE_DATE).toLocalDateTime())

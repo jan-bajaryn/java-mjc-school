@@ -2,6 +2,7 @@ package com.epam.mjc.api.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GiftCertificate {
@@ -12,7 +13,7 @@ public class GiftCertificate {
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
     private Integer duration;
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
 
     public static class GiftCertificateBuilder {
@@ -23,7 +24,7 @@ public class GiftCertificate {
         private LocalDateTime createDate;
         private LocalDateTime lastUpdateDate;
         private Integer duration;
-        private List<Tag> tags;
+        private List<Tag> tags = new ArrayList<>();
 
         GiftCertificateBuilder() {
         }

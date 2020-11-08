@@ -71,7 +71,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         checkIfNameExists(giftCertificate);
 
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
-        tagService.findOrCreateAll(created.getTags());
+        created.setTags(tagService.findOrCreateAll(created.getTags()));
 
         giftCertificateDao.addTags(giftCertificate,created.getTags());
 
@@ -98,9 +98,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public void update(GiftCertificate certificate) {
-
         giftCertificateValidator.validateGiftCertificate(certificate);
+        giftCertificateValidator.validateGiftCertificateId(certificate.getId());
         buildTagsByNames(certificate);
+
         GiftCertificate toUpdate = findById(certificate.getId());
         List<Tag> prevTags = toUpdate.getTags();
         copyFieldsToUpdate(certificate, toUpdate);
@@ -109,11 +110,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
-        toUpdate.setName(certificate.getName() == null ? null : certificate.getName());
-        toUpdate.setDescription(certificate.getDescription() == null ? null : certificate.getDescription());
-        toUpdate.setPrice(certificate.getPrice() == null ? null : certificate.getPrice());
-        toUpdate.setDuration(certificate.getDuration() == null ? null : certificate.getDuration());
-        toUpdate.setTags(certificate.getTags() == null ? null : certificate.getTags());
+        toUpdate.setName(certificate.getName() == null ? toUpdate.getName() : certificate.getName());
+        toUpdate.setDescription(certificate.getDescription() == null ? toUpdate.getDescription() : certificate.getDescription());
+        toUpdate.setPrice(certificate.getPrice() == null ? toUpdate.getPrice() : certificate.getPrice());
+        toUpdate.setDuration(certificate.getDuration() == null ? toUpdate.getDuration() : certificate.getDuration());
+        toUpdate.setTags(certificate.getTags() == null ? toUpdate.getTags() : certificate.getTags());
     }
 
     @Override
@@ -148,13 +149,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private List<Tag> tagsForAdd(List<Tag> prevTags, List<Tag> tags) {
         return tags.stream()
-                .filter(prevTags::contains)
+                .filter(o -> !prevTags.contains(o))
                 .collect(Collectors.toList());
     }
 
     private List<Tag> tagsForDelete(List<Tag> prevTags, List<Tag> tags) {
-        return tags.stream()
-                .filter(t -> !prevTags.contains(t))
+        return prevTags.stream()
+                .filter(t -> !tags.contains(t))
                 .collect(Collectors.toList());
     }
 

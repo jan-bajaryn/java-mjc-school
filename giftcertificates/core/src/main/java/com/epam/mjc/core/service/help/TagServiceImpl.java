@@ -39,7 +39,6 @@ public class TagServiceImpl implements TagService {
 
         Optional<Tag> byTagName = findByTagName(name);
         log.debug("createByName: byTagName.isPresent() = {}", byTagName.isPresent());
-        System.out.println(byTagName.isPresent());
         if (byTagName.isPresent()) {
             throw new TagAlreadyExistsException("tag.exists");
         }
