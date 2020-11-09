@@ -96,7 +96,6 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
 
     private ResponseEntity<Object> getResponseEntity(Exception exception, String errorCode, HttpStatus httpStatus) {
         logger.error("Exception: ", exception);
-//        String message = bundle.getString(exception.getMessage());
         String message = translator.getString(exception.getMessage());
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
