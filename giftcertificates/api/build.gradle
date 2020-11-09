@@ -19,6 +19,9 @@ dependencies {
     api "org.springframework:spring-webmvc:${springVersion}"
     api 'javax.servlet:javax.servlet-api:3.0.1'
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
+
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
