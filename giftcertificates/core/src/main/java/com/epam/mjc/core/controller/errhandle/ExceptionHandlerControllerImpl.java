@@ -1,6 +1,7 @@
 package com.epam.mjc.core.controller.errhandle;
 
 import com.epam.mjc.api.controller.errhandle.ExceptionHandlerController;
+import com.epam.mjc.api.controller.errhandle.Translator;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
@@ -8,6 +9,7 @@ import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ResourceBundle;
-
 @ControllerAdvice
 public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandler implements ExceptionHandlerController {
 
-    private final ResourceBundle bundle = ResourceBundle.getBundle("message");
+    private final Translator translator;
 
+    @Autowired
+    public ExceptionHandlerControllerImpl(Translator translator) {
+        this.translator = translator;
+    }
 
     @Override
     @ExceptionHandler(TagValidatorException.class)
@@ -79,7 +83,7 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleRemainException(Exception exception) {
         logger.error("Exception: ", exception);
         String errorCode = formatCode(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.REMAIN_CODE);
-        String message = bundle.getString("unexpected.error");
+        String message = translator.getString("unexpected.error");
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -92,7 +96,8 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
 
     private ResponseEntity<Object> getResponseEntity(Exception exception, String errorCode, HttpStatus httpStatus) {
         logger.error("Exception: ", exception);
-        String message = bundle.getString(exception.getMessage());
+//        String message = bundle.getString(exception.getMessage());
+        String message = translator.getString(exception.getMessage());
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
     }
