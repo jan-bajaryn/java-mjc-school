@@ -46,4 +46,14 @@ public class WebConfig extends AcceptHeaderLocaleResolver implements WebMvcConfi
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter());
     }
+
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer) {
+//        // will throw NoHandlerFoundException
+//        configurer.setUseSuffixPatternMatch(false);
+//        configurer.setUseTrailingSlashMatch(false);
+//    }
+
+
+
 }

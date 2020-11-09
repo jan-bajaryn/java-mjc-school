@@ -76,11 +76,18 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.WRONG_SORT);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
-
+    //
+//    @Override
+//    @ExceptionHandler(ServletException.class)
+//    public ResponseEntity<Object> handleWrongQuerySortException(ServletException ex) {
+//        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.WRONG_SORT);
+//        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+//    }
+//
 
     @Override
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleRemainException(Exception exception) {
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Object> handleRemainException(Throwable exception) {
         logger.error("Exception: ", exception);
         String errorCode = formatCode(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.REMAIN_CODE);
         String message = translator.getString("unexpected.error");

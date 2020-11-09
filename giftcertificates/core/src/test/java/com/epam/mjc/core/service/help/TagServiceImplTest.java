@@ -28,6 +28,9 @@ class TagServiceImplTest {
     private static final String TAG_NAME = "NAME";
 
     @Mock
+    private Tag mockTag;
+
+    @Mock
     private List<Tag> mockTags;
     @Mock
     private TagDao mockTagDao;
@@ -65,10 +68,6 @@ class TagServiceImplTest {
 
         assertThrows(TagNotFoundException.class,
                 () -> tagServiceImpl.findById(TAG_ID));
-    }
-
-    @Test
-    void createByName() {
     }
 
     @Test

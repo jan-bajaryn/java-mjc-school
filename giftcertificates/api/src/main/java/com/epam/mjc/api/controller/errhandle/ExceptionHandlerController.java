@@ -32,6 +32,6 @@ public interface ExceptionHandlerController {
     @ExceptionHandler(WrongQuerySortException.class)
     ResponseEntity<Object> handleWrongQuerySortException(WrongQuerySortException ex);
 
-    @ExceptionHandler(Exception.class)
-    ResponseEntity<Object> handleRemainException(Exception exception);
+    @ExceptionHandler(Throwable.class)
+    ResponseEntity<Object> handleRemainException(Throwable exception);
 }
