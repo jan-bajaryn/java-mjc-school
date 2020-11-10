@@ -3,8 +3,6 @@ package com.epam.mjc.core.controller;
 import com.epam.mjc.api.controller.GiftCertificateController;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.api.model.dto.AscDescDto;
-import com.epam.mjc.api.model.dto.FieldNameDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import org.slf4j.Logger;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/certificate")

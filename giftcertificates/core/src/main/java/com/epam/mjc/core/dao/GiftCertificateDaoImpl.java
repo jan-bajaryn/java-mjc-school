@@ -58,18 +58,19 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
+        LocalDateTime nowLocalDateTime = LocalDateTime.now();
+
         try {
             template.update(connection -> {
                 PreparedStatement ps = connection
                         .prepareStatement(CREATE_SQL, Statement.RETURN_GENERATED_KEYS);
 
-                LocalDateTime now = LocalDateTime.now();
-
+                Timestamp now = Timestamp.valueOf(nowLocalDateTime);
                 ps.setString(1, giftCertificate.getName());
                 ps.setString(2, giftCertificate.getDescription());
                 ps.setBigDecimal(3, giftCertificate.getPrice());
-                ps.setTimestamp(4, Timestamp.valueOf(now));
-                ps.setTimestamp(5, Timestamp.valueOf(now));
+                ps.setTimestamp(4, now);
+                ps.setTimestamp(5, now);
                 ps.setInt(6, giftCertificate.getDuration());
                 return ps;
             }, keyHolder);
@@ -77,6 +78,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             log.error("message: ", e);
         }
         giftCertificate.setId((Long) Objects.requireNonNull(keyHolder.getKeys().get(ID)));
+        giftCertificate.setCreateDate(nowLocalDateTime);
+        giftCertificate.setLastUpdateDate(nowLocalDateTime);
         return giftCertificate;
 
     }

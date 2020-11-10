@@ -20,9 +20,6 @@ public class TagControllerImpl implements TagController {
 
     private static final Logger log = LoggerFactory.getLogger(TagControllerImpl.class);
 
-//    private final TagService tagService;
-//    private final TagDtoMapper tagDtoMapper;
-
     private final TagReturnService tagReturnService;
 
     @Autowired

@@ -1,6 +1,7 @@
 package com.epam.mjc.api.controller.errhandle;
 
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
+import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
@@ -31,6 +32,9 @@ public interface ExceptionHandlerController {
 
     @ExceptionHandler(WrongQuerySortException.class)
     ResponseEntity<Object> handleWrongQuerySortException(WrongQuerySortException ex);
+
+    @ExceptionHandler(GiftCertificateNameAlreadyExistsException.class)
+    ResponseEntity<Object> handleGiftCertificateNameAlreadyExistsException(GiftCertificateNameAlreadyExistsException ex);
 
     @ExceptionHandler(Throwable.class)
     ResponseEntity<Object> handleRemainException(Throwable exception);

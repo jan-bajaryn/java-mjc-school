@@ -8,7 +8,8 @@ public enum ErrorCodes {
     GIFT_NOT_FOUND("4"),
     TAG_DUPLICATE("5"),
     TAG_NOT_FOUND("6"),
-    WRONG_SORT("7");
+    WRONG_SORT("7"),
+    CERT_NAME_EXISTS("8");
 
     private final String code;
 

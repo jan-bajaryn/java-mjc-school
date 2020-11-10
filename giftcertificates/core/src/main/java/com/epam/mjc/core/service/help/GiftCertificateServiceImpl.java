@@ -3,6 +3,7 @@ package com.epam.mjc.core.service.help;
 import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
@@ -101,12 +102,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(certificate.getId());
         buildTagsByNames(certificate);
-
+        checkDuplicatedName(certificate);
         GiftCertificate toUpdate = findById(certificate.getId());
+
         List<Tag> prevTags = toUpdate.getTags();
         copyFieldsToUpdate(certificate, toUpdate);
 
         doUpdate(toUpdate, prevTags);
+    }
+
+    private void checkDuplicatedName(GiftCertificate certificate) {
+        giftCertificateDao.findByName(certificate.getName())
+                .ifPresent(g -> {
+                    throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists");
+                });
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
