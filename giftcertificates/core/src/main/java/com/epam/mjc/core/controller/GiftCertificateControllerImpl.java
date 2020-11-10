@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/certificate")
+@RequestMapping("/certificates")
 public class GiftCertificateControllerImpl implements GiftCertificateController {
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateControllerImpl.class);
@@ -50,18 +50,16 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     }
 
     @Override
-    public ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
+    public ResponseEntity<Void> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
         //
         giftCertificateReturnService.update(giftCertificateModel);
-        return ResponseEntity.ok(
-                true
-        );
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Boolean> certificateDelete(@PathVariable Long id) {
+    public ResponseEntity<Void> certificateDelete(@PathVariable Long id) {
         giftCertificateReturnService.deleteById(id);
-        return ResponseEntity.ok(true);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

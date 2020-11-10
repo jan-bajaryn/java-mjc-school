@@ -38,8 +38,9 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
-    public ResponseEntity<Boolean> tagDelete(@PathVariable Long id) {
-        return ResponseEntity.ok(tagReturnService.deleteById(id));
+    public ResponseEntity<Void> tagDelete(@PathVariable Long id) {
+        tagReturnService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

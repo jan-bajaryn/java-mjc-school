@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-@RequestMapping("/tag")
+@RequestMapping("/tags")
 public interface TagController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -22,7 +22,7 @@ public interface TagController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Boolean> tagDelete(@PathVariable Long id);
+    ResponseEntity<Void> tagDelete(@PathVariable Long id);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

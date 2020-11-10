@@ -29,11 +29,11 @@ public interface GiftCertificateController {
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Boolean> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel);
+    ResponseEntity<Void> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Boolean> certificateDelete(@PathVariable Long id);
+    ResponseEntity<Void> certificateDelete(@PathVariable Long id);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
