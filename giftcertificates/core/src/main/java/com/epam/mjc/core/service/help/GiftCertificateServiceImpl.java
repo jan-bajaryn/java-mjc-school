@@ -101,8 +101,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void update(GiftCertificate certificate) {
         giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(certificate.getId());
-        buildTagsByNames(certificate);
         checkDuplicatedName(certificate);
+
+        buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(certificate.getId());
 
         List<Tag> prevTags = toUpdate.getTags();
@@ -114,7 +115,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void checkDuplicatedName(GiftCertificate certificate) {
         giftCertificateDao.findByName(certificate.getName())
                 .ifPresent(g -> {
-                    throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists");
+                    if (!g.getId().equals(certificate.getId())){
+                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists");
+                    }
                 });
     }
 
@@ -135,15 +138,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {
-        List<Tag> result = certificate.getTags().stream()
-                .map(t -> {
-                    Optional<Tag> byId = tagService.findByTagName(t.getName());
-                    return byId.orElseGet(() -> tagService.createByName(t.getName()));
+        if (certificate.getTags() != null) {
+            List<Tag> result = certificate.getTags().stream()
+                    .map(t -> {
+                        Optional<Tag> byId = tagService.findByTagName(t.getName());
+                        return byId.orElseGet(() -> tagService.createByName(t.getName()));
 
-                })
-                .collect(Collectors.toList());
+                    })
+                    .collect(Collectors.toList());
 
-        certificate.setTags(result);
+            certificate.setTags(result);
+        }
     }
 
 
