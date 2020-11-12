@@ -1,6 +1,7 @@
 package com.epam.mjc.api.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GiftCertificateModelForCreate {
@@ -8,7 +9,7 @@ public class GiftCertificateModelForCreate {
     private String description;
     private BigDecimal price;
     private Integer duration;
-    private List<TagModel> tags;
+    private List<TagModel> tags=new ArrayList<>();
 
     public GiftCertificateModelForCreate() {
     }

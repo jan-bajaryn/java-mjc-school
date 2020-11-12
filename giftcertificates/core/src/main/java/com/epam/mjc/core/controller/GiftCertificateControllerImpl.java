@@ -35,7 +35,6 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     public ResponseEntity<GiftCertificateDto> certificateCreate(
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
-        //
         return new ResponseEntity<>(
                 giftCertificateReturnService.create(giftCertificateModelForCreate),
                 HttpStatus.CREATED
