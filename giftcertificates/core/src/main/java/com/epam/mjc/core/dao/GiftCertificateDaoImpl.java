@@ -140,7 +140,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         return update != 0;
     }
 
-    // TODO TEST IT
     @Override
     public boolean addTags(GiftCertificate giftCertificate, List<Tag> tags) {
         int[] updateCounts = template.batchUpdate(

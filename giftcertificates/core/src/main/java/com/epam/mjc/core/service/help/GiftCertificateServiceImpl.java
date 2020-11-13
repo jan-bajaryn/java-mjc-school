@@ -154,7 +154,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     public void doUpdate(GiftCertificate toUpdate, List<Tag> prevTags) {
         boolean update = giftCertificateDao.update(toUpdate);
-        // TODO test this case
         if (!update) {
             throw new UnexpectedServiceException("certificate.unexpected.cant-update");
         }

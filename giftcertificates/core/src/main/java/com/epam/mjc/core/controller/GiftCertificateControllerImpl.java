@@ -50,7 +50,6 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
 
     @Override
     public ResponseEntity<Void> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel) {
-        //
         giftCertificateReturnService.update(giftCertificateModel);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

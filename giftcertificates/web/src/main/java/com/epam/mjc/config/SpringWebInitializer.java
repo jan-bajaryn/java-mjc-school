@@ -19,10 +19,4 @@ public class SpringWebInitializer extends AbstractAnnotationConfigDispatcherServ
         return new Class[]{RootConfig.class};
     }
 
-//    @Override
-//    public void onStartup(ServletContext servletContext) throws ServletException {
-//        servletContext.setInitParameter("throwExceptionIfNoHandlerFound", "true");
-//        servletContext.setInitParameter("throw-exception-if-no-handler-found", "true");
-//        super.onStartup(servletContext);
-//    }
 }

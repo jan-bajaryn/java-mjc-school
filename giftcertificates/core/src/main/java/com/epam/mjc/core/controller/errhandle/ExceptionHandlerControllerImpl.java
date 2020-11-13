@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-//@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandler implements ExceptionHandlerController {
 
@@ -85,14 +84,6 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.CERT_NAME_EXISTS);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
-    //
-//    @Override
-//    @ExceptionHandler(ServletException.class)
-//    public ResponseEntity<Object> handleWrongQuerySortException(ServletException ex) {
-//        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.WRONG_SORT);
-//        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
-//    }
-//
 
     @Override
     @ExceptionHandler(Throwable.class)

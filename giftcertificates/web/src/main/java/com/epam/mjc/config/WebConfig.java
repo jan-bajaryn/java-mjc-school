@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
@@ -48,19 +47,6 @@ public class WebConfig extends AcceptHeaderLocaleResolver implements WebMvcConfi
         converters.add(new MappingJackson2HttpMessageConverter());
     }
 
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        WebMvcConfigurer.super.configureHandlerExceptionResolvers(resolvers);
-//        resolvers.add(new HandleExceptionResolverImpl());
-    }
-
-
-    //    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        // will throw NoHandlerFoundException
-//        configurer.setUseSuffixPatternMatch(false);
-//        configurer.setUseTrailingSlashMatch(false);
-//    }
 
 
 }
