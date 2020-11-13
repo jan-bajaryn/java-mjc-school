@@ -36,6 +36,9 @@ public interface ExceptionHandlerController {
     @ExceptionHandler(GiftCertificateNameAlreadyExistsException.class)
     ResponseEntity<Object> handleGiftCertificateNameAlreadyExistsException(GiftCertificateNameAlreadyExistsException ex);
 
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception);
+
     @ExceptionHandler(Throwable.class)
     ResponseEntity<Object> handleRemainException(Throwable exception);
 }

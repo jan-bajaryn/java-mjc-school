@@ -10,12 +10,21 @@ import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
@@ -107,5 +116,57 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
     }
+
+    private ResponseEntity<Object> handleTypicalException(Throwable ex, String message, ErrorCodes errorCode, HttpStatus httpStatus) {
+        logger.error("Exception: ", ex);
+        ExceptionInfoHolder info = new ExceptionInfoHolder(
+                translator.getString(message),
+                formatCode(httpStatus.value(), errorCode)
+        );
+        return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "method-not-allowed", ErrorCodes.METHOD_NOT_ALLOWED, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "media-not-supported", ErrorCodes.MEDIA_NOT_SUPPORTED, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "media-not-acceptable", ErrorCodes.MEDIA_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "missing-path-variable", ErrorCodes.MISSING_PATH_VARIABLE, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "missing-servlet-request-param", ErrorCodes.MISSING_SERVLET_PARAMETER, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "type-mismatch", ErrorCodes.TYPE_MISMATCH, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "not-readable", ErrorCodes.MESSAGE_NOT_REPEATABLE, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleTypicalException(ex, "method-argument-not-valid", ErrorCodes.METHOD_ARGUMENT_NOT_VALID, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
