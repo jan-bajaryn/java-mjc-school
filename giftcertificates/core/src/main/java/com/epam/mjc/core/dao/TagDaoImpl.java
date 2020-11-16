@@ -4,6 +4,7 @@ import com.epam.mjc.api.dao.TagDao;
 import com.epam.mjc.api.domain.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Collections;
@@ -35,11 +40,26 @@ public class TagDaoImpl implements TagDao {
     private final RowMapper<Tag> rowMapper;
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
 
+    private final EntityManager entityManager;
+
+    @Autowired
+    public TagDaoImpl(final JdbcTemplate template, final RowMapper<Tag> rowMapper, EntityManager entityManager) {
+        this.template = template;
+        this.rowMapper = rowMapper;
+        this.entityManager = entityManager;
+    }
+
     @Override
     public List<Tag> findAll() {
-        List<Tag> query = template.query(FIND_ALL_SQL, rowMapper);
-        log.debug("findAll: query = {}", query);
-        return query;
+//        List<Tag> query = template.query(FIND_ALL_SQL, rowMapper);
+//        log.debug("findAll: query = {}", query);
+//        return query;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.select(root);
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
@@ -119,10 +139,5 @@ public class TagDaoImpl implements TagDao {
 //                        return toAdd.size();
 //                    }
 //                });
-    }
-
-    public TagDaoImpl(final JdbcTemplate template, final RowMapper<Tag> rowMapper) {
-        this.template = template;
-        this.rowMapper = rowMapper;
     }
 }
