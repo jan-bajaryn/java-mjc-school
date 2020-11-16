@@ -3,12 +3,11 @@ package com.epam.mjc.core.service.help;
 import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
+import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.TagService;
-import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
-import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
-import com.epam.mjc.api.service.exception.UnexpectedServiceException;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import com.epam.mjc.api.util.SearchParams;
 import org.slf4j.Logger;
@@ -39,16 +38,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GiftCertificate> findAll() {
-        List<GiftCertificate> all = giftCertificateDao.findAll();
-
-        buildAllRelations(all);
-
-        return all;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public GiftCertificate findById(Long id) {
         giftCertificateValidator.validateGiftCertificateId(id);
 
@@ -56,10 +45,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (!byId.isPresent()) {
             throw new GiftCertificateNotFoundException("certificate.not-found-id");
         }
-        GiftCertificate giftCertificate = byId.get();
 
-        buildRelations(giftCertificate);
-        return giftCertificate;
+        return byId.get();
     }
 
 
@@ -68,13 +55,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificate create(GiftCertificate giftCertificate) {
 
         giftCertificateValidator.validateGiftCertificate(giftCertificate);
-
         checkIfNameExists(giftCertificate);
+
 
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
         created.setTags(tagService.findOrCreateAll(created.getTags()));
-
-        giftCertificateDao.addTags(giftCertificate, created.getTags());
 
         return created;
     }
@@ -106,10 +91,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(certificate.getId());
 
-        List<Tag> prevTags = toUpdate.getTags();
         copyFieldsToUpdate(certificate, toUpdate);
 
-        doUpdate(toUpdate, prevTags);
+        giftCertificateDao.update(toUpdate);
     }
 
     private void checkDuplicatedName(GiftCertificate certificate) {
@@ -132,9 +116,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional(readOnly = true)
     public List<GiftCertificate> search(SearchParams searchParams) {
-        List<GiftCertificate> search = giftCertificateDao.search(searchParams);
-        buildAllRelations(search);
-        return search;
+        return giftCertificateDao.search(searchParams);
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {
@@ -152,35 +134,4 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
 
-    public void doUpdate(GiftCertificate toUpdate, List<Tag> prevTags) {
-        boolean update = giftCertificateDao.update(toUpdate);
-        if (!update) {
-            throw new UnexpectedServiceException("certificate.unexpected.cant-update");
-        }
-        tagsForDelete(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.deleteTag(toUpdate, t));
-        tagsForAdd(prevTags, toUpdate.getTags()).forEach(t -> giftCertificateDao.addTag(toUpdate, t));
-    }
-
-
-    private List<Tag> tagsForAdd(List<Tag> prevTags, List<Tag> tags) {
-        return tags.stream()
-                .filter(o -> !prevTags.contains(o))
-                .collect(Collectors.toList());
-    }
-
-    private List<Tag> tagsForDelete(List<Tag> prevTags, List<Tag> tags) {
-        return prevTags.stream()
-                .filter(t -> !tags.contains(t))
-                .collect(Collectors.toList());
-    }
-
-    private void buildAllRelations(List<GiftCertificate> all) {
-        for (GiftCertificate giftCertificate : all) {
-            buildRelations(giftCertificate);
-        }
-    }
-
-    private void buildRelations(GiftCertificate giftCertificate) {
-        giftCertificate.setTags(tagService.findAllByGiftCertificateId(giftCertificate.getId()));
-    }
 }

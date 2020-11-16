@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,6 +33,7 @@ public class TagDaoImpl implements TagDao {
     private final RowMapper<Tag> rowMapper;
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
 
+    @PersistenceContext
     private final EntityManager entityManager;
 
     @Autowired
@@ -59,6 +61,7 @@ public class TagDaoImpl implements TagDao {
 
     }
 
+    @Transactional
     @Override
     public boolean delete(Tag tag) {
 
@@ -106,6 +109,11 @@ public class TagDaoImpl implements TagDao {
         }
     }
 
+
+
+
+
+    // TODO TO DELETE OR CHANGE
     @Override
     public List<Tag> findAllExistingByNames(List<Tag> tags) {
         String[] names = tags.stream()

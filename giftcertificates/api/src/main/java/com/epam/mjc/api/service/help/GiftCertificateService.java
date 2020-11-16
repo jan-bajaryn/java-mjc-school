@@ -12,11 +12,6 @@ import java.util.List;
 public interface GiftCertificateService {
 
     /**
-     * @return List of all {@link GiftCertificate} from database
-     */
-    List<GiftCertificate> findAll();
-
-    /**
      * @param id identifier of {@link GiftCertificate}
      * @return entity from database identified by id, or throws
      * {@link com.epam.mjc.api.service.exception.GiftCertificateNotFoundException} if

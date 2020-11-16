@@ -1,18 +1,49 @@
 package com.epam.mjc.api.domain;
 
+import com.epam.mjc.api.dao.audit.AuditGiftCertificate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Entity(name = "gift_certificate")
+@EntityListeners(AuditGiftCertificate.class)
 public class GiftCertificate {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "price")
     private BigDecimal price;
+    @Column(name = "createdate")
     private LocalDateTime createDate;
+    @Column(name = "lastupdatedate")
     private LocalDateTime lastUpdateDate;
+    @Column(name = "duration")
     private Integer duration;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "gift_certificate_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
 
 

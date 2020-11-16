@@ -1,39 +1,39 @@
 package com.epam.mjc.core.dao.builder;
 
+import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.domain.GiftCertificate_;
+import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.domain.Tag_;
 import com.epam.mjc.api.util.SearchParams;
 import com.epam.mjc.api.util.sort.SortParam;
 import com.epam.mjc.api.util.sort.SortParams;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class SearchQueryBuilder {
-
-    // language=SQL
-    private static final String DEFAULT_WITH_INNER_JOIN = "SELECT gift_certificate.id as id,gift_certificate.name as name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate INNER JOIN gift_certificate_tag ON gift_certificate.id = gift_certificate_tag.gift_certificate_id INNER JOIN tag ON gift_certificate_tag.tag_id = tag.id ";
-    // language=SQL
-    private static final String DEFAULT_WITHOUT_INNER_JOIN = "SELECT gift_certificate.id as id,gift_certificate.name as name,description,price,createDate,lastUpdateDate,duration FROM gift_certificate ";
-
-    private static final Logger log = LoggerFactory.getLogger(SearchQueryBuilder.class);
-    private static final String COMMA = " , ";
 
     private String tagName;
     private String partName;
     private String partDescription;
     private SortParams sortParams;
 
-    private StringBuilder sb;
+    private final List<Predicate> predicates = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
+    private CriteriaBuilder criteriaBuilder;
+    private Root<GiftCertificate> root;
 
-    private boolean whereInserted;
-    private boolean commaInserted = false;
-
-
-    private SearchQueryBuilder() {
-    }
-
-    public SearchQueryBuilder searchParams(SearchParams searchParams) {
+    public SearchQueryBuilder searchParams(SearchParams searchParams,CriteriaBuilder criteriaBuilder) {
+        this.criteriaBuilder = criteriaBuilder;
         this.tagName = searchParams.getTagName();
         this.partName = searchParams.getPartName();
         this.partDescription = searchParams.getPartDescription();
@@ -41,80 +41,59 @@ public class SearchQueryBuilder {
         return this;
     }
 
-    public String build() {
+    public CriteriaQuery<GiftCertificate> build() {
+
+        CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
+        this.root = criteriaQuery.from(GiftCertificate.class);
 
         tagName();
         partName();
         partDescription();
         sortParams();
 
-        String result = sb.toString();
-        log.debug("result = {}", result);
-        return result;
+        return criteriaQuery.select(root)
+                .distinct(true)
+                .where(criteriaBuilder.and(predicates.toArray(new Predicate[0])))
+                .orderBy(orders.toArray(new Order[0]));
     }
 
     private void tagName() {
         if (this.tagName != null) {
-            log.info("tagName !=null");
-            sb = new StringBuilder(DEFAULT_WITH_INNER_JOIN);
-            insertWhereOrAnd();
-            sb.append(" tag.name = '").append(QueryParser.escape(this.tagName)).append("' ");
-        } else {
-            sb = new StringBuilder(DEFAULT_WITHOUT_INNER_JOIN);
+            Join<GiftCertificate, Tag> join = root.join(GiftCertificate_.tags, JoinType.INNER);
+            Predicate tagPredicate = criteriaBuilder.equal(join.get(Tag_.name), this.tagName);
+            predicates.add(tagPredicate);
         }
-    }
-
-    private void insertWhereOrAnd() {
-        if (whereInserted) {
-            sb.append(" AND ");
-        } else {
-            sb.append(" WHERE ");
-        }
-        whereInserted = true;
     }
 
     private void partName() {
         if (this.partName != null) {
-            insertWhereOrAnd();
-            sb.append(" gift_certificate.name LIKE '%").append(QueryParser.escape(this.partName)).append("%' ");
+            Predicate or = criteriaBuilder.or(criteriaBuilder.like(root.get(GiftCertificate_.name), "%" + this.partName + "%"));
+            predicates.add(or);
         }
     }
 
     private void partDescription() {
         if (this.partDescription != null) {
-            insertWhereOrAnd();
-            sb.append(" gift_certificate.description LIKE '%").append(QueryParser.escape(this.partDescription)).append("%' ");
+            Predicate or = criteriaBuilder.or(criteriaBuilder.like(root.get(GiftCertificate_.description), "%" + this.partDescription + "%"));
+            predicates.add(or);
         }
     }
 
     private void sortParams() {
         if (this.sortParams != null) {
-            sb.append(" ORDER BY ");
             for (SortParam sortParam : sortParams.getSortParams()) {
-                insertCommaIfNeed();
-                parseParam(sortParam);
+                if (sortParam.isAsc()) {
+                    orders.add(criteriaBuilder.asc(root.get(sortParam.getFieldName().getColumnName())));
+                } else {
+                    orders.add(criteriaBuilder.desc(root.get(sortParam.getFieldName().getColumnName())));
+                }
             }
-
         }
     }
 
-    private void insertCommaIfNeed() {
-        if (commaInserted) {
-            sb.append(COMMA);
-        }
-        commaInserted = true;
-    }
-
-    private void parseParam(SortParam sortParam) {
-        sb.append(sortParam.getFieldName().getColumnName()).append(" ");
-        if (sortParam.isAsc()) {
-            sb.append(" ASC ");
-        } else {
-            sb.append(" DESC ");
-        }
-    }
 
     public static SearchQueryBuilder builder() {
         return new SearchQueryBuilder();
     }
+
 }
