@@ -43,13 +43,6 @@ public interface TagService {
     Tag findById(Long id);
 
     /**
-     * @param id identifier of {@link GiftCertificate}
-     * @return list of all Tags of GiftCertificate identified by input id
-     * @throws com.epam.mjc.api.service.exception.TagValidatorException if id is incorrect
-     */
-    List<Tag> findAllByGiftCertificateId(Long id);
-
-    /**
      * Find tags with names, or create them in database
      *
      * @param tags list of {@link GiftCertificate} to find or create

@@ -6,8 +6,6 @@ import com.epam.mjc.api.domain.Tag_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +16,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,17 +26,13 @@ public class TagDaoImpl implements TagDao {
     private static final String FIND_EXISTING_SQL = "SELECT id,name FROM tag WHERE name IN (%s)";
     private static final String COMMA = ",";
     private static final String QUESTION_MARK = "?";
-    private final JdbcTemplate template;
-    private final RowMapper<Tag> rowMapper;
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
 
     @PersistenceContext
     private final EntityManager entityManager;
 
     @Autowired
-    public TagDaoImpl(final JdbcTemplate template, final RowMapper<Tag> rowMapper, EntityManager entityManager) {
-        this.template = template;
-        this.rowMapper = rowMapper;
+    public TagDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -90,12 +83,6 @@ public class TagDaoImpl implements TagDao {
 
     }
 
-    // TODO CHECK IF NEED IN FUTURE
-    @Override
-    public List<Tag> findAllByGiftCertificateId(Long id) {
-        return template.query(FIND_BY_CERTIFICATE_ID, new Object[]{id}, rowMapper);
-    }
-
     @Override
     public Optional<Tag> findByTagName(String name) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -110,25 +97,22 @@ public class TagDaoImpl implements TagDao {
     }
 
 
-
-
-
     // TODO TO DELETE OR CHANGE
-    @Override
-    public List<Tag> findAllExistingByNames(List<Tag> tags) {
-        String[] names = tags.stream()
-                .map(Tag::getName)
-                .toArray(String[]::new);
-        String inSql = String.join(COMMA, Collections.nCopies(names.length, QUESTION_MARK));
+//    @Override
+//    public List<Tag> findAllExistingByNames(List<Tag> tags) {
+//        String[] names = tags.stream()
+//                .map(Tag::getName)
+//                .toArray(String[]::new);
+//        String inSql = String.join(COMMA, Collections.nCopies(names.length, QUESTION_MARK));
+//
+//        return template.query(
+//                String.format(FIND_EXISTING_SQL, inSql),
+//                names,
+//                rowMapper);
+//    }
 
-        return template.query(
-                String.format(FIND_EXISTING_SQL, inSql),
-                names,
-                rowMapper);
-    }
-
-    @Override
-    public void createAll(List<Tag> toAdd) {
+//    @Override
+//    public void createAll(List<Tag> toAdd) {
 //        int[] updateCounts = template.batchUpdate(
 //                CREATE_SQL,
 //                new BatchPreparedStatementSetter() {
@@ -140,5 +124,5 @@ public class TagDaoImpl implements TagDao {
 //                        return toAdd.size();
 //                    }
 //                });
-    }
+//    }
 }

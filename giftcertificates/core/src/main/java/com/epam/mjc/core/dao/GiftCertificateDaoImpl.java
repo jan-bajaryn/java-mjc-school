@@ -8,8 +8,6 @@ import com.epam.mjc.core.dao.builder.SearchQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,16 +29,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateDaoImpl.class);
 
-    private final JdbcTemplate template;
-    private final RowMapper<GiftCertificate> rowMapper;
 
     @PersistenceContext
     private final EntityManager entityManager;
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate template, RowMapper<GiftCertificate> rowMapper, EntityManager entityManager) {
-        this.template = template;
-        this.rowMapper = rowMapper;
+    public GiftCertificateDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

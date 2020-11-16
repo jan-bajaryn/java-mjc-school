@@ -66,12 +66,6 @@ public class TagServiceImpl implements TagService {
         return byId.get();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Tag> findAllByGiftCertificateId(Long id) {
-        tagValidator.validateTagId(id);
-        return tagDao.findAllByGiftCertificateId(id);
-    }
 
     @Override
     @Transactional
