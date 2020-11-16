@@ -2,35 +2,27 @@ package com.epam.mjc.core.dao;
 
 import com.epam.mjc.api.dao.TagDao;
 import com.epam.mjc.api.domain.Tag;
+import com.epam.mjc.api.domain.Tag_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
 public class TagDaoImpl implements TagDao {
-    private static final String FIND_ALL_SQL = "SELECT id,name FROM tag;";
-    private static final String CREATE_SQL = "INSERT INTO tag (name) values (?);";
-    private static final String DELETE_SQL = "DELETE FROM tag WHERE id = ?;";
-    private static final String FIND_BY_ID_SQL = "SELECT id,name FROM tag WHERE id=?";
-    private static final String ID = "id";
     private static final String FIND_BY_CERTIFICATE_ID = "SELECT tag.id, tag.name FROM tag INNER JOIN gift_certificate_tag ON tag.id = gift_certificate_tag.tag_id WHERE gift_certificate_id = ?;";
     private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name =?;";
     private static final String FIND_EXISTING_SQL = "SELECT id,name FROM tag WHERE name IN (%s)";
@@ -51,10 +43,6 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public List<Tag> findAll() {
-//        List<Tag> query = template.query(FIND_ALL_SQL, rowMapper);
-//        log.debug("findAll: query = {}", query);
-//        return query;
-
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
@@ -62,41 +50,44 @@ public class TagDaoImpl implements TagDao {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
+    @Transactional
     @Override
     public Tag create(Tag tag) {
-        log.debug("create: method entered");
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        try {
-            log.debug("try entered");
-            template.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(CREATE_SQL, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, tag.getName());
-                return ps;
-            }, keyHolder);
-        } catch (DataAccessException e) {
-            log.error("message: ", e);
-        }
-        tag.setId((Long) Objects.requireNonNull(keyHolder.getKeys().get(ID)));
+
+        entityManager.persist(tag);
         return tag;
+
     }
 
     @Override
     public boolean delete(Tag tag) {
-        int update = template.update(DELETE_SQL, tag.getId());
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Tag> criteriaDelete = criteriaBuilder.createCriteriaDelete(Tag.class);
+        Root<Tag> root = criteriaDelete.from(Tag.class);
+        criteriaDelete.where(criteriaBuilder.equal(root.get(Tag_.id), tag.getId()));
+
+        int update = entityManager.createQuery(criteriaDelete).executeUpdate();
         return update != 0;
     }
 
     @Override
     public Optional<Tag> findById(Long id) {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.select(root).distinct(true).where(criteriaBuilder.equal(root.get(Tag_.id), id));
+
         try {
-            Tag tag = template.queryForObject(FIND_BY_ID_SQL, new Object[]{id}, rowMapper);
-            return Optional.ofNullable(tag);
-        } catch (EmptyResultDataAccessException e) {
+            return Optional.ofNullable(entityManager.createQuery(criteriaQuery).getSingleResult());
+        } catch (NoResultException e) {
             return Optional.empty();
         }
 
     }
 
+    // TODO CHECK IF NEED IN FUTURE
     @Override
     public List<Tag> findAllByGiftCertificateId(Long id) {
         return template.query(FIND_BY_CERTIFICATE_ID, new Object[]{id}, rowMapper);
@@ -104,11 +95,13 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> findByTagName(String name) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.select(root).distinct(true).where(criteriaBuilder.equal(root.get(Tag_.name), name));
         try {
-            Tag tag = template.queryForObject(FIND_BY_TAG_NAME, new Object[]{name}, rowMapper);
-            log.debug("findByTagName: tag = {}", tag);
-            return Optional.ofNullable(tag);
-        } catch (EmptyResultDataAccessException e) {
+            return Optional.ofNullable(entityManager.createQuery(criteriaQuery).getSingleResult());
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }

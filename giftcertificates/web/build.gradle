@@ -3,11 +3,10 @@ plugins {
     id 'io.spring.dependency-management'
     id 'java'
     id 'war'
-    id "com.bmuschko.tomcat-base" version "2.5"
-    id "com.bmuschko.tomcat" version "2.5"
-
 }
 
+group 'com.epam.mjc'
+version '1.0-SNAPSHOT'
 
 bootJar {
     mainClassName = 'cpm.epam.mjc.Application'
@@ -16,8 +15,6 @@ bootJar {
 bootWar {
     mainClassName = 'cpm.epam.mjc.Application'
 }
-group 'com.epam.mjc'
-version '1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -29,16 +26,4 @@ repositories {
 dependencies {
     implementation project(':api')
     implementation project(':core')
-
-    def tomcatVersion = '7.0.76'
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
-}
-
-ext {
-    tomcat {
-        contextPath = '/'
-
-    }
 }
