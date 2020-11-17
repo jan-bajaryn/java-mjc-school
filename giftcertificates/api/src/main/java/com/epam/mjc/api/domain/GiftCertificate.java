@@ -1,6 +1,6 @@
 package com.epam.mjc.api.domain;
 
-import com.epam.mjc.core.dao.audit.AuditGiftCertificate;
+import com.epam.mjc.api.dao.audit.AuditGiftCertificate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,10 +46,13 @@ public class GiftCertificate {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "giftCertificates")
+    private List<Order> orders = new ArrayList<>();
+
     public GiftCertificate() {
     }
 
-    public GiftCertificate(final Long id, final String name, final String description, final BigDecimal price, final LocalDateTime createDate, final LocalDateTime lastUpdateDate, final Integer duration, final List<Tag> tags) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration, List<Tag> tags, List<Order> orders) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -58,76 +61,109 @@ public class GiftCertificate {
         this.lastUpdateDate = lastUpdateDate;
         this.duration = duration;
         this.tags = tags;
+        this.orders = orders;
     }
 
+    private GiftCertificate(Builder builder) {
+        setId(builder.id);
+        setName(builder.name);
+        setDescription(builder.description);
+        setPrice(builder.price);
+        setCreateDate(builder.createDate);
+        setLastUpdateDate(builder.lastUpdateDate);
+        setDuration(builder.duration);
+        setTags(builder.tags);
+        setOrders(builder.orders);
+    }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
 
-    public static GiftCertificateBuilder builder() {
-        return new GiftCertificateBuilder();
+    public static Builder newBuilder(GiftCertificate copy) {
+        Builder builder = new Builder();
+        builder.id = copy.getId();
+        builder.name = copy.getName();
+        builder.description = copy.getDescription();
+        builder.price = copy.getPrice();
+        builder.createDate = copy.getCreateDate();
+        builder.lastUpdateDate = copy.getLastUpdateDate();
+        builder.duration = copy.getDuration();
+        builder.tags = copy.getTags();
+        builder.orders = copy.getOrders();
+        return builder;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
-    }
-
-    public LocalDateTime getLastUpdateDate() {
-        return this.lastUpdateDate;
-    }
-
-    public Integer getDuration() {
-        return this.duration;
-    }
-
-    public List<Tag> getTags() {
-        return this.tags;
-    }
-
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setName(final String name) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(final String description) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public void setCreateDate(final LocalDateTime createDate) {
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public void setDuration(final Integer duration) {
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
-    public void setTags(final List<Tag> tags) {
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override
@@ -146,9 +182,7 @@ public class GiftCertificate {
             return false;
         if (getLastUpdateDate() != null ? !getLastUpdateDate().equals(that.getLastUpdateDate()) : that.getLastUpdateDate() != null)
             return false;
-        if (getDuration() != null ? !getDuration().equals(that.getDuration()) : that.getDuration() != null)
-            return false;
-        return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
+        return getDuration() != null ? getDuration().equals(that.getDuration()) : that.getDuration() == null;
     }
 
     @Override
@@ -160,16 +194,23 @@ public class GiftCertificate {
         result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
         result = 31 * result + (getLastUpdateDate() != null ? getLastUpdateDate().hashCode() : 0);
         result = 31 * result + (getDuration() != null ? getDuration().hashCode() : 0);
-        result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "GiftCertificate(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ", price=" + this.getPrice() + ", createDate=" + this.getCreateDate() + ", lastUpdateDate=" + this.getLastUpdateDate() + ", duration=" + this.getDuration() + ", tags=" + this.getTags() + ")";
+        return "GiftCertificate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
+                ", duration=" + duration +
+                '}';
     }
 
-    public static class GiftCertificateBuilder {
+    public static final class Builder {
         private Long id;
         private String name;
         private String description;
@@ -177,59 +218,59 @@ public class GiftCertificate {
         private LocalDateTime createDate;
         private LocalDateTime lastUpdateDate;
         private Integer duration;
-        private List<Tag> tags = new ArrayList<>();
+        private List<Tag> tags;
+        private List<Order> orders;
 
-        GiftCertificateBuilder() {
+        private Builder() {
         }
 
-        public GiftCertificateBuilder id(final Long id) {
-            this.id = id;
+        public Builder id(Long val) {
+            id = val;
             return this;
         }
 
-        public GiftCertificateBuilder name(final String name) {
-            this.name = name;
+        public Builder name(String val) {
+            name = val;
             return this;
         }
 
-        public GiftCertificateBuilder description(final String description) {
-            this.description = description;
+        public Builder description(String val) {
+            description = val;
             return this;
         }
 
-        public GiftCertificateBuilder price(final BigDecimal price) {
-            this.price = price;
+        public Builder price(BigDecimal val) {
+            price = val;
             return this;
         }
 
-        public GiftCertificateBuilder createDate(final LocalDateTime createDate) {
-            this.createDate = createDate;
+        public Builder createDate(LocalDateTime val) {
+            createDate = val;
             return this;
         }
 
-        public GiftCertificateBuilder lastUpdateDate(final LocalDateTime lastUpdateDate) {
-            this.lastUpdateDate = lastUpdateDate;
+        public Builder lastUpdateDate(LocalDateTime val) {
+            lastUpdateDate = val;
             return this;
         }
 
-        public GiftCertificateBuilder duration(final Integer duration) {
-            this.duration = duration;
+        public Builder duration(Integer val) {
+            duration = val;
             return this;
         }
 
-        public GiftCertificateBuilder tags(final List<Tag> tags) {
-            this.tags = tags;
+        public Builder tags(List<Tag> val) {
+            tags = val;
+            return this;
+        }
+
+        public Builder orders(List<Order> val) {
+            orders = val;
             return this;
         }
 
         public GiftCertificate build() {
-            return new GiftCertificate(this.id, this.name, this.description, this.price, this.createDate, this.lastUpdateDate, this.duration, this.tags);
-        }
-
-        @Override
-        public String toString() {
-            return "GiftCertificate.GiftCertificateBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", price=" + this.price + ", createDate=" + this.createDate + ", lastUpdateDate=" + this.lastUpdateDate + ", duration=" + this.duration + ", tags=" + this.tags + ")";
+            return new GiftCertificate(this);
         }
     }
-
 }

@@ -2,10 +2,12 @@ package com.epam.mjc.core.controller.errhandle;
 
 import com.epam.mjc.api.controller.errhandle.ExceptionHandlerController;
 import com.epam.mjc.api.controller.errhandle.Translator;
+import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
+import com.epam.mjc.api.service.exception.OrderNotFountException;
 import com.epam.mjc.api.service.exception.OrderValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
@@ -110,9 +112,21 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     }
 
     @Override
+    public ResponseEntity<Object> handleEmptyGiftCertificates(EmptyGiftCertificates ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.EMPTY_GIFT_CERTIFICATES);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
     public ResponseEntity<Object> handleUserValidatorException(UserValidatorException ex) {
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.USER_VALIDATOR);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleOrderNotFountException(OrderNotFountException ex) {
+        String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.ORDER_NOT_FOUNT);
+        return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
     }
 
     @Override

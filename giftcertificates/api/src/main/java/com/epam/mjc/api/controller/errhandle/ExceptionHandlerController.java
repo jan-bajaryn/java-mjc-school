@@ -1,9 +1,11 @@
 package com.epam.mjc.api.controller.errhandle;
 
+import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
+import com.epam.mjc.api.service.exception.OrderNotFountException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
@@ -46,8 +48,14 @@ public interface ExceptionHandlerController {
     @ExceptionHandler(OrderValidatorException.class)
     ResponseEntity<Object> handleOrderValidatorException(OrderValidatorException ex);
 
+    @ExceptionHandler(EmptyGiftCertificates.class)
+    ResponseEntity<Object> handleEmptyGiftCertificates(EmptyGiftCertificates ex);
+
     @ExceptionHandler(UserValidatorException.class)
     ResponseEntity<Object> handleUserValidatorException(UserValidatorException ex);
+
+    @ExceptionHandler(OrderNotFountException.class)
+    ResponseEntity<Object> handleOrderNotFountException(OrderNotFountException ex);
 
 
     @ExceptionHandler(Throwable.class)

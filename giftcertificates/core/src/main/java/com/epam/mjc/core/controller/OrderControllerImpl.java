@@ -30,7 +30,7 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<OrderDto>> search(@RequestParam Long userId) {
+    public ResponseEntity<List<OrderDto>> search(@RequestParam(required = false) Long userId) {
         return ResponseEntity.ok(orderReturnService.search(userId));
     }
 

@@ -7,6 +7,7 @@ import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.domain.User_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -70,6 +71,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    @Transactional
     public Order create(Order order) {
         entityManager.persist(order);
         return order;

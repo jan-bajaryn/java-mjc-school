@@ -18,10 +18,13 @@ public interface GiftCertificateDtoMapper {
 
     List<GiftCertificateDto> toGiftCertificateDto(List<GiftCertificate> giftCertificates);
 
+    @Mapping(target = "orders", ignore = true)
     @Mapping(target = "lastUpdateDate", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createDate", ignore = true)
     GiftCertificate toGiftCertificate(GiftCertificateModelForCreate forCreate);
+
+    @Mapping(target = "orders", ignore = true)
     GiftCertificate toGiftCertificate(GiftCertificateModel model);
 
 }
