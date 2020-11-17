@@ -1,4 +1,4 @@
-package com.epam.mjc.api.dao.audit;
+package com.epam.mjc.core.dao.audit;
 
 import com.epam.mjc.api.domain.GiftCertificate;
 

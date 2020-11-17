@@ -1,6 +1,6 @@
 package com.epam.mjc.api.domain;
 
-import com.epam.mjc.api.dao.audit.AuditGiftCertificate;
+import com.epam.mjc.core.dao.audit.AuditGiftCertificate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

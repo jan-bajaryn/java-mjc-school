@@ -6,10 +6,12 @@ import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
+import com.epam.mjc.api.service.exception.OrderValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
+import com.epam.mjc.api.service.exception.UserValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +101,18 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
         String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.USER_NOT_FOUND);
         return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleOrderValidatorException(OrderValidatorException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.ORDER_VALIDATOR);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleUserValidatorException(UserValidatorException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.USER_VALIDATOR);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 
     @Override
