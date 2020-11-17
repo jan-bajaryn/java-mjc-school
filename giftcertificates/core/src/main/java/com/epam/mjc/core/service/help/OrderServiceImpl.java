@@ -5,6 +5,7 @@ import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Order;
 import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.service.exception.OrderNotFountException;
+import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.OrderService;
 import com.epam.mjc.api.service.help.UserService;
 import com.epam.mjc.core.service.validator.OrderValidator;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,13 +25,15 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final OrderValidator orderValidator;
     private final UserValidator userValidator;
+    private final GiftCertificateService giftCertificateService;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, UserService userService, OrderValidator orderValidator, UserValidator userValidator) {
+    public OrderServiceImpl(OrderDao orderDao, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService) {
         this.orderDao = orderDao;
         this.userService = userService;
         this.orderValidator = orderValidator;
         this.userValidator = userValidator;
+        this.giftCertificateService = giftCertificateService;
     }
 
     @Override
@@ -43,7 +47,8 @@ public class OrderServiceImpl implements OrderService {
         orderValidator.validateId(id);
         return orderDao.findById(id).orElseThrow(() -> new OrderNotFountException("order.not-fount"));
     }
-// TODO complete creation
+
+    // TODO complete creation, check for no order for empty
     @Override
     public Order create(OrderForCreate orderForCreate) {
         Order order = new Order();
@@ -57,10 +62,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private BigDecimal calculatePrice(Order order) {
-        return null;
+        BigDecimal result = BigDecimal.ZERO;
+        for (GiftCertificate giftCertificate : order.getGiftCertificates()) {
+            result = result.add(giftCertificate.getPrice());
+        }
+        return result;
     }
 
     private List<GiftCertificate> buildGiftCertificates(List<Long> giftCertificatesIds) {
-        return null;
+        return giftCertificatesIds.stream()
+                .map(giftCertificateService::findById)
+                .collect(Collectors.toList());
     }
 }
