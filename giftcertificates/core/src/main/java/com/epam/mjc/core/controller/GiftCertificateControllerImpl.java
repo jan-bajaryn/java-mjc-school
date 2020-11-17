@@ -22,6 +22,11 @@ import java.util.List;
 @RequestMapping("/certificates")
 public class GiftCertificateControllerImpl implements GiftCertificateController {
 
+
+    private static final String DEFAULT_PAGE_NUMBER = "1";
+    private static final String DEFAULT_PAGE_SIZE = "5";
+
+
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateControllerImpl.class);
     private final GiftCertificateReturnService giftCertificateReturnService;
 
@@ -65,11 +70,13 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
             @RequestParam(required = false,name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
-            @RequestParam(required = false, name = "sort") String sort
+            @RequestParam(required = false, name = "sort") String sort,
+            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
+            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize
     ) {
         log.debug("sort = {}", sort);
         return ResponseEntity.ok(
-                giftCertificateReturnService.search(tagNames, partName, partDescription, sort)
+                giftCertificateReturnService.search(tagNames, partName, partDescription, sort,pageNumber,pageSize)
         );
     }
 

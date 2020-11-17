@@ -9,6 +9,7 @@ import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.exception.OrderNotFountException;
 import com.epam.mjc.api.service.exception.OrderValidatorException;
+import com.epam.mjc.api.service.exception.PaginationException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
@@ -127,6 +128,12 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleOrderNotFountException(OrderNotFountException ex) {
         String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.ORDER_NOT_FOUNT);
         return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<Object> handlePaginationException(PaginationException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.PAGINATION);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 
     @Override

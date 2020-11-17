@@ -21,6 +21,10 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderControllerImpl implements OrderController {
 
+    private static final String DEFAULT_PAGE_NUMBER = "1";
+    private static final String DEFAULT_PAGE_SIZE = "5";
+
+
     private final OrderReturnService orderReturnService;
 
     @Autowired
@@ -30,8 +34,10 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<OrderDto>> search(@RequestParam(required = false) Long userId) {
-        return ResponseEntity.ok(orderReturnService.search(userId));
+    public ResponseEntity<List<OrderDto>> search(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                 @RequestParam(required = false) Long userId) {
+        return ResponseEntity.ok(orderReturnService.search(userId,pageNumber,pageSize));
     }
 
     @Override

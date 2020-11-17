@@ -59,9 +59,9 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort) {
+    public List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort,Integer pageNumber,Integer pageSize) {
         return giftCertificateDtoMapper.toGiftCertificateDto(
-                service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)))
+                service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)),pageNumber,pageSize)
         );
     }
 }

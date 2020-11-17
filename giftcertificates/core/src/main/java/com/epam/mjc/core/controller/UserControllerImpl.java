@@ -6,12 +6,16 @@ import com.epam.mjc.api.service.UserReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 public class UserControllerImpl implements UserController {
+
+    private static final String DEFAULT_PAGE_NUMBER = "1";
+    private static final String DEFAULT_PAGE_SIZE = "5";
 
     private final UserReturnService userReturnService;
 
@@ -21,8 +25,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<List<UserDto>> findAll() {
-        return ResponseEntity.ok(userReturnService.findAll());
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
+        return ResponseEntity.ok(userReturnService.findAll(pageNumber,pageSize));
     }
 
     @Override

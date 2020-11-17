@@ -11,12 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 public class TagControllerImpl implements TagController {
+
+
+    private static final String DEFAULT_PAGE_NUMBER = "1";
+    private static final String DEFAULT_PAGE_SIZE = "5";
 
     private static final Logger log = LoggerFactory.getLogger(TagControllerImpl.class);
 
@@ -44,9 +49,10 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
-    public ResponseEntity<List<TagDto>> showAll() {
+    public ResponseEntity<List<TagDto>> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
         return ResponseEntity.ok(
-                tagReturnService.findAll()
+                tagReturnService.findAll(pageNumber,pageSize)
         );
     }
 

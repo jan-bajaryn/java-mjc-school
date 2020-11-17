@@ -32,12 +32,15 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public List<Tag> findAll() {
+    public List<Tag> findAll(Integer begin, Integer pageSize) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
         criteriaQuery.select(root);
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(begin)
+                .setMaxResults(pageSize)
+                .getResultList();
     }
 
     @Transactional

@@ -10,6 +10,7 @@ import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import com.epam.mjc.api.util.SearchParams;
+import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
     private final TagService tagService;
     private final GiftCertificateValidator giftCertificateValidator;
+    private final PaginationCalculator paginationCalculator;
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateServiceImpl.class);
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagService tagService, GiftCertificateValidator giftCertificateValidator) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagService tagService, GiftCertificateValidator giftCertificateValidator, PaginationCalculator paginationCalculator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagService = tagService;
         this.giftCertificateValidator = giftCertificateValidator;
+        this.paginationCalculator = paginationCalculator;
     }
 
     @Override
@@ -99,7 +102,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void checkDuplicatedName(GiftCertificate certificate) {
         giftCertificateDao.findByName(certificate.getName())
                 .ifPresent(g -> {
-                    if (!g.getId().equals(certificate.getId())){
+                    if (!g.getId().equals(certificate.getId())) {
                         throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists");
                     }
                 });
@@ -115,8 +118,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GiftCertificate> search(SearchParams searchParams) {
-        return giftCertificateDao.search(searchParams);
+    public List<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize) {
+        return giftCertificateDao.search(searchParams, paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {

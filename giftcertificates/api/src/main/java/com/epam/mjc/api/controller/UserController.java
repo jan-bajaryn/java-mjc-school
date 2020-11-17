@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/users")
 public interface UserController {
     @GetMapping
-    ResponseEntity<List<UserDto>> findAll();
+    ResponseEntity<List<UserDto>> findAll(Integer pageNumber, Integer pageSize);
 
     @GetMapping("/{id}")
     ResponseEntity<UserDto> findById(@PathVariable Long id);

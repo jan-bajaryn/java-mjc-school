@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TagDao {
-    List<Tag> findAll();
+    List<Tag> findAll(Integer begin, Integer pageSize);
 
     Tag create(Tag tag);
 

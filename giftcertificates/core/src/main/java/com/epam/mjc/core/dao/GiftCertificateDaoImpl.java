@@ -85,12 +85,14 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> search(SearchParams searchParams) {
-        CriteriaQuery<GiftCertificate> criteriaQuery =  SearchQueryBuilder.builder()
-                .searchParams(searchParams,entityManager.getCriteriaBuilder())
+    public List<GiftCertificate> search(SearchParams searchParams, Integer begin, Integer pageSize) {
+        CriteriaQuery<GiftCertificate> criteriaQuery = SearchQueryBuilder.builder()
+                .searchParams(searchParams, entityManager.getCriteriaBuilder())
                 .build();
 
         return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(begin)
+                .setMaxResults(pageSize)
                 .getResultList();
 
     }

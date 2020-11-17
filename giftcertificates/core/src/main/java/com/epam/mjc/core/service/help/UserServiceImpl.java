@@ -5,6 +5,7 @@ import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.help.UserService;
 import com.epam.mjc.core.service.validator.UserValidator;
+import com.epam.mjc.core.util.PaginationCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +16,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final UserValidator userValidator;
+    private final PaginationCalculator paginationCalculator;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, UserValidator userValidator) {
+    public UserServiceImpl(UserDao userDao, UserValidator userValidator, PaginationCalculator paginationCalculator) {
         this.userDao = userDao;
         this.userValidator = userValidator;
+        this.paginationCalculator = paginationCalculator;
     }
 
 
     @Override
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<User> findAll(Integer pageNumber, Integer pageSize) {
+        return userDao.findAll(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
     }
 
     @Override

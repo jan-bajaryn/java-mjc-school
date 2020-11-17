@@ -32,8 +32,8 @@ public class TagReturnServiceImpl implements TagReturnService {
     }
 
     @Override
-    public List<TagDto> findAll() {
-        return tagDtoMapper.toTagDto(service.findAll());
+    public List<TagDto> findAll(Integer pageNumber,Integer pageSize) {
+        return tagDtoMapper.toTagDto(service.findAll(pageNumber,pageSize));
     }
 
     @Override

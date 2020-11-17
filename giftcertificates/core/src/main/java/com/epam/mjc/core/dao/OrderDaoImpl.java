@@ -32,7 +32,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> search(Long userId) {
+    public List<Order> search(Long userId, Integer begin, Integer pageSize) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> root = criteriaQuery.from(Order.class);
@@ -44,6 +44,8 @@ public class OrderDaoImpl implements OrderDao {
         resultCriteria = filterIfIdNotNull(userId, criteriaBuilder, root, resultCriteria);
 
         return entityManager.createQuery(resultCriteria)
+                .setFirstResult(begin)
+                .setMaxResults(pageSize)
                 .getResultList();
     }
 

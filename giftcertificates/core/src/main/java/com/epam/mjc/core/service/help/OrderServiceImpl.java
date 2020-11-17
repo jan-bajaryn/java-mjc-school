@@ -11,6 +11,7 @@ import com.epam.mjc.api.service.help.OrderService;
 import com.epam.mjc.api.service.help.UserService;
 import com.epam.mjc.core.service.validator.OrderValidator;
 import com.epam.mjc.core.service.validator.UserValidator;
+import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,22 @@ public class OrderServiceImpl implements OrderService {
     private final OrderValidator orderValidator;
     private final UserValidator userValidator;
     private final GiftCertificateService giftCertificateService;
+    private final PaginationCalculator paginationCalculator;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService) {
+    public OrderServiceImpl(OrderDao orderDao, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService, PaginationCalculator paginationCalculator) {
         this.orderDao = orderDao;
         this.userService = userService;
         this.orderValidator = orderValidator;
         this.userValidator = userValidator;
         this.giftCertificateService = giftCertificateService;
+        this.paginationCalculator = paginationCalculator;
     }
 
     @Override
-    public List<Order> search(Long userId) {
+    public List<Order> search(Long userId,Integer pageNumber,Integer pageSize) {
         userValidator.validateIdNullable(userId);
-        return orderDao.search(userId);
+        return orderDao.search(userId,paginationCalculator.calculateBegin(pageNumber,pageSize),pageSize);
     }
 
     @Override

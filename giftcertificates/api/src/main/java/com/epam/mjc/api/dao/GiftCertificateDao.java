@@ -16,7 +16,7 @@ public interface GiftCertificateDao {
 
     boolean delete(GiftCertificate giftCertificate);
 
-    List<GiftCertificate> search(SearchParams searchParams);
+    List<GiftCertificate> search(SearchParams searchParams, Integer begin, Integer pageSize);
 
     Optional<GiftCertificate> findByName(String name);
 }

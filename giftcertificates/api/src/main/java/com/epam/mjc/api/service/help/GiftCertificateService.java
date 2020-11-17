@@ -54,5 +54,5 @@ public interface GiftCertificateService {
      * @param searchParams {@link SearchParams} parameters to search {@link GiftCertificate}
      *                     from database
      */
-    List<GiftCertificate> search(SearchParams searchParams);
+    List<GiftCertificate> search(SearchParams searchParams,Integer pageNumber,Integer pageSize);
 }

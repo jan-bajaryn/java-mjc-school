@@ -6,13 +6,14 @@ import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsExcept
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.exception.OrderNotFountException;
+import com.epam.mjc.api.service.exception.OrderValidatorException;
+import com.epam.mjc.api.service.exception.PaginationException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
-import com.epam.mjc.api.service.exception.OrderValidatorException;
-import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import com.epam.mjc.api.service.exception.UserValidatorException;
+import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -56,6 +57,9 @@ public interface ExceptionHandlerController {
 
     @ExceptionHandler(OrderNotFountException.class)
     ResponseEntity<Object> handleOrderNotFountException(OrderNotFountException ex);
+
+    @ExceptionHandler(PaginationException.class)
+    ResponseEntity<Object> handlePaginationException(PaginationException ex);
 
 
     @ExceptionHandler(Throwable.class)

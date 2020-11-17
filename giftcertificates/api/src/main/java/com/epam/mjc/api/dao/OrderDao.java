@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderDao {
-    List<Order> search(Long userId);
+    List<Order> search(Long userId, Integer begin, Integer pageSize);
 
     Optional<Order> findById(Long id);
 

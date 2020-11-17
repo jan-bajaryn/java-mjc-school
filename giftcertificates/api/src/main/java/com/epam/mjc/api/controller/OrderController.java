@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface OrderController {
     @GetMapping
-    ResponseEntity<List<OrderDto>> search(Long userId);
+    ResponseEntity<List<OrderDto>> search(Integer pageNumber, Integer pageSize, Long userId);
 
     @GetMapping("/{id}")
     ResponseEntity<OrderDto> findById(Long id);

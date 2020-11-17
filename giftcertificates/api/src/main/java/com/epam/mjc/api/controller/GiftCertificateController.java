@@ -41,6 +41,8 @@ public interface GiftCertificateController {
             @RequestParam(required = false,name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
-            @RequestParam(required = false) String sort
+            @RequestParam(required = false) String sort,
+            Integer pageNumber,
+            Integer pageSize
     );
 }
