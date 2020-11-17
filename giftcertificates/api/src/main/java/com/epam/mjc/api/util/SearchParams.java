@@ -2,9 +2,11 @@ package com.epam.mjc.api.util;
 
 import com.epam.mjc.api.util.sort.SortParams;
 
+import java.util.List;
+
 public class SearchParams {
 
-    private String tagName;
+    private List<String> tagNames;
     private String partName;
     private String partDescription;
     private SortParams sortParams;
@@ -12,19 +14,19 @@ public class SearchParams {
     public SearchParams() {
     }
 
-    public SearchParams(String tagName, String partName, String partDescription, SortParams sortParams) {
-        this.tagName = tagName;
+    public SearchParams(List<String> tagNames, String partName, String partDescription, SortParams sortParams) {
+        this.tagNames = tagNames;
         this.partName = partName;
         this.partDescription = partDescription;
         this.sortParams = sortParams;
     }
 
-    public String getTagName() {
-        return tagName;
+    public List<String> getTagNames() {
+        return tagNames;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
     }
 
     public String getPartName() {
@@ -58,7 +60,8 @@ public class SearchParams {
 
         SearchParams that = (SearchParams) o;
 
-        if (getTagName() != null ? !getTagName().equals(that.getTagName()) : that.getTagName() != null) return false;
+        if (getTagNames() != null ? !getTagNames().equals(that.getTagNames()) : that.getTagNames() != null)
+            return false;
         if (getPartName() != null ? !getPartName().equals(that.getPartName()) : that.getPartName() != null)
             return false;
         if (getPartDescription() != null ? !getPartDescription().equals(that.getPartDescription()) : that.getPartDescription() != null)
@@ -68,7 +71,7 @@ public class SearchParams {
 
     @Override
     public int hashCode() {
-        int result = getTagName() != null ? getTagName().hashCode() : 0;
+        int result = getTagNames() != null ? getTagNames().hashCode() : 0;
         result = 31 * result + (getPartName() != null ? getPartName().hashCode() : 0);
         result = 31 * result + (getPartDescription() != null ? getPartDescription().hashCode() : 0);
         result = 31 * result + (getSortParams() != null ? getSortParams().hashCode() : 0);
@@ -78,7 +81,7 @@ public class SearchParams {
     @Override
     public String toString() {
         return "SearchParams{" +
-                "tagName='" + tagName + '\'' +
+                "tagNames=" + tagNames +
                 ", partName='" + partName + '\'' +
                 ", partDescription='" + partDescription + '\'' +
                 ", sortParams=" + sortParams +

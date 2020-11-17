@@ -38,7 +38,7 @@ public interface GiftCertificateController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<GiftCertificateDto>> certificateSearch(
-            @RequestParam(required = false) String tagName,
+            @RequestParam(required = false,name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
             @RequestParam(required = false) String sort

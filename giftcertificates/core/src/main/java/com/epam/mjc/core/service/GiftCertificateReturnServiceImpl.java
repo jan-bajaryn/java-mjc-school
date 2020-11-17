@@ -8,6 +8,7 @@ import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.mapper.GiftCertificateDtoMapper;
 import com.epam.mjc.api.service.mapper.SortMapper;
 import com.epam.mjc.api.util.SearchParams;
+import com.epam.mjc.api.service.mapper.TagNameMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,14 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     private final GiftCertificateService service;
     private final GiftCertificateDtoMapper giftCertificateDtoMapper;
     private final SortMapper sortMapper;
+    private final TagNameMapper tagNameMapper;
 
     @Autowired
-    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, SortMapper sortMapper) {
+    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, SortMapper sortMapper, TagNameMapper tagNameMapper) {
         this.service = service;
         this.giftCertificateDtoMapper = giftCertificateDtoMapper;
         this.sortMapper = sortMapper;
+        this.tagNameMapper = tagNameMapper;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     @Override
     public List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort) {
         return giftCertificateDtoMapper.toGiftCertificateDto(
-                service.search(new SearchParams(tagName, partName, partDescription, sortMapper.toSortParams(sort)))
+                service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)))
         );
     }
 }

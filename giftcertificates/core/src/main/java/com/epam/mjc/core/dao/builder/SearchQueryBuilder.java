@@ -22,7 +22,7 @@ import java.util.List;
 @Component
 public class SearchQueryBuilder {
 
-    private String tagName;
+    private List<String> tagNames;
     private String partName;
     private String partDescription;
     private SortParams sortParams;
@@ -34,7 +34,7 @@ public class SearchQueryBuilder {
 
     public SearchQueryBuilder searchParams(SearchParams searchParams,CriteriaBuilder criteriaBuilder) {
         this.criteriaBuilder = criteriaBuilder;
-        this.tagName = searchParams.getTagName();
+        this.tagNames = searchParams.getTagNames();
         this.partName = searchParams.getPartName();
         this.partDescription = searchParams.getPartDescription();
         this.sortParams = searchParams.getSortParams();
@@ -58,10 +58,12 @@ public class SearchQueryBuilder {
     }
 
     private void tagName() {
-        if (this.tagName != null) {
-            Join<GiftCertificate, Tag> join = root.join(GiftCertificate_.tags, JoinType.INNER);
-            Predicate tagPredicate = criteriaBuilder.equal(join.get(Tag_.name), this.tagName);
-            predicates.add(tagPredicate);
+        if (this.tagNames != null && !this.tagNames.isEmpty()) {
+            for (String tagName : this.tagNames) {
+                Join<GiftCertificate, Tag> join = root.join(GiftCertificate_.tags, JoinType.INNER);
+                Predicate tagPredicate = criteriaBuilder.equal(join.get(Tag_.name), tagName);
+                predicates.add(tagPredicate);
+            }
         }
     }
 

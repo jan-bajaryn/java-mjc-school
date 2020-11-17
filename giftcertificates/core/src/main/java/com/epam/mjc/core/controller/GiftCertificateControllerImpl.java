@@ -62,14 +62,14 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
 
     @Override
     public ResponseEntity<List<GiftCertificateDto>> certificateSearch(
-            @RequestParam(required = false) String tagName,
+            @RequestParam(required = false,name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
             @RequestParam(required = false, name = "sort") String sort
     ) {
         log.debug("sort = {}", sort);
         return ResponseEntity.ok(
-                giftCertificateReturnService.search(tagName, partName, partDescription, sort)
+                giftCertificateReturnService.search(tagNames, partName, partDescription, sort)
         );
     }
 
