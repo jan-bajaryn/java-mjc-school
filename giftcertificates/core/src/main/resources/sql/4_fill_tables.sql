@@ -18,3 +18,7 @@ VALUES (1, 1),
        (4, 2),
        (5, 2);
 
+INSERT INTO usr(username)
+VALUES ('Antuan'),
+       ('Valeri'),
+       ('Kabal');

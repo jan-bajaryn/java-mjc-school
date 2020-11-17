@@ -9,6 +9,7 @@ import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
+import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,12 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleGiftCertificateNameAlreadyExistsException(GiftCertificateNameAlreadyExistsException ex) {
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.CERT_NAME_EXISTS);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+        String errorCode = formatCode(HttpStatus.NOT_FOUND.value(), ErrorCodes.USER_NOT_FOUND);
+        return getResponseEntity(ex, errorCode, HttpStatus.NOT_FOUND);
     }
 
     @Override

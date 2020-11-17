@@ -7,6 +7,7 @@ import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
+import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,8 +37,8 @@ public interface ExceptionHandlerController {
     @ExceptionHandler(GiftCertificateNameAlreadyExistsException.class)
     ResponseEntity<Object> handleGiftCertificateNameAlreadyExistsException(GiftCertificateNameAlreadyExistsException ex);
 
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception);
+    @ExceptionHandler(UserNotFoundException.class)
+    ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex);
 
     @ExceptionHandler(Throwable.class)
     ResponseEntity<Object> handleRemainException(Throwable exception);

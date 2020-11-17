@@ -21,11 +21,6 @@ import java.util.Optional;
 
 @Repository
 public class TagDaoImpl implements TagDao {
-    private static final String FIND_BY_CERTIFICATE_ID = "SELECT tag.id, tag.name FROM tag INNER JOIN gift_certificate_tag ON tag.id = gift_certificate_tag.tag_id WHERE gift_certificate_id = ?;";
-    private static final String FIND_BY_TAG_NAME = "SELECT id, name FROM tag WHERE name =?;";
-    private static final String FIND_EXISTING_SQL = "SELECT id,name FROM tag WHERE name IN (%s)";
-    private static final String COMMA = ",";
-    private static final String QUESTION_MARK = "?";
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
 
     @PersistenceContext
