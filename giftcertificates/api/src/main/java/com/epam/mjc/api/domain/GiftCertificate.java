@@ -46,69 +46,21 @@ public class GiftCertificate {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
 
-
-    public static class GiftCertificateBuilder {
-        private Long id;
-        private String name;
-        private String description;
-        private BigDecimal price;
-        private LocalDateTime createDate;
-        private LocalDateTime lastUpdateDate;
-        private Integer duration;
-        private List<Tag> tags = new ArrayList<>();
-
-        GiftCertificateBuilder() {
-        }
-
-        public GiftCertificateBuilder id(final Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public GiftCertificateBuilder name(final String name) {
-            this.name = name;
-            return this;
-        }
-
-        public GiftCertificateBuilder description(final String description) {
-            this.description = description;
-            return this;
-        }
-
-        public GiftCertificateBuilder price(final BigDecimal price) {
-            this.price = price;
-            return this;
-        }
-
-        public GiftCertificateBuilder createDate(final LocalDateTime createDate) {
-            this.createDate = createDate;
-            return this;
-        }
-
-        public GiftCertificateBuilder lastUpdateDate(final LocalDateTime lastUpdateDate) {
-            this.lastUpdateDate = lastUpdateDate;
-            return this;
-        }
-
-        public GiftCertificateBuilder duration(final Integer duration) {
-            this.duration = duration;
-            return this;
-        }
-
-        public GiftCertificateBuilder tags(final List<Tag> tags) {
-            this.tags = tags;
-            return this;
-        }
-
-        public GiftCertificate build() {
-            return new GiftCertificate(this.id, this.name, this.description, this.price, this.createDate, this.lastUpdateDate, this.duration, this.tags);
-        }
-
-        @Override
-        public String toString() {
-            return "GiftCertificate.GiftCertificateBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", price=" + this.price + ", createDate=" + this.createDate + ", lastUpdateDate=" + this.lastUpdateDate + ", duration=" + this.duration + ", tags=" + this.tags + ")";
-        }
+    public GiftCertificate() {
     }
+
+    public GiftCertificate(final Long id, final String name, final String description, final BigDecimal price, final LocalDateTime createDate, final LocalDateTime lastUpdateDate, final Integer duration, final List<Tag> tags) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
+        this.tags = tags;
+    }
+
+
 
     public static GiftCertificateBuilder builder() {
         return new GiftCertificateBuilder();
@@ -217,17 +169,67 @@ public class GiftCertificate {
         return "GiftCertificate(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ", price=" + this.getPrice() + ", createDate=" + this.getCreateDate() + ", lastUpdateDate=" + this.getLastUpdateDate() + ", duration=" + this.getDuration() + ", tags=" + this.getTags() + ")";
     }
 
-    public GiftCertificate() {
+    public static class GiftCertificateBuilder {
+        private Long id;
+        private String name;
+        private String description;
+        private BigDecimal price;
+        private LocalDateTime createDate;
+        private LocalDateTime lastUpdateDate;
+        private Integer duration;
+        private List<Tag> tags = new ArrayList<>();
+
+        GiftCertificateBuilder() {
+        }
+
+        public GiftCertificateBuilder id(final Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public GiftCertificateBuilder name(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public GiftCertificateBuilder description(final String description) {
+            this.description = description;
+            return this;
+        }
+
+        public GiftCertificateBuilder price(final BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public GiftCertificateBuilder createDate(final LocalDateTime createDate) {
+            this.createDate = createDate;
+            return this;
+        }
+
+        public GiftCertificateBuilder lastUpdateDate(final LocalDateTime lastUpdateDate) {
+            this.lastUpdateDate = lastUpdateDate;
+            return this;
+        }
+
+        public GiftCertificateBuilder duration(final Integer duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public GiftCertificateBuilder tags(final List<Tag> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public GiftCertificate build() {
+            return new GiftCertificate(this.id, this.name, this.description, this.price, this.createDate, this.lastUpdateDate, this.duration, this.tags);
+        }
+
+        @Override
+        public String toString() {
+            return "GiftCertificate.GiftCertificateBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", price=" + this.price + ", createDate=" + this.createDate + ", lastUpdateDate=" + this.lastUpdateDate + ", duration=" + this.duration + ", tags=" + this.tags + ")";
+        }
     }
 
-    public GiftCertificate(final Long id, final String name, final String description, final BigDecimal price, final LocalDateTime createDate, final LocalDateTime lastUpdateDate, final Integer duration, final List<Tag> tags) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
-        this.duration = duration;
-        this.tags = tags;
-    }
 }

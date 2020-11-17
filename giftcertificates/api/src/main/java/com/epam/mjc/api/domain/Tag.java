@@ -3,9 +3,12 @@ package com.epam.mjc.api.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.List;
 
 @Entity(name = "tag")
 public class Tag {
@@ -18,52 +21,58 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
+    @ManyToMany(mappedBy = "tags",fetch = FetchType.LAZY)
+    private List<GiftCertificate> giftCertificates;
 
-    public static class TagBuilder {
-        private Long id;
-        private String name;
-
-        TagBuilder() {
-        }
-
-        public TagBuilder id(final Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public TagBuilder name(final String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Tag build() {
-            return new Tag(this.id, this.name);
-        }
-
-        @Override
-        public String toString() {
-            return "Tag.TagBuilder(id=" + this.id + ", name=" + this.name + ")";
-        }
+    public Tag() {
     }
 
-    public static TagBuilder builder() {
-        return new TagBuilder();
+    public Tag(Long id, String name, List<GiftCertificate> giftCertificates) {
+        this.id = id;
+        this.name = name;
+        this.giftCertificates = giftCertificates;
+    }
+
+    private Tag(Builder builder) {
+        setId(builder.id);
+        setName(builder.name);
+        setGiftCertificates(builder.giftCertificates);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder builder(Tag copy) {
+        Builder builder = new Builder();
+        builder.id = copy.getId();
+        builder.name = copy.getName();
+        builder.giftCertificates = copy.getGiftCertificates();
+        return builder;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setName(final String name) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public List<GiftCertificate> getGiftCertificates() {
+        return giftCertificates;
+    }
+
+    public void setGiftCertificates(List<GiftCertificate> giftCertificates) {
+        this.giftCertificates = giftCertificates;
     }
 
     @Override
@@ -86,14 +95,38 @@ public class Tag {
 
     @Override
     public String toString() {
-        return "Tag(id=" + this.getId() + ", name=" + this.getName() + ")";
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
-    public Tag() {
-    }
 
-    public Tag(final Long id, final String name) {
-        this.id = id;
-        this.name = name;
+    public static final class Builder {
+        private Long id;
+        private String name;
+        private List<GiftCertificate> giftCertificates;
+
+        private Builder() {
+        }
+
+        public Builder id(Long val) {
+            id = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder giftCertificates(List<GiftCertificate> val) {
+            giftCertificates = val;
+            return this;
+        }
+
+        public Tag build() {
+            return new Tag(this);
+        }
     }
 }
