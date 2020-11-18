@@ -3,6 +3,7 @@ package com.epam.mjc.core.service.help;
 import com.epam.mjc.api.dao.OrderDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Order;
+import com.epam.mjc.api.domain.PurchaseCertificate;
 import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
 import com.epam.mjc.api.service.exception.OrderNotFountException;
@@ -47,9 +48,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> search(Long userId,Integer pageNumber,Integer pageSize) {
+    public List<Order> search(Long userId, Integer pageNumber, Integer pageSize) {
         userValidator.validateIdNullable(userId);
-        return orderDao.search(userId,paginationCalculator.calculateBegin(pageNumber,pageSize),pageSize);
+        return orderDao.search(userId, paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
     }
 
     @Override
@@ -68,13 +69,22 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setCreateDate(LocalDateTime.now());
-        order.setGiftCertificates(
-                buildGiftCertificates(orderForCreate.getGiftCertificatesIds())
+        List<GiftCertificate> giftCertificates = buildGiftCertificates(orderForCreate.getGiftCertificatesIds());
+        order.setPurchaseCertificates(
+                buildPurchases(
+                        giftCertificates
+                )
+
         );
         order.setUser(userService.findById(orderForCreate.getUserId()));
-        order.setPrice(calculatePrice(order));
+        order.setPrice(calculatePrice(giftCertificates));
         log.debug("before create");
         return orderDao.create(order);
+    }
+
+    // TODO complete that
+    private List<PurchaseCertificate> buildPurchases(List<GiftCertificate> buildGiftCertificates) {
+        return null;
     }
 
     private void checkEmptyGiftCertificates(OrderForCreate orderForCreate) throws EmptyGiftCertificates {
@@ -84,9 +94,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private BigDecimal calculatePrice(Order order) {
+    private BigDecimal calculatePrice(List<GiftCertificate> giftCertificates) {
         BigDecimal result = BigDecimal.ZERO;
-        for (GiftCertificate giftCertificate : order.getGiftCertificates()) {
+        for (GiftCertificate giftCertificate : giftCertificates) {
             result = result.add(giftCertificate.getPrice());
         }
         return result;

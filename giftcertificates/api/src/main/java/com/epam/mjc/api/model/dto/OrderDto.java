@@ -14,18 +14,17 @@ public class OrderDto {
     private LocalDateTime createDate;
     private BigDecimal price;
     private UserDto user;
-    private List<GiftCertificateDto> giftCertificates;
-
+    private List<PurchaseDto> purchases;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, LocalDateTime createDate, BigDecimal price, UserDto user, List<GiftCertificateDto> giftCertificates) {
+    public OrderDto(Long id, LocalDateTime createDate, BigDecimal price, UserDto user, List<PurchaseDto> purchases) {
         this.id = id;
         this.createDate = createDate;
         this.price = price;
         this.user = user;
-        this.giftCertificates = giftCertificates;
+        this.purchases = purchases;
     }
 
     public Long getId() {
@@ -60,14 +59,13 @@ public class OrderDto {
         this.user = user;
     }
 
-    public List<GiftCertificateDto> getGiftCertificates() {
-        return giftCertificates;
+    public List<PurchaseDto> getPurchases() {
+        return purchases;
     }
 
-    public void setGiftCertificates(List<GiftCertificateDto> giftCertificates) {
-        this.giftCertificates = giftCertificates;
+    public void setPurchases(List<PurchaseDto> purchases) {
+        this.purchases = purchases;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -81,7 +79,7 @@ public class OrderDto {
             return false;
         if (getPrice() != null ? !getPrice().equals(orderDto.getPrice()) : orderDto.getPrice() != null) return false;
         if (getUser() != null ? !getUser().equals(orderDto.getUser()) : orderDto.getUser() != null) return false;
-        return getGiftCertificates() != null ? getGiftCertificates().equals(orderDto.getGiftCertificates()) : orderDto.getGiftCertificates() == null;
+        return getPurchases() != null ? getPurchases().equals(orderDto.getPurchases()) : orderDto.getPurchases() == null;
     }
 
     @Override
@@ -90,7 +88,7 @@ public class OrderDto {
         result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
         result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
         result = 31 * result + (getUser() != null ? getUser().hashCode() : 0);
-        result = 31 * result + (getGiftCertificates() != null ? getGiftCertificates().hashCode() : 0);
+        result = 31 * result + (getPurchases() != null ? getPurchases().hashCode() : 0);
         return result;
     }
 
@@ -101,7 +99,7 @@ public class OrderDto {
                 ", createDate=" + createDate +
                 ", price=" + price +
                 ", user=" + user +
-                ", giftCertificates=" + giftCertificates +
+                ", purchases=" + purchases +
                 '}';
     }
 }
