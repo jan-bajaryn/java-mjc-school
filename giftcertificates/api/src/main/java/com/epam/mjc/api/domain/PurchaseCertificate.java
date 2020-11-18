@@ -15,16 +15,16 @@ import java.math.BigDecimal;
 public class PurchaseCertificate {
 
     @EmbeddedId
-    public PurchaseCertificateKey purchaseCertificateKey;
+    private PurchaseCertificateKey purchaseCertificateKey;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gift_certificate_id")
-    @MapsId("gift_certificate_id")
+    @MapsId("giftCertificateId")
     private GiftCertificate giftCertificate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
-    @MapsId("order_id")
+    @MapsId("orderId")
     private Order order;
 
     @Column(name = "price_for_one")

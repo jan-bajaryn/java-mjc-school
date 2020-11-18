@@ -1,5 +1,6 @@
 package com.epam.mjc.api.domain.keys;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -7,35 +8,35 @@ import java.io.Serializable;
 public class PurchaseCertificateKey implements Serializable {
     public static final long serialVersionUID = 1L;
 
-//    @Column(name = "gift_certificate_id")
-    private Long gift_certificate_id;
+    @Column(name = "gift_certificate_id")
+    private Long giftCertificateId;
 
 
-//    @Column(name = "order_id")
-    private Long order_id;
+    @Column(name = "order_id")
+    private Long orderId;
 
     public PurchaseCertificateKey() {
     }
 
-    public PurchaseCertificateKey(Long gift_certificate_id, Long order_id) {
-        this.gift_certificate_id = gift_certificate_id;
-        this.order_id = order_id;
+    public PurchaseCertificateKey(Long giftCertificateId, Long orderId) {
+        this.giftCertificateId = giftCertificateId;
+        this.orderId = orderId;
     }
 
-    public Long getGift_certificate_id() {
-        return gift_certificate_id;
+    public Long getGiftCertificateId() {
+        return giftCertificateId;
     }
 
-    public void setGift_certificate_id(Long gift_certificate_id) {
-        this.gift_certificate_id = gift_certificate_id;
+    public void setGiftCertificateId(Long giftCertificateId) {
+        this.giftCertificateId = giftCertificateId;
     }
 
-    public Long getOrder_id() {
-        return order_id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Long order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     @Override
@@ -45,23 +46,23 @@ public class PurchaseCertificateKey implements Serializable {
 
         PurchaseCertificateKey that = (PurchaseCertificateKey) o;
 
-        if (getGift_certificate_id() != null ? !getGift_certificate_id().equals(that.getGift_certificate_id()) : that.getGift_certificate_id() != null)
+        if (getGiftCertificateId() != null ? !getGiftCertificateId().equals(that.getGiftCertificateId()) : that.getGiftCertificateId() != null)
             return false;
-        return getOrder_id() != null ? getOrder_id().equals(that.getOrder_id()) : that.getOrder_id() == null;
+        return getOrderId() != null ? getOrderId().equals(that.getOrderId()) : that.getOrderId() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getGift_certificate_id() != null ? getGift_certificate_id().hashCode() : 0;
-        result = 31 * result + (getOrder_id() != null ? getOrder_id().hashCode() : 0);
+        int result = getGiftCertificateId() != null ? getGiftCertificateId().hashCode() : 0;
+        result = 31 * result + (getOrderId() != null ? getOrderId().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "PurchaseCertificateKey{" +
-                "gift_certificate_id=" + gift_certificate_id +
-                ", order_id=" + order_id +
+                "giftCertificateId=" + giftCertificateId +
+                ", orderId=" + orderId +
                 '}';
     }
 }
