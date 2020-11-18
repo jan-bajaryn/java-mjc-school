@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,13 +47,13 @@ public class GiftCertificate {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "giftCertificates")
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "giftCertificate", fetch = FetchType.LAZY)
+    private List<PurchaseCertificate> purchaseCertificates = new ArrayList<>();
 
     public GiftCertificate() {
     }
 
-    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration, List<Tag> tags, List<Order> orders) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration, List<Tag> tags, List<PurchaseCertificate> purchaseCertificates) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,37 +62,7 @@ public class GiftCertificate {
         this.lastUpdateDate = lastUpdateDate;
         this.duration = duration;
         this.tags = tags;
-        this.orders = orders;
-    }
-
-    private GiftCertificate(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setDescription(builder.description);
-        setPrice(builder.price);
-        setCreateDate(builder.createDate);
-        setLastUpdateDate(builder.lastUpdateDate);
-        setDuration(builder.duration);
-        setTags(builder.tags);
-        setOrders(builder.orders);
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
-    public static Builder newBuilder(GiftCertificate copy) {
-        Builder builder = new Builder();
-        builder.id = copy.getId();
-        builder.name = copy.getName();
-        builder.description = copy.getDescription();
-        builder.price = copy.getPrice();
-        builder.createDate = copy.getCreateDate();
-        builder.lastUpdateDate = copy.getLastUpdateDate();
-        builder.duration = copy.getDuration();
-        builder.tags = copy.getTags();
-        builder.orders = copy.getOrders();
-        return builder;
+        this.purchaseCertificates = purchaseCertificates;
     }
 
     public Long getId() {
@@ -158,12 +129,12 @@ public class GiftCertificate {
         this.tags = tags;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public List<PurchaseCertificate> getPurchaseCertificates() {
+        return purchaseCertificates;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setPurchaseCertificates(List<PurchaseCertificate> purchaseCertificates) {
+        this.purchaseCertificates = purchaseCertificates;
     }
 
     @Override
@@ -208,69 +179,5 @@ public class GiftCertificate {
                 ", lastUpdateDate=" + lastUpdateDate +
                 ", duration=" + duration +
                 '}';
-    }
-
-    public static final class Builder {
-        private Long id;
-        private String name;
-        private String description;
-        private BigDecimal price;
-        private LocalDateTime createDate;
-        private LocalDateTime lastUpdateDate;
-        private Integer duration;
-        private List<Tag> tags;
-        private List<Order> orders;
-
-        private Builder() {
-        }
-
-        public Builder id(Long val) {
-            id = val;
-            return this;
-        }
-
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
-
-        public Builder description(String val) {
-            description = val;
-            return this;
-        }
-
-        public Builder price(BigDecimal val) {
-            price = val;
-            return this;
-        }
-
-        public Builder createDate(LocalDateTime val) {
-            createDate = val;
-            return this;
-        }
-
-        public Builder lastUpdateDate(LocalDateTime val) {
-            lastUpdateDate = val;
-            return this;
-        }
-
-        public Builder duration(Integer val) {
-            duration = val;
-            return this;
-        }
-
-        public Builder tags(List<Tag> val) {
-            tags = val;
-            return this;
-        }
-
-        public Builder orders(List<Order> val) {
-            orders = val;
-            return this;
-        }
-
-        public GiftCertificate build() {
-            return new GiftCertificate(this);
-        }
     }
 }

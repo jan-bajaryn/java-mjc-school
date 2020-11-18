@@ -7,11 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "orders")
@@ -32,22 +32,18 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "gift_certificate_order",
-            joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "gift_certificate_id", referencedColumnName = "id")})
-    private List<GiftCertificate> giftCertificates;
-
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<PurchaseCertificate> purchaseCertificates = new ArrayList<>();
 
     public Order() {
     }
 
-    public Order(Long id, LocalDateTime createDate, BigDecimal price, User user, List<GiftCertificate> giftCertificates) {
+    public Order(Long id, LocalDateTime createDate, BigDecimal price, User user, List<PurchaseCertificate> purchaseCertificates) {
         this.id = id;
         this.createDate = createDate;
         this.price = price;
         this.user = user;
-        this.giftCertificates = giftCertificates;
+        this.purchaseCertificates = purchaseCertificates;
     }
 
     public Long getId() {
@@ -82,12 +78,12 @@ public class Order {
         this.user = user;
     }
 
-    public List<GiftCertificate> getGiftCertificates() {
-        return giftCertificates;
+    public List<PurchaseCertificate> getPurchaseCertificates() {
+        return purchaseCertificates;
     }
 
-    public void setGiftCertificates(List<GiftCertificate> giftCertificates) {
-        this.giftCertificates = giftCertificates;
+    public void setPurchaseCertificates(List<PurchaseCertificate> purchaseCertificates) {
+        this.purchaseCertificates = purchaseCertificates;
     }
 
     @Override

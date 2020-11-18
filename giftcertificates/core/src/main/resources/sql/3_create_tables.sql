@@ -44,15 +44,18 @@ CREATE TABLE orders
     createdate timestamp NOT NULL,
     price      decimal   NOT NULL,
     user_id    bigint,
-    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES usr(id)
+    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES usr (id)
 )
 
 \c giftcertificates
 CREATE TABLE gift_certificate_order
 (
     gift_certificate_id bigint,
-    order_id bigint,
+    order_id            bigint,
+    count               int          NOT NULL,
+    price_for_one       decimal      NOT NULL,
+    old_name            varchar(255) NOT NULL,
     CONSTRAINT fk_gift_certificate_order_gift_certificate_id FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate (id) ON DELETE CASCADE,
     CONSTRAINT fk_fk_gift_certificate_order_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
-    CONSTRAINT uk_gift_certificate_order UNIQUE (gift_certificate_id, order_id)
+    CONSTRAINT check_count_gift_certificate_order CHECK ( count > 0 )
 )
