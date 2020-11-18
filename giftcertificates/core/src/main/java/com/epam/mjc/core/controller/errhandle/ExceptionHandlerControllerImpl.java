@@ -2,14 +2,17 @@ package com.epam.mjc.core.controller.errhandle;
 
 import com.epam.mjc.api.controller.errhandle.ExceptionHandlerController;
 import com.epam.mjc.api.controller.errhandle.Translator;
+import com.epam.mjc.api.service.exception.CountValidatorException;
 import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
+import com.epam.mjc.api.service.exception.MissedIdAndNameException;
 import com.epam.mjc.api.service.exception.OrderNotFountException;
 import com.epam.mjc.api.service.exception.OrderValidatorException;
 import com.epam.mjc.api.service.exception.PaginationException;
+import com.epam.mjc.api.service.exception.PurchaseCertificateValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
@@ -133,6 +136,24 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     @Override
     public ResponseEntity<Object> handlePaginationException(PaginationException ex) {
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.PAGINATION);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleMissedIdAndNameException(MissedIdAndNameException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.MISSED_ID_AND_NAME);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handlePurchaseCertificateValidatorException(PurchaseCertificateValidatorException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.PURCHACE_CERTIFICATE_VALIDATOR);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleCountValidatorException(CountValidatorException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.WRONG_COUNT);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 

@@ -5,10 +5,14 @@ import java.io.Serializable;
 
 @Embeddable
 public class PurchaseCertificateKey implements Serializable {
-    static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
-    public Long gift_certificate_id;
-    public Long order_id;
+//    @Column(name = "gift_certificate_id")
+    private Long gift_certificate_id;
+
+
+//    @Column(name = "order_id")
+    private Long order_id;
 
     public PurchaseCertificateKey() {
     }
@@ -16,10 +20,6 @@ public class PurchaseCertificateKey implements Serializable {
     public PurchaseCertificateKey(Long gift_certificate_id, Long order_id) {
         this.gift_certificate_id = gift_certificate_id;
         this.order_id = order_id;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Long getGift_certificate_id() {

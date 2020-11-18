@@ -54,7 +54,8 @@ public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
         }
     }
 
-    private void validateGiftCertificateName(String name) {
+    @Override
+    public void validateGiftCertificateName(String name) {
         if (name == null || name.isEmpty() || name.length() > NAME_MAX_LENGTH) {
             throw new GiftCertificateValidatorException("certificate.wrong-name");
         }

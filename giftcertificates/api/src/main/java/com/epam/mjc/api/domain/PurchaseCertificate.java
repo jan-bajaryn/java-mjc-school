@@ -5,6 +5,7 @@ import com.epam.mjc.api.domain.keys.PurchaseCertificateKey;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -16,12 +17,12 @@ public class PurchaseCertificate {
     @EmbeddedId
     public PurchaseCertificateKey purchaseCertificateKey;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gift_certificate_id")
     @MapsId("gift_certificate_id")
     private GiftCertificate giftCertificate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
     @MapsId("order_id")
     private Order order;

@@ -122,6 +122,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return giftCertificateDao.search(searchParams, paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
     }
 
+    @Override
+    public GiftCertificate findByName(String name) {
+        giftCertificateValidator.validateGiftCertificateName(name);
+        return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name"));
+    }
+
     private void buildTagsByNames(GiftCertificate certificate) {
         if (certificate.getTags() != null) {
             List<Tag> result = certificate.getTags().stream()

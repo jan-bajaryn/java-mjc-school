@@ -55,4 +55,6 @@ public interface GiftCertificateService {
      *                     from database
      */
     List<GiftCertificate> search(SearchParams searchParams,Integer pageNumber,Integer pageSize);
+
+    GiftCertificate findByName(String name);
 }

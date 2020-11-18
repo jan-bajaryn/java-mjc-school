@@ -1,18 +1,20 @@
 package com.epam.mjc.api.model;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import java.util.List;
 
 public class OrderForCreate {
     private Long userId;
-    private List<Long> giftCertificatesIds;
+    private List<CertificateRequestModel> giftCertificates;
 
 
     public OrderForCreate() {
     }
 
-    public OrderForCreate(Long userId, List<Long> giftCertificatesIds) {
+    public OrderForCreate(Long userId, List<CertificateRequestModel> giftCertificates) {
         this.userId = userId;
-        this.giftCertificatesIds = giftCertificatesIds;
+        this.giftCertificates = giftCertificates;
     }
 
     public Long getUserId() {
@@ -23,12 +25,12 @@ public class OrderForCreate {
         this.userId = userId;
     }
 
-    public List<Long> getGiftCertificatesIds() {
-        return giftCertificatesIds;
+    public List<CertificateRequestModel> getGiftCertificates() {
+        return giftCertificates;
     }
 
-    public void setGiftCertificatesIds(List<Long> giftCertificatesIds) {
-        this.giftCertificatesIds = giftCertificatesIds;
+    public void setGiftCertificates(List<CertificateRequestModel> giftCertificates) {
+        this.giftCertificates = giftCertificates;
     }
 
     @Override
@@ -39,13 +41,13 @@ public class OrderForCreate {
         OrderForCreate that = (OrderForCreate) o;
 
         if (getUserId() != null ? !getUserId().equals(that.getUserId()) : that.getUserId() != null) return false;
-        return getGiftCertificatesIds() != null ? getGiftCertificatesIds().equals(that.getGiftCertificatesIds()) : that.getGiftCertificatesIds() == null;
+        return getGiftCertificates() != null ? getGiftCertificates().equals(that.getGiftCertificates()) : that.getGiftCertificates() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getUserId() != null ? getUserId().hashCode() : 0;
-        result = 31 * result + (getGiftCertificatesIds() != null ? getGiftCertificatesIds().hashCode() : 0);
+        result = 31 * result + (getGiftCertificates() != null ? getGiftCertificates().hashCode() : 0);
         return result;
     }
 
@@ -53,7 +55,7 @@ public class OrderForCreate {
     public String toString() {
         return "OrderForCreate{" +
                 "userId=" + userId +
-                ", giftCertificatesIds=" + giftCertificatesIds +
+                ", giftCertificates=" + giftCertificates +
                 '}';
     }
 }
