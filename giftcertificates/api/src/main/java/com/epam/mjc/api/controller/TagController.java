@@ -2,6 +2,7 @@ package com.epam.mjc.api.controller;
 
 import com.epam.mjc.api.model.TagForCreate;
 import com.epam.mjc.api.model.dto.TagDto;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.List;
 
 @RequestMapping("/tags")
 public interface TagController {
@@ -26,7 +25,7 @@ public interface TagController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<TagDto>> showAll(Integer pageNumber,Integer pageSize);
+    ResponseEntity<CollectionModel<TagDto>> showAll(Integer pageNumber,Integer pageSize);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

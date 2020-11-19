@@ -1,6 +1,8 @@
 package com.epam.mjc.api.model.dto;
 
-public class TagDto {
+import org.springframework.hateoas.RepresentationModel;
+
+public class TagDto extends RepresentationModel<TagDto> {
 
     private Long id;
     private String name;
