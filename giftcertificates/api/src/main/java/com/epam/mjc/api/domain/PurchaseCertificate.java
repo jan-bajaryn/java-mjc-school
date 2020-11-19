@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class PurchaseCertificate {
 
     @EmbeddedId
-    private PurchaseCertificateKey purchaseCertificateKey;
+    private PurchaseCertificateKey purchaseCertificateKey = new PurchaseCertificateKey();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gift_certificate_id")

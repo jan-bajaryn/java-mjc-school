@@ -4,7 +4,6 @@ import com.epam.mjc.api.dao.OrderDao;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Order;
 import com.epam.mjc.api.domain.PurchaseCertificate;
-import com.epam.mjc.api.domain.keys.PurchaseCertificateKey;
 import com.epam.mjc.api.model.CertificateRequestModel;
 import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
@@ -91,7 +90,6 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    // TODO complete that
     private List<PurchaseCertificate> buildPurchases(Map<GiftCertificate, Integer> buildGiftCertificates, final Order order) {
         return buildGiftCertificates.entrySet().stream()
                 .map(e -> {
@@ -102,9 +100,6 @@ public class OrderServiceImpl implements OrderService {
                     pc.setOrder(order);
                     pc.setOldName(e.getKey().getName());
                     pc.setPriceForOne(e.getKey().getPrice());
-                    pc.setPurchaseCertificateKey(
-                            new PurchaseCertificateKey(e.getKey().getId(), order.getId())
-                    );
                     return purchaseCertificateService.create(pc);
                 })
                 .collect(Collectors.toList());
