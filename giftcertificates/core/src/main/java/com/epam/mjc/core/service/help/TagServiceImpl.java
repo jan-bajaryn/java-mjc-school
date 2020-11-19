@@ -104,4 +104,9 @@ public class TagServiceImpl implements TagService {
         return tagDao.findByTagName(name);
     }
 
+    @Override
+    public Tag findMostPopularTagOfUserHigherCostOrders() {
+        return findById(tagDao.findMostPopularTagIdOfUserHigherCostOrders());
+    }
+
 }

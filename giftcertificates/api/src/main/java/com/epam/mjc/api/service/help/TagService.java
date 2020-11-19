@@ -57,4 +57,6 @@ public interface TagService {
      * @throws com.epam.mjc.api.service.exception.TagValidatorException if name is incorrect
      */
     Optional<Tag> findByTagName(String name);
+
+    Tag findMostPopularTagOfUserHigherCostOrders();
 }

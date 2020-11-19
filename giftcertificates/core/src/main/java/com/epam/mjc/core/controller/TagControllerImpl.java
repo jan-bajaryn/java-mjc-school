@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +53,7 @@ public class TagControllerImpl implements TagController {
     public ResponseEntity<List<TagDto>> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
         return ResponseEntity.ok(
-                tagReturnService.findAll(pageNumber,pageSize)
+                tagReturnService.findAll(pageNumber, pageSize)
         );
     }
 
@@ -60,6 +61,13 @@ public class TagControllerImpl implements TagController {
     public ResponseEntity<TagDto> showById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 tagReturnService.findById(id)
+        );
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<TagDto> getRich() {
+        return ResponseEntity.ok(
+                tagReturnService.findMostPopularTagOfUserHigherCostOrders()
         );
     }
 

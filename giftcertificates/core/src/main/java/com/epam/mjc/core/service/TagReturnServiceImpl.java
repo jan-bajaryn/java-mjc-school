@@ -40,4 +40,9 @@ public class TagReturnServiceImpl implements TagReturnService {
     public TagDto findById(Long id) {
         return tagDtoMapper.toTagDto(service.findById(id));
     }
+
+    @Override
+    public TagDto findMostPopularTagOfUserHigherCostOrders() {
+        return tagDtoMapper.toTagDto(service.findMostPopularTagOfUserHigherCostOrders());
+    }
 }

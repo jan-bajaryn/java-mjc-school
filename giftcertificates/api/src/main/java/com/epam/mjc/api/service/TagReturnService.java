@@ -12,4 +12,6 @@ public interface TagReturnService {
     List<TagDto> findAll(Integer pageNumber,Integer pageSize);
 
     TagDto findById(Long id);
+
+    TagDto findMostPopularTagOfUserHigherCostOrders();
 }

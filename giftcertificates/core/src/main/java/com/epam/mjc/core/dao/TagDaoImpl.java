@@ -6,6 +6,7 @@ import com.epam.mjc.api.domain.Tag_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +23,41 @@ import java.util.Optional;
 @Repository
 public class TagDaoImpl implements TagDao {
     private static final Logger log = LoggerFactory.getLogger(TagDaoImpl.class);
+    // lang=SQL
+    private static final String FIND_POPULAR_TAG =
+            "with rich_user(id, price) as\n" +
+                    "         (select usr.id, sum(o.price) as sm\n" +
+                    "          from usr\n" +
+                    "                   inner join orders o on usr.id = o.user_id\n" +
+                    "          group by usr.id\n" +
+                    "          order by sm desc\n" +
+                    "          limit 1)\n" +
+                    "   ,\n" +
+                    "     tag_count_usages(id, cnt) as\n" +
+                    "    (select tag.id, sum(gco.count)\n" +
+                    "     from tag\n" +
+                    "              inner join gift_certificate_tag gct on tag.id = gct.tag_id\n" +
+                    "              inner join gift_certificate gc on gct.gift_certificate_id = gc.id\n" +
+                    "              inner join gift_certificate_order gco on gc.id = gco.gift_certificate_id\n" +
+                    "              inner join orders o2 on gco.order_id = o2.id\n" +
+                    "              inner join usr u on o2.user_id = u.id\n" +
+                    "     where u.id = (select id from rich_user)\n" +
+                    "     group by tag.id\n" +
+                    "     order by sum(gco.count) desc\n" +
+                    "     limit 1)\n" +
+                    " select tag_count_usages.id as id from tag_count_usages";
+
+    private static final String ID = "id";
 
     @PersistenceContext
     private final EntityManager entityManager;
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    public TagDaoImpl(EntityManager entityManager) {
+    public TagDaoImpl(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
         this.entityManager = entityManager;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -94,33 +123,9 @@ public class TagDaoImpl implements TagDao {
         }
     }
 
+    @Override
+    public Long findMostPopularTagIdOfUserHigherCostOrders() {
+        return jdbcTemplate.queryForObject(FIND_POPULAR_TAG, (rs, rowNum) -> rs.getLong(ID));
+    }
 
-    // TODO TO DELETE OR CHANGE
-//    @Override
-//    public List<Tag> findAllExistingByNames(List<Tag> tags) {
-//        String[] names = tags.stream()
-//                .map(Tag::getName)
-//                .toArray(String[]::new);
-//        String inSql = String.join(COMMA, Collections.nCopies(names.length, QUESTION_MARK));
-//
-//        return template.query(
-//                String.format(FIND_EXISTING_SQL, inSql),
-//                names,
-//                rowMapper);
-//    }
-
-//    @Override
-//    public void createAll(List<Tag> toAdd) {
-//        int[] updateCounts = template.batchUpdate(
-//                CREATE_SQL,
-//                new BatchPreparedStatementSetter() {
-//                    public void setValues(PreparedStatement ps, int i) throws SQLException {
-//                        ps.setString(1, toAdd.get(i).getName());
-//                    }
-//
-//                    public int getBatchSize() {
-//                        return toAdd.size();
-//                    }
-//                });
-//    }
 }

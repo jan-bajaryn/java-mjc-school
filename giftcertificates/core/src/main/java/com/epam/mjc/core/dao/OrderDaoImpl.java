@@ -40,7 +40,6 @@ public class OrderDaoImpl implements OrderDao {
         CriteriaQuery<Order> resultCriteria = criteriaQuery.select(root)
                 .distinct(true);
 
-        // TODO check that
         resultCriteria = filterIfIdNotNull(userId, criteriaBuilder, root, resultCriteria);
 
         return entityManager.createQuery(resultCriteria)
