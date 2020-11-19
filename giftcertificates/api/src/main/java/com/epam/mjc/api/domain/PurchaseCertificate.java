@@ -1,30 +1,29 @@
 package com.epam.mjc.api.domain;
 
-import com.epam.mjc.api.domain.keys.PurchaseCertificateKey;
-
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import java.math.BigDecimal;
 
 @Entity(name = "gift_certificate_order")
 public class PurchaseCertificate {
 
-    @EmbeddedId
-    private PurchaseCertificateKey purchaseCertificateKey = new PurchaseCertificateKey();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gift_certificate_id")
-    @MapsId("giftCertificateId")
     private GiftCertificate giftCertificate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    @MapsId("orderId")
     private Order order;
 
     @Column(name = "price_for_one")
@@ -37,8 +36,8 @@ public class PurchaseCertificate {
     public PurchaseCertificate() {
     }
 
-    public PurchaseCertificate(PurchaseCertificateKey purchaseCertificateKey, GiftCertificate giftCertificate, Order order, BigDecimal priceForOne, String oldName, Integer count) {
-        this.purchaseCertificateKey = purchaseCertificateKey;
+    public PurchaseCertificate(Long id, GiftCertificate giftCertificate, Order order, BigDecimal priceForOne, String oldName, Integer count) {
+        this.id = id;
         this.giftCertificate = giftCertificate;
         this.order = order;
         this.priceForOne = priceForOne;
@@ -46,12 +45,12 @@ public class PurchaseCertificate {
         this.count = count;
     }
 
-    public PurchaseCertificateKey getPurchaseCertificateKey() {
-        return purchaseCertificateKey;
+    public Long getId() {
+        return id;
     }
 
-    public void setPurchaseCertificateKey(PurchaseCertificateKey purchaseCertificateKey) {
-        this.purchaseCertificateKey = purchaseCertificateKey;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public GiftCertificate getGiftCertificate() {
@@ -101,8 +100,7 @@ public class PurchaseCertificate {
 
         PurchaseCertificate that = (PurchaseCertificate) o;
 
-        if (getPurchaseCertificateKey() != null ? !getPurchaseCertificateKey().equals(that.getPurchaseCertificateKey()) : that.getPurchaseCertificateKey() != null)
-            return false;
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getGiftCertificate() != null ? !getGiftCertificate().equals(that.getGiftCertificate()) : that.getGiftCertificate() != null)
             return false;
         if (getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null) return false;
@@ -114,7 +112,7 @@ public class PurchaseCertificate {
 
     @Override
     public int hashCode() {
-        int result = getPurchaseCertificateKey() != null ? getPurchaseCertificateKey().hashCode() : 0;
+        int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getGiftCertificate() != null ? getGiftCertificate().hashCode() : 0);
         result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + (getPriceForOne() != null ? getPriceForOne().hashCode() : 0);
@@ -126,7 +124,7 @@ public class PurchaseCertificate {
     @Override
     public String toString() {
         return "PurchaseCertificate{" +
-                "purchaseCertificateKey=" + purchaseCertificateKey +
+                "id=" + id +
                 ", giftCertificate=" + giftCertificate +
                 ", order=" + order +
                 ", priceForOne=" + priceForOne +
