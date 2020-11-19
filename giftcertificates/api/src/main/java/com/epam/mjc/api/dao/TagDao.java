@@ -16,5 +16,5 @@ public interface TagDao {
 
     Optional<Tag> findByTagName(String name);
 
-    Long findMostPopularTagIdOfUserHigherCostOrders();
+    Tag findMostPopularTagIdOfUserHigherCostOrders();
 }

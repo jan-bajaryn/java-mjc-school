@@ -106,7 +106,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag findMostPopularTagOfUserHigherCostOrders() {
-        return findById(tagDao.findMostPopularTagIdOfUserHigherCostOrders());
+        return tagDao.findMostPopularTagIdOfUserHigherCostOrders();
     }
 
 }

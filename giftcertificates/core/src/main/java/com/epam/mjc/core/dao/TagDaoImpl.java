@@ -6,7 +6,6 @@ import com.epam.mjc.api.domain.Tag_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,19 +44,16 @@ public class TagDaoImpl implements TagDao {
                     "     group by tag.id\n" +
                     "     order by sum(gco.count) desc\n" +
                     "     limit 1)\n" +
-                    " select tag_count_usages.id as id from tag_count_usages";
+                    " select tag.id, tag.name from tag where tag.id = (select tag_count_usages.id from tag_count_usages)";
 
-    private static final String ID = "id";
 
     @PersistenceContext
     private final EntityManager entityManager;
 
-    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public TagDaoImpl(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
+    public TagDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -124,8 +120,8 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Long findMostPopularTagIdOfUserHigherCostOrders() {
-        return jdbcTemplate.queryForObject(FIND_POPULAR_TAG, (rs, rowNum) -> rs.getLong(ID));
+    public Tag findMostPopularTagIdOfUserHigherCostOrders() {
+        return (Tag) entityManager.createNativeQuery(FIND_POPULAR_TAG, Tag.class).getSingleResult();
     }
 
 }
