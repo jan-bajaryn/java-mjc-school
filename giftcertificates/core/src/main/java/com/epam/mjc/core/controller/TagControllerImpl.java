@@ -43,7 +43,7 @@ public class TagControllerImpl implements TagController {
     public ResponseEntity<TagDto> tagCreate(@RequestBody TagForCreate tagForCreate) {
         log.debug("tagCreate: name = {}", tagForCreate.getName());
         TagDto byName = tagReturnService.createByName(tagForCreate.getName());
-        setSelfLinks(byName);
+//        setSelfLinks(byName);
         return new ResponseEntity<>(
                 byName,
                 HttpStatus.CREATED
@@ -61,9 +61,9 @@ public class TagControllerImpl implements TagController {
                                                            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
         List<TagDto> all = tagReturnService.findAll(pageNumber, pageSize);
 
-        for (TagDto tagDto : all) {
-            setSelfLinks(tagDto);
-        }
+//        for (TagDto tagDto : all) {
+//            setSelfLinks(tagDto);
+//        }
         CollectionModel<TagDto> model = new CollectionModel<>(all);
 
         Link self = linkTo(TagControllerImpl.class).withRel("tags");
@@ -83,25 +83,16 @@ public class TagControllerImpl implements TagController {
     @Override
     public ResponseEntity<TagDto> showById(@PathVariable Long id) {
         TagDto byId = tagReturnService.findById(id);
-        setSelfLinks(byId);
+//        setSelfLinks(byId);
         return ResponseEntity.ok(
                 byId
         );
     }
 
-    private void setSelfLinks(TagDto byId) {
-        Link selfLink = linkTo(methodOn(TagControllerImpl.class)
-                .showById(byId.getId())).withSelfRel();
-        byId.add(selfLink);
-        Link delete = linkTo(methodOn(TagControllerImpl.class)
-                .tagDelete(byId.getId())).withRel("delete");
-        byId.add(delete);
-    }
-
     @GetMapping("/popular")
     public ResponseEntity<TagDto> getRich() {
         TagDto result = tagReturnService.findMostPopularTagOfUserHigherCostOrders();
-        setSelfLinks(result);
+//        setSelfLinks(result);
         return ResponseEntity.ok(
                 result
         );

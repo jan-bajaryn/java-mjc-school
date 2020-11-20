@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +45,6 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
             @RequestBody GiftCertificateModelForCreate giftCertificateModelForCreate
     ) {
         GiftCertificateDto result = giftCertificateReturnService.create(giftCertificateModelForCreate);
-        setSelfLinks(result);
         return new ResponseEntity<>(
                 result,
                 HttpStatus.CREATED
@@ -56,7 +54,6 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     @Override
     public ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id) {
         GiftCertificateDto byId = giftCertificateReturnService.findById(id);
-        setSelfLinks(byId);
         return ResponseEntity.ok(
                 byId
         );
@@ -86,10 +83,6 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
         log.debug("sort = {}", sort);
         List<GiftCertificateDto> result = giftCertificateReturnService.search(tagNames, partName, partDescription, sort, pageNumber, pageSize);
 
-        for (GiftCertificateDto giftCertificateDto : result) {
-            setSelfLinks(giftCertificateDto);
-        }
-
         CollectionModel<GiftCertificateDto> model = new CollectionModel<>(result);
 
         model.add(linkTo(GiftCertificateControllerImpl.class).withSelfRel());
@@ -104,14 +97,5 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
         );
     }
 
-    private void setSelfLinks(GiftCertificateDto byId) {
-        Link selfLink = linkTo(methodOn(GiftCertificateControllerImpl.class)
-                .showById(byId.getId())).withSelfRel();
-        Link delete = linkTo(methodOn(GiftCertificateControllerImpl.class)
-                .certificateDelete(byId.getId())).withRel("delete");
-        Link update = linkTo(methodOn(GiftCertificateControllerImpl.class)
-                .certificateUpdate(byId.getId(), new GiftCertificateModel())).withRel("update");
-        byId.add(selfLink, delete, update);
-    }
 
 }

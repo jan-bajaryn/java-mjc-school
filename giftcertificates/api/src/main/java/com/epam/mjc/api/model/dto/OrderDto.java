@@ -1,5 +1,6 @@
 package com.epam.mjc.api.model.dto;
 
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
@@ -14,6 +15,11 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     private List<PurchaseDto> purchases;
 
     public OrderDto() {
+    }
+
+    @Override
+    public OrderDto add(Link link) {
+        return super.add(link);
     }
 
     public OrderDto(Long id, LocalDateTime createDate, BigDecimal price, UserDto user, List<PurchaseDto> purchases) {

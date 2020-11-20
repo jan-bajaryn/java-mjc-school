@@ -6,7 +6,6 @@ import com.epam.mjc.api.model.dto.OrderDto;
 import com.epam.mjc.api.service.OrderReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,10 +43,6 @@ public class OrderControllerImpl implements OrderController {
                                                             @RequestParam(required = false) Long userId) {
         List<OrderDto> search = orderReturnService.search(userId, pageNumber, pageSize);
 
-        for (OrderDto orderDto : search) {
-            setSelfLinks(orderDto);
-        }
-
         CollectionModel<OrderDto> model = new CollectionModel<>(search);
 
         model.add(linkTo(OrderControllerImpl.class).withSelfRel());
@@ -60,7 +55,6 @@ public class OrderControllerImpl implements OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> findById(@PathVariable Long id) {
         OrderDto byId = orderReturnService.findById(id);
-        setSelfLinks(byId);
         return ResponseEntity.ok(byId);
     }
 
@@ -68,13 +62,7 @@ public class OrderControllerImpl implements OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> create(@RequestBody OrderForCreate orderForCreate) {
         OrderDto orderDto = orderReturnService.create(orderForCreate);
-        setSelfLinks(orderDto);
         return new ResponseEntity<>(orderDto, HttpStatus.CREATED);
     }
 
-    private void setSelfLinks(OrderDto byId) {
-        Link selfLink = linkTo(methodOn(OrderControllerImpl.class)
-                .findById(byId.getId())).withSelfRel();
-        byId.add(selfLink);
-    }
 }

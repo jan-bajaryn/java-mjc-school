@@ -5,7 +5,6 @@ import com.epam.mjc.api.model.dto.UserDto;
 import com.epam.mjc.api.service.UserReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserControllerImpl implements UserController {
@@ -34,10 +32,6 @@ public class UserControllerImpl implements UserController {
                                                             @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
         List<UserDto> all = userReturnService.findAll(pageNumber, pageSize);
 
-        for (UserDto userDto : all) {
-            setSelfLinks(userDto);
-        }
-
         CollectionModel<UserDto> model = new CollectionModel<>(all);
         model.add(linkTo(UserControllerImpl.class).withSelfRel());
         return ResponseEntity.ok(model);
@@ -46,14 +40,7 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {
         UserDto byId = userReturnService.findById(id);
-        setSelfLinks(byId);
         return ResponseEntity.ok(byId);
     }
 
-
-    private void setSelfLinks(UserDto byId) {
-        Link selfLink = linkTo(methodOn(UserControllerImpl.class)
-                .findById(byId.getId())).withSelfRel();
-        byId.add(selfLink);
-    }
 }
