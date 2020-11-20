@@ -28,7 +28,8 @@ public class UserReturnServiceImpl implements UserReturnService {
 
     @Override
     public List<UserDto> findAll(Integer pageNumber,Integer pageSize) {
-        List<User> all = userService.findAll(pageNumber,pageNumber);
+        log.debug("findAll: pageSize = {}", pageSize);
+        List<User> all = userService.findAll(pageNumber,pageSize);
         log.debug("findAll: all = {}", all);
         List<UserDto> userDtos = userMapper.toUserDto(all);
         log.debug("findAll: userDtos = {}", userDtos);

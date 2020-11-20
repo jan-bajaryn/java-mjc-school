@@ -3,6 +3,8 @@ package com.epam.mjc.core.dao;
 import com.epam.mjc.api.dao.UserDao;
 import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.domain.User_;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,8 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
+
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -28,14 +32,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll(Integer begin, Integer pageSize) {
+        log.debug("findAll: begin = {}", begin);
+        log.debug("findAll: pageSize = {}", pageSize);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         criteriaQuery.select(root);
-        return entityManager.createQuery(criteriaQuery)
+        List<User> resultList = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(begin)
                 .setMaxResults(pageSize)
                 .getResultList();
+
+        log.debug("findAll: resultList = {}", resultList);
+        return resultList;
     }
 
     @Override
