@@ -9,7 +9,7 @@ import java.util.List;
 public interface GiftCertificateReturnService {
     GiftCertificateDto create(GiftCertificateModelForCreate giftCertificateModelForCreate);
     GiftCertificateDto findById(Long id);
-    void update(GiftCertificateModel giftCertificateModel);
+    void update(Long id, GiftCertificateModel giftCertificateModel);
     void deleteById(Long id);
     List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort,Integer pageNumber,Integer pageSize);
 }

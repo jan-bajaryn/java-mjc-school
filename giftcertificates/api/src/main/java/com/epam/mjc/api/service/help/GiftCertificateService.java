@@ -41,11 +41,13 @@ public interface GiftCertificateService {
     void deleteById(Long id);
 
     /**
+     *
+     * @param id
      * @param toGiftCertificate {@link GiftCertificate} entity to update
      * @throws com.epam.mjc.api.service.exception.GiftCertificateNotFoundException  if there not GiftCertificate in base to update
      * @throws com.epam.mjc.api.service.exception.GiftCertificateValidatorException if field of giftCertificate is incorrect
      */
-    void update(GiftCertificate toGiftCertificate);
+    void update(Long id, GiftCertificate toGiftCertificate);
 
 
     /**

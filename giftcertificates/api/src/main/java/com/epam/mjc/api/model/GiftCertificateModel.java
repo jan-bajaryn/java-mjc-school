@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class GiftCertificateModel {
-    private Long id;
     private String name;
     private String description;
     private BigDecimal price;
@@ -17,52 +16,70 @@ public class GiftCertificateModel {
     public GiftCertificateModel() {
     }
 
-    public Long getId() {
-        return this.id;
+    public GiftCertificateModel(String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, Integer duration, List<TagModel> tags) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
+        this.tags = tags;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
-    }
-
-    public LocalDateTime getLastUpdateDate() {
-        return this.lastUpdateDate;
-    }
-
-    public Integer getDuration() {
-        return this.duration;
-    }
-
-    public List<TagModel> getTags() {
-        return this.tags;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public void setCreateDate(final LocalDateTime createDate) {
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public List<TagModel> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagModel> tags) {
+        this.tags = tags;
     }
 
     @Override
@@ -72,7 +89,6 @@ public class GiftCertificateModel {
 
         GiftCertificateModel that = (GiftCertificateModel) o;
 
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
         if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
             return false;
@@ -88,8 +104,7 @@ public class GiftCertificateModel {
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        int result = getName() != null ? getName().hashCode() : 0;
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
         result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
@@ -99,26 +114,16 @@ public class GiftCertificateModel {
         return result;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDuration(final Integer duration) {
-        this.duration = duration;
-    }
-
-    public void setTags(final List<TagModel> tags) {
-        this.tags = tags;
-    }
-
-
-
     @Override
     public String toString() {
-        return "GiftCertificateModel(id=" + this.getId() + ", description=" + this.getDescription() + ", price=" + this.getPrice() + ", createDate=" + this.getCreateDate() + ", lastUpdateDate=" + this.getLastUpdateDate() + ", duration=" + this.getDuration() + ", tags=" + this.getTags() + ")";
+        return "GiftCertificateModel{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
+                ", duration=" + duration +
+                ", tags=" + tags +
+                '}';
     }
 }

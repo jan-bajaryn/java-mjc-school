@@ -86,13 +86,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public void update(GiftCertificate certificate) {
+    public void update(Long id, GiftCertificate certificate) {
         giftCertificateValidator.validateGiftCertificate(certificate);
-        giftCertificateValidator.validateGiftCertificateId(certificate.getId());
+        giftCertificateValidator.validateGiftCertificateId(id);
         checkDuplicatedName(certificate);
 
         buildTagsByNames(certificate);
-        GiftCertificate toUpdate = findById(certificate.getId());
+        GiftCertificate toUpdate = findById(id);
 
         copyFieldsToUpdate(certificate, toUpdate);
 

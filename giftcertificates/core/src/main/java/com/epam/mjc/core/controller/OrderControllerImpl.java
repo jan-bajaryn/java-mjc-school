@@ -5,6 +5,8 @@ import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.model.dto.OrderDto;
 import com.epam.mjc.api.service.OrderReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/orders")
@@ -34,21 +39,42 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<OrderDto>> search(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
-                                                 @RequestParam(required = false) Long userId) {
-        return ResponseEntity.ok(orderReturnService.search(userId,pageNumber,pageSize));
+    public ResponseEntity<CollectionModel<OrderDto>> search(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                            @RequestParam(required = false) Long userId) {
+        List<OrderDto> search = orderReturnService.search(userId, pageNumber, pageSize);
+
+        for (OrderDto orderDto : search) {
+            setSelfLinks(orderDto);
+        }
+
+        CollectionModel<OrderDto> model = new CollectionModel<>(search);
+
+        model.add(linkTo(OrderControllerImpl.class).withSelfRel());
+        model.add(linkTo(methodOn(OrderControllerImpl.class).create(new OrderForCreate())).withRel("create"));
+
+        return ResponseEntity.ok(model);
     }
 
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(orderReturnService.findById(id));
+        OrderDto byId = orderReturnService.findById(id);
+        setSelfLinks(byId);
+        return ResponseEntity.ok(byId);
     }
 
     @Override
     @PostMapping
     public ResponseEntity<OrderDto> create(@RequestBody OrderForCreate orderForCreate) {
-        return new ResponseEntity<>(orderReturnService.create(orderForCreate), HttpStatus.CREATED);
+        OrderDto orderDto = orderReturnService.create(orderForCreate);
+        setSelfLinks(orderDto);
+        return new ResponseEntity<>(orderDto, HttpStatus.CREATED);
+    }
+
+    private void setSelfLinks(OrderDto byId) {
+        Link selfLink = linkTo(methodOn(OrderControllerImpl.class)
+                .findById(byId.getId())).withSelfRel();
+        byId.add(selfLink);
     }
 }

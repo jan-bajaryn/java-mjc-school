@@ -39,7 +39,7 @@ public class UserControllerImpl implements UserController {
         }
 
         CollectionModel<UserDto> model = new CollectionModel<>(all);
-        model.add(linkTo(UserControllerImpl.class).withRel("all"));
+        model.add(linkTo(UserControllerImpl.class).withSelfRel());
         return ResponseEntity.ok(model);
     }
 

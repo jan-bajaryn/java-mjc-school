@@ -3,6 +3,7 @@ package com.epam.mjc.api.controller;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.List;
 
 public interface GiftCertificateController {
     @PostMapping
@@ -27,9 +26,9 @@ public interface GiftCertificateController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id);
 
-    @PatchMapping
+    @PatchMapping("/id")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Void> certificateUpdate(@RequestBody GiftCertificateModel giftCertificateModel);
+    ResponseEntity<Void> certificateUpdate(@PathVariable Long id, @RequestBody GiftCertificateModel giftCertificateModel);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -37,8 +36,8 @@ public interface GiftCertificateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<GiftCertificateDto>> certificateSearch(
-            @RequestParam(required = false,name = "tagNames") String tagNames,
+    ResponseEntity<CollectionModel<GiftCertificateDto>> certificateSearch(
+            @RequestParam(required = false, name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
             @RequestParam(required = false) String sort,
