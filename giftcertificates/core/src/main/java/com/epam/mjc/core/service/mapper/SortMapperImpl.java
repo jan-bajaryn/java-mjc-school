@@ -36,7 +36,7 @@ public class SortMapperImpl implements SortMapper {
                 .map(s -> s.split(COLON))
                 .peek(arr -> {
                     if (arr.length != ARR_LENGTH) {
-                        throw new WrongQuerySortException("sort.wrong-sort");
+                        throw new WrongQuerySortException("sort.wrong-sort", sort);
                     }
                 })
                 .map(arr -> {
@@ -45,20 +45,20 @@ public class SortMapperImpl implements SortMapper {
                         boolean isAsc = takeIsAsc(arr[1]);
                         return new SortParam(fieldName, isAsc);
                     } catch (IllegalArgumentException e) {
-                        throw new WrongQuerySortException("sort.wrong-sort");
+                        throw new WrongQuerySortException("sort.wrong-sort", sort);
                     }
                 })
                 .collect(Collectors.toList());
     }
 
     private boolean takeIsAsc(String s) {
-        if (s.equals(ASC)){
+        if (s.equals(ASC)) {
             return true;
         }
-        if (s.equals(DESC)){
+        if (s.equals(DESC)) {
             return false;
         }
-        throw new WrongQuerySortException("sort.wrong-sort");
+        throw new WrongQuerySortException("sort.wrong-sort.asc", s);
     }
 
 }

@@ -45,7 +45,7 @@ public class TagServiceImpl implements TagService {
         Optional<Tag> byTagName = findByTagName(name);
         log.debug("createByName: byTagName.isPresent() = {}", byTagName.isPresent());
         if (byTagName.isPresent()) {
-            throw new TagAlreadyExistsException("tag.exists");
+            throw new TagAlreadyExistsException("tag.exists", name);
         }
 
         return tagDao.create(Tag.builder().name(name).build());
@@ -66,7 +66,7 @@ public class TagServiceImpl implements TagService {
         tagValidator.validateTagId(id);
         Optional<Tag> byId = tagDao.findById(id);
         if (!byId.isPresent()) {
-            throw new TagNotFoundException("tag.not-found-id");
+            throw new TagNotFoundException("tag.not-found-id", id);
         }
         return byId.get();
     }

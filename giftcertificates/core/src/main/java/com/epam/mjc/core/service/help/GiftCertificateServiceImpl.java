@@ -46,7 +46,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         Optional<GiftCertificate> byId = giftCertificateDao.findById(id);
         if (!byId.isPresent()) {
-            throw new GiftCertificateNotFoundException("certificate.not-found-id");
+            throw new GiftCertificateNotFoundException("certificate.not-found-id", id);
         }
 
         return byId.get();
@@ -72,7 +72,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         log.debug("create: byName.isPresent() = {}", byName.isPresent());
 
         if (byName.isPresent()) {
-            throw new GiftCertificateAlreadyExists("certificate.exists");
+            throw new GiftCertificateAlreadyExists("certificate.exists", giftCertificate.getName());
         }
     }
 
@@ -103,7 +103,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDao.findByName(certificate.getName())
                 .ifPresent(g -> {
                     if (!g.getId().equals(certificate.getId())) {
-                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists");
+                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
                     }
                 });
     }
@@ -125,7 +125,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificate findByName(String name) {
         giftCertificateValidator.validateGiftCertificateName(name);
-        return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name"));
+        return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name", name));
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {

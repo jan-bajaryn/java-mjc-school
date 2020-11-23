@@ -32,32 +32,32 @@ public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
     @Override
     public void validateGiftCertificateId(Long id) {
         if (id == null || id < ID_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("certificate.wrong-id");
+            throw new GiftCertificateValidatorException("certificate.wrong-id", id);
         }
     }
 
     private void validateGiftCertificateDuration(Integer duration) {
         if (duration == null || duration < DURATION_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("certificate.wrong-duration");
+            throw new GiftCertificateValidatorException("certificate.wrong-duration", duration);
         }
     }
 
     private void validateGiftCertificatePrice(BigDecimal price) {
         if (price == null || price.compareTo(BigDecimal.ZERO) < PRICE_MIN_VALUE) {
-            throw new GiftCertificateValidatorException("certificate.wrong-price");
+            throw new GiftCertificateValidatorException("certificate.wrong-price", price);
         }
     }
 
     private void validateGiftCertificateDescription(String description) {
         if (description == null || description.isEmpty() || description.length() > DESCRIPTION_MAX_LENGTH) {
-            throw new GiftCertificateValidatorException("certificate.wrong-description");
+            throw new GiftCertificateValidatorException("certificate.wrong-description", description);
         }
     }
 
     @Override
     public void validateGiftCertificateName(String name) {
         if (name == null || name.isEmpty() || name.length() > NAME_MAX_LENGTH) {
-            throw new GiftCertificateValidatorException("certificate.wrong-name");
+            throw new GiftCertificateValidatorException("certificate.wrong-name", name);
         }
     }
 

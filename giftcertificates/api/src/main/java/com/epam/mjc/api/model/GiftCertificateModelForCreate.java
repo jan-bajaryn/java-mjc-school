@@ -9,7 +9,7 @@ public class GiftCertificateModelForCreate {
     private String description;
     private BigDecimal price;
     private Integer duration;
-    private List<TagModel> tags=new ArrayList<>();
+    private List<TagModel> tags = new ArrayList<>();
 
     public GiftCertificateModelForCreate() {
     }

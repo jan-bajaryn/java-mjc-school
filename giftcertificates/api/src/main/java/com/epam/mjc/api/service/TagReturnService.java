@@ -9,7 +9,7 @@ public interface TagReturnService {
 
     boolean deleteById(Long id);
 
-    List<TagDto> findAll(Integer pageNumber,Integer pageSize);
+    List<TagDto> findAll(Integer pageNumber, Integer pageSize);
 
     TagDto findById(Long id);
 

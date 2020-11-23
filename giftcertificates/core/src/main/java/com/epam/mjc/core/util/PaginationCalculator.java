@@ -15,7 +15,7 @@ public class PaginationCalculator {
     }
 
     public Integer calculateBegin(Integer pageNumber, Integer pageSize) {
-        paginationValidator.validatePagination(pageNumber,pageSize);
+        paginationValidator.validatePagination(pageNumber, pageSize);
         return (pageNumber - 1) * pageSize;
     }
 }

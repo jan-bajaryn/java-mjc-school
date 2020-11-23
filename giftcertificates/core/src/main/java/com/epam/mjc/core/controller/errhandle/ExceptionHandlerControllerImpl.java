@@ -13,6 +13,7 @@ import com.epam.mjc.api.service.exception.OrderNotFountException;
 import com.epam.mjc.api.service.exception.OrderValidatorException;
 import com.epam.mjc.api.service.exception.PaginationException;
 import com.epam.mjc.api.service.exception.PurchaseCertificateValidatorException;
+import com.epam.mjc.api.service.exception.ServiceException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
@@ -173,9 +174,9 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     }
 
 
-    private ResponseEntity<Object> getResponseEntity(Exception exception, String errorCode, HttpStatus httpStatus) {
+    private ResponseEntity<Object> getResponseEntity(ServiceException exception, String errorCode, HttpStatus httpStatus) {
         logger.error("Exception: ", exception);
-        String message = translator.getString(exception.getMessage());
+        String message = translator.getString(exception.getMessage(), exception.getArgs());
         ExceptionInfoHolder info = new ExceptionInfoHolder(message, errorCode);
         return new ResponseEntity<>(info, new HttpHeaders(), httpStatus);
     }

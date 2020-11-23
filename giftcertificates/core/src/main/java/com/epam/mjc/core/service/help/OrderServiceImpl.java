@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(Long id) {
         orderValidator.validateId(id);
-        return orderDao.findById(id).orElseThrow(() -> new OrderNotFountException("order.not-fount"));
+        return orderDao.findById(id).orElseThrow(() -> new OrderNotFountException("order.not-fount", id));
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface TagService {
     /**
      * @return List of all {@link Tag} from database
      */
-    List<Tag> findAll(Integer pageNumber,Integer pageSize);
+    List<Tag> findAll(Integer pageNumber, Integer pageSize);
 
     /**
      * Create {@link GiftCertificate} by name in database and return created {@link GiftCertificate}

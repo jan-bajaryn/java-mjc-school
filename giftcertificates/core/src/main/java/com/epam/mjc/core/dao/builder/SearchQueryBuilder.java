@@ -32,7 +32,7 @@ public class SearchQueryBuilder {
     private CriteriaBuilder criteriaBuilder;
     private Root<GiftCertificate> root;
 
-    public SearchQueryBuilder searchParams(SearchParams searchParams,CriteriaBuilder criteriaBuilder) {
+    public SearchQueryBuilder searchParams(SearchParams searchParams, CriteriaBuilder criteriaBuilder) {
         this.criteriaBuilder = criteriaBuilder;
         this.tagNames = searchParams.getTagNames();
         this.partName = searchParams.getPartName();

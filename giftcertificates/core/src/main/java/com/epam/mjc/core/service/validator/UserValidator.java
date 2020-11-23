@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 public class UserValidator {
     public void validateId(Long id) {
         if (id == null || id < 1) {
-            throw new UserValidatorException("user.wrong-id");
+            throw new UserValidatorException("user.wrong-id", id);
         }
     }
 
     public void validateIdNullable(Long userId) {
         if (userId != null && userId < 1) {
-            throw new UserValidatorException("user.wrong-id");
+            throw new UserValidatorException("user.wrong-id", userId);
         }
     }
 }

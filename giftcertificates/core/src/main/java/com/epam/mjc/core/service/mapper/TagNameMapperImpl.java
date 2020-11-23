@@ -21,7 +21,7 @@ public class TagNameMapperImpl implements TagNameMapper {
         return Arrays.stream(tagName.split(COMMA))
                 .peek(s -> {
                     if (s.isEmpty()) {
-                        throw new TagNameMapperException("tag.mapper-list");
+                        throw new TagNameMapperException("tag.mapper-list", tagName);
                     }
                 })
                 .collect(Collectors.toList());

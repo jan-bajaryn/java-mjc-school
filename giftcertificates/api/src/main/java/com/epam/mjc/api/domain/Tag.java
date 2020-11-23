@@ -21,7 +21,7 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "tags",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<GiftCertificate> giftCertificates;
 
     public Tag() {

@@ -25,7 +25,7 @@ public interface TagController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<CollectionModel<TagDto>> showAll(Integer pageNumber,Integer pageSize);
+    ResponseEntity<CollectionModel<TagDto>> showAll(Integer pageNumber, Integer pageSize);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

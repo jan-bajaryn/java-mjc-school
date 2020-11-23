@@ -39,6 +39,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         userValidator.validateId(id);
-        return userDao.findById(id).orElseThrow(() -> new UserNotFoundException("user.not-found"));
+        return userDao.findById(id).orElseThrow(() -> new UserNotFoundException("user.not-found", id));
     }
 }

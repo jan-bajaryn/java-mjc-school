@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class PaginationValidator {
     public void validatePagination(Integer pageNumber, Integer pageSize) {
         if (pageNumber == null || pageSize == null || pageNumber < 1 || pageSize < 1) {
-            throw new PaginationException("pagination.wrong-parameters");
+            throw new PaginationException("pagination.wrong-parameters", pageNumber, pageSize);
         }
     }
 }

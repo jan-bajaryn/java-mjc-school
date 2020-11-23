@@ -8,7 +8,7 @@ public class OrderValidator {
 
     public void validateId(Long id) {
         if (id == null || id < 1) {
-            throw new OrderValidatorException("order.wrong-id");
+            throw new OrderValidatorException("order.wrong-id", id);
         }
     }
 }

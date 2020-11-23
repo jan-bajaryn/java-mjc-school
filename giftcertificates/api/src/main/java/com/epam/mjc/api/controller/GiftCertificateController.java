@@ -26,7 +26,7 @@ public interface GiftCertificateController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id);
 
-    @PatchMapping("/id")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<Void> certificateUpdate(@PathVariable Long id, @RequestBody GiftCertificateModel giftCertificateModel);
 
