@@ -17,4 +17,8 @@ public interface TagDao {
     Optional<Tag> findByTagName(String name);
 
     Tag findMostPopularTagIdOfUserHigherCostOrders();
+
+    List<Tag> findAllExistingByNames(List<Tag> tags);
+
+    void createAll(List<Tag> toAdd);
 }

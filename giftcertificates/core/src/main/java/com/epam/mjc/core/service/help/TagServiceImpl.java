@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -76,20 +79,30 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public List<Tag> findOrCreateAll(List<Tag> tags) {
 
-// waiting for batchUpdate with generated keys
-//        List<Tag> existing = tagDao.findAllExistingByNames(tags);
-//        List<Tag> toAdd = new ArrayList<>(tags);
-//        toAdd.removeAll(existing);
-//        createAllByName(toAdd);
+        List<Tag> existing = tagDao.findAllExistingByNames(tags);
 
-        return tags.stream().map(this::findOrCreate).collect(Collectors.toList());
+        List<Tag> toAdd = new ArrayList<>(tags);
+        toAdd.removeIf(
+                t -> existing.stream().anyMatch(e -> e.getName().equals(t.getName()))
+        );
+        createAll(toAdd);
+
+        return Stream.concat(toAdd.stream(), existing.stream())
+                .sorted(Comparator.comparingInt(a -> findIndex(tags, a)))
+                .collect(Collectors.toList());
     }
 
-    private void createAllByName(List<Tag> toAdd) {
-//        tagDao.createAll(toAdd);
-        for (Tag tag : toAdd) {
-            createByName(tag.getName());
+    private int findIndex(List<Tag> tags, Tag b) {
+        for (int i = 0; i < tags.size(); i++) {
+            if (tags.get(i).getName().equals(b.getName())) {
+                return i;
+            }
         }
+        throw new IllegalArgumentException();
+    }
+
+    private void createAll(List<Tag> toAdd) {
+        tagDao.createAll(toAdd);
     }
 
     @Transactional

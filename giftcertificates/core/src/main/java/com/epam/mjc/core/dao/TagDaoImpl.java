@@ -15,9 +15,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class TagDaoImpl implements TagDao {
@@ -71,7 +73,6 @@ public class TagDaoImpl implements TagDao {
     @Transactional
     @Override
     public Tag create(Tag tag) {
-
         entityManager.persist(tag);
         return tag;
 
@@ -123,5 +124,36 @@ public class TagDaoImpl implements TagDao {
     public Tag findMostPopularTagIdOfUserHigherCostOrders() {
         return (Tag) entityManager.createNativeQuery(FIND_POPULAR_TAG, Tag.class).getSingleResult();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Tag> findAllExistingByNames(List<Tag> tags) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        List<Predicate> predicates = predicatesForExisting(tags, criteriaBuilder, root);
+
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+        return entityManager.createQuery(criteriaQuery)
+                .getResultList();
+    }
+
+    private List<Predicate> predicatesForExisting(List<Tag> tags, CriteriaBuilder criteriaBuilder, Root<Tag> root) {
+        return tags.stream()
+                .map(t -> criteriaBuilder.or(criteriaBuilder.equal(root.get(Tag_.name), t.getName())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void createAll(List<Tag> toAdd) {
+        for (Tag tag : toAdd) {
+            entityManager.persist(tag);
+        }
+    }
+
+
 
 }

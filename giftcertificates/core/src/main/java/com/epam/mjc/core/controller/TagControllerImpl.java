@@ -43,7 +43,6 @@ public class TagControllerImpl implements TagController {
     public ResponseEntity<TagDto> tagCreate(@RequestBody TagForCreate tagForCreate) {
         log.debug("tagCreate: name = {}", tagForCreate.getName());
         TagDto byName = tagReturnService.createByName(tagForCreate.getName());
-//        setSelfLinks(byName);
         return new ResponseEntity<>(
                 byName,
                 HttpStatus.CREATED
@@ -61,9 +60,6 @@ public class TagControllerImpl implements TagController {
                                                            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
         List<TagDto> all = tagReturnService.findAll(pageNumber, pageSize);
 
-//        for (TagDto tagDto : all) {
-//            setSelfLinks(tagDto);
-//        }
         CollectionModel<TagDto> model = new CollectionModel<>(all);
 
         Link self = linkTo(TagControllerImpl.class).withRel("tags");
@@ -92,7 +88,6 @@ public class TagControllerImpl implements TagController {
     @GetMapping("/popular")
     public ResponseEntity<TagDto> getRich() {
         TagDto result = tagReturnService.findMostPopularTagOfUserHigherCostOrders();
-//        setSelfLinks(result);
         return ResponseEntity.ok(
                 result
         );

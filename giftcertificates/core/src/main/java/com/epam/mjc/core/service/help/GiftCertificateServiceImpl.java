@@ -2,7 +2,6 @@ package com.epam.mjc.core.service.help;
 
 import com.epam.mjc.api.dao.GiftCertificateDao;
 import com.epam.mjc.api.domain.GiftCertificate;
-import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -130,15 +128,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private void buildTagsByNames(GiftCertificate certificate) {
         if (certificate.getTags() != null) {
-            List<Tag> result = certificate.getTags().stream()
-                    .map(t -> {
-                        Optional<Tag> byId = tagService.findByTagName(t.getName());
-                        return byId.orElseGet(() -> tagService.createByName(t.getName()));
-
-                    })
-                    .collect(Collectors.toList());
-
-            certificate.setTags(result);
+            certificate.setTags(tagService.findOrCreateAll(certificate.getTags()));
         }
     }
 
