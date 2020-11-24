@@ -11,7 +11,7 @@ public interface GiftCertificateReturnService {
 
     GiftCertificateDto findById(Long id);
 
-    void update(Long id, GiftCertificateModel giftCertificateModel);
+    GiftCertificateDto update(Long id, GiftCertificateModel giftCertificateModel);
 
     void deleteById(Long id);
 

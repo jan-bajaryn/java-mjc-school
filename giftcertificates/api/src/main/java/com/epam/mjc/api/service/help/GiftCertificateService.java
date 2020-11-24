@@ -45,8 +45,9 @@ public interface GiftCertificateService {
      * @param toGiftCertificate {@link GiftCertificate} entity to update
      * @throws com.epam.mjc.api.service.exception.GiftCertificateNotFoundException  if there not GiftCertificate in base to update
      * @throws com.epam.mjc.api.service.exception.GiftCertificateValidatorException if field of giftCertificate is incorrect
+     * @return
      */
-    void update(Long id, GiftCertificate toGiftCertificate);
+    GiftCertificate update(Long id, GiftCertificate toGiftCertificate);
 
 
     /**

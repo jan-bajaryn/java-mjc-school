@@ -47,9 +47,10 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public void update(Long id, GiftCertificateModel giftCertificateModel) {
-        service.update(id,
+    public GiftCertificateDto update(Long id, GiftCertificateModel giftCertificateModel) {
+        return giftCertificateDtoMapper.toGiftCertificateDto(service.update(id,
                 giftCertificateDtoMapper.toGiftCertificate(giftCertificateModel)
+                )
         );
     }
 

@@ -86,23 +86,23 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public void update(Long id, GiftCertificate certificate) {
+    public GiftCertificate update(Long id, GiftCertificate certificate) {
         giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(id);
-        checkDuplicatedName(certificate);
+        checkDuplicatedName(certificate,id);
 
         buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(id);
 
         copyFieldsToUpdate(certificate, toUpdate);
 
-        giftCertificateDao.update(toUpdate);
+        return giftCertificateDao.update(toUpdate);
     }
 
-    private void checkDuplicatedName(GiftCertificate certificate) {
+    private void checkDuplicatedName(GiftCertificate certificate, Long id) {
         giftCertificateDao.findByName(certificate.getName())
                 .ifPresent(g -> {
-                    if (!g.getId().equals(certificate.getId())) {
+                    if (!g.getId().equals(id)) {
                         throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
                     }
                 });

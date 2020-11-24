@@ -10,7 +10,7 @@ public interface GiftCertificateDao {
 
     GiftCertificate create(GiftCertificate giftCertificate);
 
-    void update(GiftCertificate giftCertificate);
+    GiftCertificate update(GiftCertificate giftCertificate);
 
     Optional<GiftCertificate> findById(Long id);
 

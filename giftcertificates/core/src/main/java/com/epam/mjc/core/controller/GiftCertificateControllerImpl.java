@@ -60,9 +60,8 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     }
 
     @Override
-    public ResponseEntity<Void> certificateUpdate(@PathVariable Long id, @RequestBody GiftCertificateModel giftCertificateModel) {
-        giftCertificateReturnService.update(id, giftCertificateModel);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<GiftCertificateDto> certificateUpdate(@PathVariable Long id, @RequestBody GiftCertificateModel giftCertificateModel) {
+        return ResponseEntity.ok(giftCertificateReturnService.update(id, giftCertificateModel));
     }
 
     @Override

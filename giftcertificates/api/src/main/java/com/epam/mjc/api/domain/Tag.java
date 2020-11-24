@@ -102,7 +102,7 @@ public class Tag {
     }
 
 
-    public static final class Builder {
+    public static class Builder {
         private Long id;
         private String name;
         private List<GiftCertificate> giftCertificates;
