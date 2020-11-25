@@ -7,7 +7,7 @@ import java.util.List;
 public interface TagReturnService {
     TagDto createByName(String name);
 
-    boolean deleteById(Long id);
+    void deleteById(Long id);
 
     List<TagDto> findAll(Integer pageNumber, Integer pageSize);
 

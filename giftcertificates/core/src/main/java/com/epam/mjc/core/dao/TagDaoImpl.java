@@ -80,15 +80,14 @@ public class TagDaoImpl implements TagDao {
 
     @Transactional
     @Override
-    public boolean delete(Tag tag) {
+    public void delete(Tag tag) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaDelete<Tag> criteriaDelete = criteriaBuilder.createCriteriaDelete(Tag.class);
         Root<Tag> root = criteriaDelete.from(Tag.class);
         criteriaDelete.where(criteriaBuilder.equal(root.get(Tag_.id), tag.getId()));
 
-        int update = entityManager.createQuery(criteriaDelete).executeUpdate();
-        return update != 0;
+        entityManager.createQuery(criteriaDelete).executeUpdate();
     }
 
     @Override
@@ -153,7 +152,6 @@ public class TagDaoImpl implements TagDao {
             entityManager.persist(tag);
         }
     }
-
 
 
 }

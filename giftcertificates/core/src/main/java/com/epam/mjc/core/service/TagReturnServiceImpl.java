@@ -27,8 +27,8 @@ public class TagReturnServiceImpl implements TagReturnService {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        return service.deleteById(id);
+    public void deleteById(Long id) {
+        service.deleteById(id);
     }
 
     @Override

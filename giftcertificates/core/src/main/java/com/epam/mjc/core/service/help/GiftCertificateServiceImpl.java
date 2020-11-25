@@ -58,7 +58,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateValidator.validateGiftCertificate(giftCertificate);
         checkIfNameExists(giftCertificate);
 
-
         GiftCertificate created = giftCertificateDao.create(giftCertificate);
         created.setTags(tagService.findOrCreateAll(created.getTags()));
 
@@ -88,7 +87,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(id);
         checkDuplicatedName(certificate,id);
-
         buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(id);
 

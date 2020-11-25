@@ -32,7 +32,7 @@ public interface TagService {
      * @throws com.epam.mjc.api.service.exception.TagNotFoundException  if there not GiftCertificate with so id
      * @throws com.epam.mjc.api.service.exception.TagValidatorException if id is incorrect
      */
-    boolean deleteById(Long id);
+    void deleteById(Long id);
 
     /**
      * @param id identifier of {@link Tag}

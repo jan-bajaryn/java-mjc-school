@@ -56,12 +56,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public boolean deleteById(Long id) {
+    public void deleteById(Long id) {
 
         tagValidator.validateTagId(id);
 
         Tag toDelete = findById(id);
-        return tagDao.delete(toDelete);
+        tagDao.delete(toDelete);
     }
 
     @Override
@@ -79,6 +79,8 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public List<Tag> findOrCreateAll(List<Tag> tags) {
 
+        validateTagNames(tags);
+
         List<Tag> existing = tagDao.findAllExistingByNames(tags);
 
         List<Tag> toAdd = new ArrayList<>(tags);
@@ -90,6 +92,10 @@ public class TagServiceImpl implements TagService {
         return Stream.concat(toAdd.stream(), existing.stream())
                 .sorted(Comparator.comparingInt(a -> findIndex(tags, a)))
                 .collect(Collectors.toList());
+    }
+
+    private void validateTagNames(List<Tag> tags) {
+        tags.forEach(t -> tagValidator.validateTagName(t.getName()));
     }
 
     private int findIndex(List<Tag> tags, Tag b) {
@@ -105,11 +111,11 @@ public class TagServiceImpl implements TagService {
         tagDao.createAll(toAdd);
     }
 
-    @Transactional
-    public Tag findOrCreate(Tag tag) {
-        Optional<Tag> byTagName = findByTagName(tag.getName());
-        return byTagName.orElseGet(() -> createByName(tag.getName()));
-    }
+//    @Transactional
+//    public Tag findOrCreate(Tag tag) {
+//        Optional<Tag> byTagName = findByTagName(tag.getName());
+//        return byTagName.orElseGet(() -> createByName(tag.getName()));
+//    }
 
     @Override
     public Optional<Tag> findByTagName(String name) {

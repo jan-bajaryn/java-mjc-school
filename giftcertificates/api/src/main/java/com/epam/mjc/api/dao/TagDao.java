@@ -10,7 +10,7 @@ public interface TagDao {
 
     Tag create(Tag tag);
 
-    boolean delete(Tag tag);
+    void delete(Tag tag);
 
     Optional<Tag> findById(Long id);
 
