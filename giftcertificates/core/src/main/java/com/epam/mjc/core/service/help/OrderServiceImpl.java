@@ -82,12 +82,13 @@ public class OrderServiceImpl implements OrderService {
         order.setCreateDate(LocalDateTime.now());
 
         order.setUser(userService.findById(orderForCreate.getUserId()));
+        log.debug("giftCertificates = {}", giftCertificates);
         order.setPrice(calculatePrice(giftCertificates));
         log.debug("before create");
 
-        orderDao.create(order);
-        order.setPurchaseCertificates(buildPurchases(giftCertificates, order));
-        return order;
+        Order result = orderDao.create(order);
+        result.setPurchaseCertificates(buildPurchases(giftCertificates, order));
+        return result;
     }
 
     private List<PurchaseCertificate> buildPurchases(Map<GiftCertificate, Integer> buildGiftCertificates, final Order order) {
