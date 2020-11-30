@@ -42,7 +42,7 @@ public class OrderDaoImpl implements OrderDao {
 
         resultCriteria = filterIfIdNotNull(userId, criteriaBuilder, root, resultCriteria);
 
-        return entityManager.createQuery(resultCriteria)
+        return entityManager.createQuery(resultCriteria.orderBy(criteriaBuilder.asc(root.get(Order_.id))))
                 .setFirstResult(begin)
                 .setMaxResults(pageSize)
                 .getResultList();

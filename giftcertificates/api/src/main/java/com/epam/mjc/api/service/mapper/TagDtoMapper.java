@@ -19,6 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Mapper(componentModel = "spring")
 public interface TagDtoMapper {
     TagDtoMapper INSTANCE = Mappers.getMapper(TagDtoMapper.class);
+    String DELETE = "delete";
 
     TagDto toTagDto(Tag tag);
 
@@ -32,7 +33,7 @@ public interface TagDtoMapper {
                 .showById(byId.getId())).withSelfRel();
         byId.add(selfLink);
         Link delete = linkTo(methodOn(TagController.class)
-                .tagDelete(byId.getId())).withRel("delete");
+                .tagDelete(byId.getId())).withRel(DELETE);
         byId.add(delete);
     }
 

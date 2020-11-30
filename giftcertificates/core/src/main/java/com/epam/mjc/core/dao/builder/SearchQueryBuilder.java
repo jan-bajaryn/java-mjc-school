@@ -90,6 +90,8 @@ public class SearchQueryBuilder {
                     orders.add(criteriaBuilder.desc(root.get(sortParam.getFieldName().getColumnName())));
                 }
             }
+        } else {
+            orders.add(criteriaBuilder.asc(root.get(GiftCertificate_.id)));
         }
     }
 
