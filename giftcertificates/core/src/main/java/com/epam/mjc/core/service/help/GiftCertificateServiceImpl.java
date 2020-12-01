@@ -85,18 +85,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate update(Long id, GiftCertificate certificate) {
-        giftCertificateValidator.validateGiftCertificateId(id);
         checkNull(certificate);
-        checkDuplicatedName(certificate,id);
-        GiftCertificate toUpdate = findById(id);
-        copyFieldsToUpdate(certificate, toUpdate);
-
-
-        System.out.println("111");
-        giftCertificateValidator.validateGiftCertificate(toUpdate);
-        System.out.println("222");
+        giftCertificateValidator.validateGiftCertificateId(id);
+        checkDuplicatedName(certificate, id);
         buildTagsByNames(certificate);
+        GiftCertificate toUpdate = findById(id);
 
+        copyFieldsToUpdate(certificate, toUpdate);
+        giftCertificateValidator.validateGiftCertificate(toUpdate);
 
         return giftCertificateDao.update(toUpdate);
     }
@@ -107,7 +103,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
     }
 
-    public void checkDuplicatedName(GiftCertificate certificate, Long id) {
+    private void checkDuplicatedName(GiftCertificate certificate, Long id) {
         if (certificate.getName() != null) {
             giftCertificateDao.findByName(certificate.getName())
                     .ifPresent(g -> {
@@ -138,9 +134,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name", name));
     }
 
-    @Transactional
-    public void buildTagsByNames(GiftCertificate certificate) {
-        if (certificate.getTags() != null) {
+    private void buildTagsByNames(GiftCertificate certificate) {
+        if (certificate.getTags() != null && !certificate.getTags().isEmpty()) {
             certificate.setTags(tagService.findOrCreateAll(certificate.getTags()));
         }
     }
