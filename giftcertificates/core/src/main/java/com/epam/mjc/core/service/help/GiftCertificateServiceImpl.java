@@ -1,19 +1,22 @@
 package com.epam.mjc.core.service.help;
 
-import com.epam.mjc.api.dao.GiftCertificateDao;
+import com.epam.mjc.api.dao.GiftCertificateRepo;
+import com.epam.mjc.core.dao.specification.GiftCertificateSpecification;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
-import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import com.epam.mjc.api.util.SearchParams;
+import com.epam.mjc.api.util.sort.SortParam;
 import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,7 @@ import java.util.Optional;
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-    private final GiftCertificateDao giftCertificateDao;
+    private final GiftCertificateRepo giftCertificateRepo;
     private final TagService tagService;
     private final GiftCertificateValidator giftCertificateValidator;
     private final PaginationCalculator paginationCalculator;
@@ -31,8 +34,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateServiceImpl.class);
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagService tagService, GiftCertificateValidator giftCertificateValidator, PaginationCalculator paginationCalculator) {
-        this.giftCertificateDao = giftCertificateDao;
+    public GiftCertificateServiceImpl(GiftCertificateRepo giftCertificateRepo, TagService tagService, GiftCertificateValidator giftCertificateValidator, PaginationCalculator paginationCalculator) {
+        this.giftCertificateRepo = giftCertificateRepo;
         this.tagService = tagService;
         this.giftCertificateValidator = giftCertificateValidator;
         this.paginationCalculator = paginationCalculator;
@@ -42,13 +45,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional(readOnly = true)
     public GiftCertificate findById(Long id) {
         giftCertificateValidator.validateGiftCertificateId(id);
-
-        Optional<GiftCertificate> byId = giftCertificateDao.findById(id);
-        if (!byId.isPresent()) {
-            throw new GiftCertificateNotFoundException("certificate.not-found-id", id);
-        }
-
-        return byId.get();
+        return giftCertificateRepo.findById(id)
+                .orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-id", id));
     }
 
 
@@ -59,14 +57,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateValidator.validateGiftCertificate(giftCertificate);
         checkIfNameExists(giftCertificate);
 
-        GiftCertificate created = giftCertificateDao.create(giftCertificate);
+        GiftCertificate created = giftCertificateRepo.save(giftCertificate);
         created.setTags(tagService.findOrCreateAll(created.getTags()));
 
         return created;
     }
 
     private void checkIfNameExists(GiftCertificate giftCertificate) {
-        Optional<GiftCertificate> byName = giftCertificateDao.findByName(giftCertificate.getName());
+        Optional<GiftCertificate> byName = giftCertificateRepo.findByName(giftCertificate.getName());
         log.debug("create: byName.isPresent() = {}", byName.isPresent());
 
         if (byName.isPresent()) {
@@ -79,39 +77,30 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void deleteById(Long id) {
         giftCertificateValidator.validateGiftCertificateId(id);
         GiftCertificate byId = findById(id);
-        giftCertificateDao.delete(byId);
+        giftCertificateRepo.delete(byId);
     }
 
     @Override
     @Transactional
     public GiftCertificate update(Long id, GiftCertificate certificate) {
-        checkNull(certificate);
+        giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(id);
         checkDuplicatedName(certificate, id);
         buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(id);
 
         copyFieldsToUpdate(certificate, toUpdate);
-        giftCertificateValidator.validateGiftCertificate(toUpdate);
 
-        return giftCertificateDao.update(toUpdate);
-    }
-
-    private void checkNull(GiftCertificate certificate) {
-        if (certificate == null) {
-            throw new GiftCertificateValidatorException("certificate.null");
-        }
+        return giftCertificateRepo.save(toUpdate);
     }
 
     private void checkDuplicatedName(GiftCertificate certificate, Long id) {
-        if (certificate.getName() != null) {
-            giftCertificateDao.findByName(certificate.getName())
-                    .ifPresent(g -> {
-                        if (!g.getId().equals(id)) {
-                            throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
-                        }
-                    });
-        }
+        giftCertificateRepo.findByName(certificate.getName())
+                .ifPresent(g -> {
+                    if (!g.getId().equals(id)) {
+                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
+                    }
+                });
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
@@ -125,17 +114,42 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional(readOnly = true)
     public List<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize) {
-        return giftCertificateDao.search(searchParams, paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
+
+
+        PageRequest pageRequest = PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize, buildSort(searchParams));
+
+        return giftCertificateRepo.findAll(
+                GiftCertificateSpecification.search(searchParams.getPartName(), searchParams.getPartDescription(), searchParams.getTagNames()),
+                pageRequest
+        ).getContent();
+    }
+
+    private Sort buildSort(SearchParams searchParams) {
+        Sort sort = Sort.unsorted();
+        if (searchParams == null || searchParams.getSortParams() == null) {
+            return sort;
+        }
+        List<SortParam> sortParams = searchParams.getSortParams().getSortParams();
+        for (SortParam sortParam : sortParams) {
+            sort = sort.and(Sort.by(sortParam.getFieldName().getColumnName()));
+            if (sortParam.isAsc()) {
+                sort = sort.ascending();
+            } else {
+                sort = sort.descending();
+            }
+
+        }
+        return sort;
     }
 
     @Override
     public GiftCertificate findByName(String name) {
         giftCertificateValidator.validateGiftCertificateName(name);
-        return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name", name));
+        return giftCertificateRepo.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name", name));
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {
-        if (certificate.getTags() != null && !certificate.getTags().isEmpty()) {
+        if (certificate.getTags() != null) {
             certificate.setTags(tagService.findOrCreateAll(certificate.getTags()));
         }
     }

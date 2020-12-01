@@ -18,10 +18,10 @@ VALUES (1, 1),
        (4, 2),
        (5, 2);
 
-INSERT INTO usr(username)
-VALUES ('Antuan'),
-       ('Valeri'),
-       ('Kabal');
+INSERT INTO usr(username, password)
+VALUES ('Antuan','$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK'),
+       ('Valeri','$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK'),
+       ('Kabal','$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK');
 
 
 INSERT INTO orders(createdate, price, user_id)

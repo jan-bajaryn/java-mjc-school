@@ -1,6 +1,6 @@
 package com.epam.mjc.core.service.help;
 
-import com.epam.mjc.api.dao.TagDao;
+import com.epam.mjc.api.dao.TagRepo;
 import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
@@ -9,6 +9,7 @@ import com.epam.mjc.api.service.validator.TagValidator;
 import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +22,15 @@ import java.util.stream.Stream;
 
 @Service
 public class TagServiceImpl implements TagService {
-    private final TagDao tagDao;
+    private final TagRepo tagRepo;
     private final TagValidator tagValidator;
     private final PaginationCalculator paginationCalculator;
 
 
     private static final Logger log = LoggerFactory.getLogger(TagServiceImpl.class);
 
-    public TagServiceImpl(final TagDao tagDao, TagValidator tagValidator, PaginationCalculator paginationCalculator) {
-        this.tagDao = tagDao;
+    public TagServiceImpl(TagRepo tagRepo, TagValidator tagValidator, PaginationCalculator paginationCalculator) {
+        this.tagRepo = tagRepo;
         this.tagValidator = tagValidator;
         this.paginationCalculator = paginationCalculator;
     }
@@ -37,7 +38,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAll(Integer pageNumber, Integer pageSize) {
-        return tagDao.findAll(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
+        return tagRepo.findAll(PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)).getContent();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class TagServiceImpl implements TagService {
             throw new TagAlreadyExistsException("tag.exists", name);
         }
 
-        return tagDao.create(Tag.builder().name(name).build());
+        return tagRepo.save(Tag.builder().name(name).build());
     }
 
     @Override
@@ -61,17 +62,14 @@ public class TagServiceImpl implements TagService {
         tagValidator.validateTagId(id);
 
         Tag toDelete = findById(id);
-        tagDao.delete(toDelete);
+        tagRepo.delete(toDelete);
     }
 
     @Override
     public Tag findById(Long id) {
         tagValidator.validateTagId(id);
-        Optional<Tag> byId = tagDao.findById(id);
-        if (!byId.isPresent()) {
-            throw new TagNotFoundException("tag.not-found-id", id);
-        }
-        return byId.get();
+        return tagRepo.findById(id)
+                .orElseThrow(() -> new TagNotFoundException("tag.not-found-id", id));
     }
 
 
@@ -81,13 +79,19 @@ public class TagServiceImpl implements TagService {
 
         validateTagNames(tags);
 
-        List<Tag> existing = tagDao.findAllExistingByNames(tags);
+        List<Tag> existing =
+                tagRepo.findAllExistingByNames(
+                        tags.stream()
+                        .map(Tag::getName)
+                        .collect(Collectors.toList())
+                );
 
         List<Tag> toAdd = new ArrayList<>(tags);
         toAdd.removeIf(
                 t -> existing.stream().anyMatch(e -> e.getName().equals(t.getName()))
         );
-        createAll(toAdd);
+
+        tagRepo.saveAll(toAdd);
 
         return Stream.concat(toAdd.stream(), existing.stream())
                 .sorted(Comparator.comparingInt(a -> findIndex(tags, a)))
@@ -107,25 +111,17 @@ public class TagServiceImpl implements TagService {
         throw new IllegalArgumentException();
     }
 
-    private void createAll(List<Tag> toAdd) {
-        tagDao.createAll(toAdd);
-    }
 
-//    @Transactional
-//    public Tag findOrCreate(Tag tag) {
-//        Optional<Tag> byTagName = findByTagName(tag.getName());
-//        return byTagName.orElseGet(() -> createByName(tag.getName()));
-//    }
 
     @Override
     public Optional<Tag> findByTagName(String name) {
         tagValidator.validateTagName(name);
-        return tagDao.findByTagName(name);
+        return tagRepo.findByName(name);
     }
 
     @Override
     public Tag findMostPopularTagOfUserHigherCostOrders() {
-        return tagDao.findMostPopularTagIdOfUserHigherCostOrders();
+        return tagRepo.findMostPopularTagIdOfUserHigherCostOrders();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.epam.mjc.core.service.help;
 
-import com.epam.mjc.api.dao.OrderDao;
+import com.epam.mjc.api.dao.OrderRepo;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Order;
 import com.epam.mjc.api.domain.PurchaseCertificate;
@@ -19,6 +19,7 @@ import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    private final OrderDao orderDao;
+    private final OrderRepo orderRepo;
     private final UserService userService;
     private final OrderValidator orderValidator;
     private final UserValidator userValidator;
@@ -44,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
     private final PurchaseCertificateService purchaseCertificateService;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService, PaginationCalculator paginationCalculator, CountValidator countValidator, PurchaseCertificateService purchaseCertificateService) {
-        this.orderDao = orderDao;
+    public OrderServiceImpl(OrderRepo orderRepo, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService, PaginationCalculator paginationCalculator, CountValidator countValidator, PurchaseCertificateService purchaseCertificateService) {
+        this.orderRepo = orderRepo;
         this.userService = userService;
         this.orderValidator = orderValidator;
         this.userValidator = userValidator;
@@ -57,14 +58,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> search(Long userId, Integer pageNumber, Integer pageSize) {
+
+        if (userId == null) {
+            return orderRepo.findAll(PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)).getContent();
+        }
+
         userValidator.validateIdNullable(userId);
-        return orderDao.search(userId, paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize);
+        return orderRepo.findAllByUserId(
+                userId,
+                PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize) - 1, pageSize)
+        );
     }
 
     @Override
     public Order findById(Long id) {
         orderValidator.validateId(id);
-        return orderDao.findById(id).orElseThrow(() -> new OrderNotFountException("order.not-fount", id));
+        return orderRepo.findById(id).orElseThrow(() -> new OrderNotFountException("order.not-fount", id));
     }
 
     @Override
@@ -86,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPrice(calculatePrice(giftCertificates));
         log.debug("before create");
 
-        Order result = orderDao.create(order);
+        Order result = orderRepo.save(order);
         result.setPurchaseCertificates(buildPurchases(giftCertificates, order));
         return result;
     }

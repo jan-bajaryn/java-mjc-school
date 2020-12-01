@@ -11,6 +11,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,6 +78,7 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
+    @PreAuthorize(value = "hasAuthority('USER')")
     public ResponseEntity<TagDto> showById(@PathVariable Long id) {
         TagDto byId = tagReturnService.findById(id);
 //        setSelfLinks(byId);

@@ -16,7 +16,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource("classpath:persistence.properties")
+@PropertySource("classpath:application.properties")
 @ComponentScan("com.epam.mjc")
 public class PersistenceConfig {
 

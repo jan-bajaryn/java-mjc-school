@@ -19,8 +19,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Mapper(componentModel = "spring", uses = {TagDtoMapper.class})
 public interface GiftCertificateDtoMapper {
     GiftCertificateDtoMapper INSTANCE = Mappers.getMapper(GiftCertificateDtoMapper.class);
-    String DELETE = "delete";
-    String UPDATE = "update";
 
     GiftCertificateDto toGiftCertificateDto(GiftCertificate giftCertificate);
 
@@ -34,9 +32,9 @@ public interface GiftCertificateDtoMapper {
         Link selfLink = linkTo(methodOn(GiftCertificateController.class)
                 .showById(byId.getId())).withSelfRel();
         Link delete = linkTo(methodOn(GiftCertificateController.class)
-                .certificateDelete(byId.getId())).withRel(DELETE);
+                .certificateDelete(byId.getId())).withRel("delete");
         Link update = linkTo(methodOn(GiftCertificateController.class)
-                .certificateUpdate(byId.getId(), new GiftCertificateModel())).withRel(UPDATE);
+                .certificateUpdate(byId.getId(), new GiftCertificateModel())).withRel("update");
         byId.add(selfLink, delete, update);
     }
 
