@@ -5,6 +5,7 @@ import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
 import com.epam.mjc.api.service.exception.GiftCertificateNameAlreadyExistsException;
 import com.epam.mjc.api.service.exception.GiftCertificateNotFoundException;
+import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
@@ -84,24 +85,37 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate update(Long id, GiftCertificate certificate) {
-        giftCertificateValidator.validateGiftCertificate(certificate);
         giftCertificateValidator.validateGiftCertificateId(id);
+        checkNull(certificate);
         checkDuplicatedName(certificate,id);
-        buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(id);
-
         copyFieldsToUpdate(certificate, toUpdate);
+
+
+        System.out.println("111");
+        giftCertificateValidator.validateGiftCertificate(toUpdate);
+        System.out.println("222");
+        buildTagsByNames(certificate);
+
 
         return giftCertificateDao.update(toUpdate);
     }
 
-    private void checkDuplicatedName(GiftCertificate certificate, Long id) {
-        giftCertificateDao.findByName(certificate.getName())
-                .ifPresent(g -> {
-                    if (!g.getId().equals(id)) {
-                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
-                    }
-                });
+    private void checkNull(GiftCertificate certificate) {
+        if (certificate == null) {
+            throw new GiftCertificateValidatorException("certificate.null");
+        }
+    }
+
+    public void checkDuplicatedName(GiftCertificate certificate, Long id) {
+        if (certificate.getName() != null) {
+            giftCertificateDao.findByName(certificate.getName())
+                    .ifPresent(g -> {
+                        if (!g.getId().equals(id)) {
+                            throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
+                        }
+                    });
+        }
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
@@ -124,7 +138,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return giftCertificateDao.findByName(name).orElseThrow(() -> new GiftCertificateNotFoundException("certificate.not-found-by-name", name));
     }
 
-    private void buildTagsByNames(GiftCertificate certificate) {
+    @Transactional
+    public void buildTagsByNames(GiftCertificate certificate) {
         if (certificate.getTags() != null) {
             certificate.setTags(tagService.findOrCreateAll(certificate.getTags()));
         }
