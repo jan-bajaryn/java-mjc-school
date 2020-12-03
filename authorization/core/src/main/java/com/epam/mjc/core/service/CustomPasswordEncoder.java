@@ -1,8 +1,8 @@
-package com.epam.mjc.core.service.auth;
+package com.epam.mjc.core.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.beans.factory.annotation.Value;
 
 @PropertySource("classpath:application.properties")
 public class CustomPasswordEncoder extends BCryptPasswordEncoder {
