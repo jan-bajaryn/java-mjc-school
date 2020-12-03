@@ -1,0 +1,5 @@
+rootProject.name = 'authorization'
+include 'core'
+include 'api'
+include 'web'
+
