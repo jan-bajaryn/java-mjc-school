@@ -5,6 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +30,10 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Enumerated(value = EnumType.ORDINAL)
+    @Column(name = "role")
+    private Role role;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
@@ -35,9 +41,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String username, List<Order> orders) {
+    public User(Long id, String username, String password, Role role, List<Order> orders) {
         this.id = id;
         this.username = username;
+        this.password = password;
+        this.role = role;
         this.orders = orders;
     }
 
@@ -51,7 +59,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(Role.USER);
+        return Collections.singleton(role);
     }
 
     @Override
@@ -91,6 +99,14 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -107,13 +123,19 @@ public class User implements UserDetails {
         User user = (User) o;
 
         if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
-        return getUsername() != null ? getUsername().equals(user.getUsername()) : user.getUsername() == null;
+        if (getUsername() != null ? !getUsername().equals(user.getUsername()) : user.getUsername() != null)
+            return false;
+        if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
+            return false;
+        return getRole() == user.getRole();
     }
 
     @Override
     public int hashCode() {
         int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
         return result;
     }
 
@@ -122,6 +144,8 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

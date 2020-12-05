@@ -1,5 +1,6 @@
 package com.epam.mjc.api.controller;
 
+import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
@@ -26,7 +27,7 @@ public interface GiftCertificateController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id);
+    ResponseEntity<GiftCertificateDto> showById(@PathVariable Long id, User principal);
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -44,6 +45,6 @@ public interface GiftCertificateController {
             @RequestParam(required = false) String partDescription,
             @RequestParam(required = false) String sort,
             Integer pageNumber,
-            Integer pageSize
-    );
+            Integer pageSize,
+            User principal);
 }

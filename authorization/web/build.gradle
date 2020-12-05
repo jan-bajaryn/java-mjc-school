@@ -3,27 +3,34 @@ plugins {
     id 'io.spring.dependency-management'
     id 'java'
     id 'war'
+
 }
+
 
 group 'com.epam.mjc'
 version '1.0-SNAPSHOT'
 
 bootJar {
-    mainClassName = 'cpm.epam.mjc.Application'
+    mainClassName = 'com.epam.mjc.Application'
 }
 
 bootWar {
-    mainClassName = 'cpm.epam.mjc.Application'
+    mainClassName = 'com.epam.mjc.Application'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security.experimental:spring-security-oauth2-authorization-server:0.1.0-SNAPSHOT'
+
     implementation project(':api')
     implementation project(':core')
 }

@@ -35,6 +35,7 @@ CREATE TABLE usr
     id       BIGSERIAL PRIMARY KEY,
     username varchar(255) NOT NULL,
     password varchar(60)  not null,
+    role     smallint,
     CONSTRAINT uk_usr UNIQUE (username)
 )
 

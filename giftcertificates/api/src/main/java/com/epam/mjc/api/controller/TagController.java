@@ -1,5 +1,6 @@
 package com.epam.mjc.api.controller;
 
+import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.model.TagForCreate;
 import com.epam.mjc.api.model.dto.TagDto;
 import org.springframework.hateoas.CollectionModel;
@@ -25,9 +26,9 @@ public interface TagController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<CollectionModel<TagDto>> showAll(Integer pageNumber, Integer pageSize);
+    ResponseEntity<CollectionModel<TagDto>> showAll(Integer pageNumber, Integer pageSize, User principal);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<TagDto> showById(@PathVariable Long id);
+    ResponseEntity<TagDto> showById(@PathVariable Long id, User principal);
 }
