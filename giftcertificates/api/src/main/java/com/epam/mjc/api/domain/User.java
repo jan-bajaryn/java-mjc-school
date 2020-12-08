@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+    @Column(name = "access_token")
+    private String accessToken;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
@@ -41,11 +44,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String username, String password, Role role, List<Order> orders) {
+    public User(Long id, String username, String password, Role role, String accessToken, List<Order> orders) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.accessToken = accessToken;
         this.orders = orders;
     }
 
@@ -115,6 +119,14 @@ public class User implements UserDetails {
         this.orders = orders;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -127,7 +139,8 @@ public class User implements UserDetails {
             return false;
         if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
             return false;
-        return getRole() == user.getRole();
+        if (getRole() != user.getRole()) return false;
+        return getAccessToken() != null ? getAccessToken().equals(user.getAccessToken()) : user.getAccessToken() == null;
     }
 
     @Override
@@ -136,6 +149,7 @@ public class User implements UserDetails {
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
+        result = 31 * result + (getAccessToken() != null ? getAccessToken().hashCode() : 0);
         return result;
     }
 
@@ -146,6 +160,7 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
+                ", accessToken='" + accessToken + '\'' +
                 '}';
     }
 }

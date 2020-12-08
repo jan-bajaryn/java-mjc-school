@@ -33,10 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(customPasswordEncoder);
     }
 
-//    @Bean
-//    public PasswordEncoder encoder() {
-//        return new ();
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

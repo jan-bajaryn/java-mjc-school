@@ -1,4 +1,4 @@
-package com.epam.mjc.core.config;
+package com.epam.mjc.api.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,6 +12,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import javax.sql.DataSource;
 
@@ -53,9 +55,19 @@ public class PersistenceConfig {
         return objectMapper;
     }
 
+
+
     @Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager
+                = new JpaTransactionManager();
+        return transactionManager;
     }
+
+//
+//    @Bean
+//    public DataSourceTransactionManager transactionManager() {
+//        return new DataSourceTransactionManager(dataSource());
+//    }
 
 }

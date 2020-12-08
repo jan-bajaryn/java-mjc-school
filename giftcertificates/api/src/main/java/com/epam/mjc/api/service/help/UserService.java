@@ -8,4 +8,6 @@ public interface UserService {
     List<User> findAll(Integer pageNumber, Integer pageSize);
 
     User findById(Long id);
+
+    boolean isTokenExists(String token);
 }

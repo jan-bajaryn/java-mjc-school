@@ -23,18 +23,20 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Value("${config.oauth2.clientSecret}")
     private String clientSecret;
 
-    @Value("${config.oauth2.privateKey}")
-    private String privateKey;
 
-    @Value("${config.oauth2.publicKey}")
-    private String publicKey;
+    private final CustomTokenEnhancer converter;
+    private final CustomPasswordEncoder customPasswordEncoder;
 
-    @Autowired
-    private CustomPasswordEncoder customPasswordEncoder;
-
-    @Autowired
+//    @Autowired
     @Qualifier("authenticationManagerBean")
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    public OAuth2Config(CustomTokenEnhancer converter, CustomPasswordEncoder customPasswordEncoder, AuthenticationManager authenticationManager) {
+        this.converter = converter;
+        this.customPasswordEncoder = customPasswordEncoder;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -51,20 +53,12 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore())
-                .accessTokenConverter(tokenEnhancer());
+                .accessTokenConverter(converter);
     }
 
     @Bean
     public JwtTokenStore tokenStore() {
-        return new JwtTokenStore(tokenEnhancer());
-    }
-
-    @Bean
-    public JwtAccessTokenConverter tokenEnhancer() {
-        JwtAccessTokenConverter converter = new CustomTokenEnhancer();
-        converter.setSigningKey(privateKey);
-        converter.setVerifierKey(publicKey);
-        return converter;
+        return new JwtTokenStore(converter);
     }
 
 }

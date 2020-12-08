@@ -42,4 +42,9 @@ public class UserServiceImpl implements UserService {
         userValidator.validateId(id);
         return userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("user.not-found", id));
     }
+
+    @Override
+    public boolean isTokenExists(String token) {
+        return userRepo.findByAccessToken(token).isPresent();
+    }
 }
