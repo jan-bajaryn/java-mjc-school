@@ -22,6 +22,9 @@ repositories {
 
 dependencies {
 
+    implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
+
+
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     implementation 'org.postgresql:postgresql:42.2.18'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -45,6 +48,14 @@ dependencies {
     testImplementation 'com.h2database:h2:1.4.200'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+
 test {
     useJUnitPlatform()
 }
+
