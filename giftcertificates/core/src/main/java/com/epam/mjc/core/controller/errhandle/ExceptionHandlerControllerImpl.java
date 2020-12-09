@@ -17,6 +17,7 @@ import com.epam.mjc.api.service.exception.ServiceException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
+import com.epam.mjc.api.service.exception.UserAlreadyExistsException;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.exception.UserValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
@@ -148,13 +149,19 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
 
     @Override
     public ResponseEntity<Object> handlePurchaseCertificateValidatorException(PurchaseCertificateValidatorException ex) {
-        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.PURCHACE_CERTIFICATE_VALIDATOR);
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.PURCHASE_CERTIFICATE_VALIDATOR);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 
     @Override
     public ResponseEntity<Object> handleCountValidatorException(CountValidatorException ex) {
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.WRONG_COUNT);
+        return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.USERNAME_DUPLICATED);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
     }
 

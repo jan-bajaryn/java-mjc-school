@@ -1,6 +1,7 @@
 package com.epam.mjc.api.service.mapper;
 
 import com.epam.mjc.api.domain.User;
+import com.epam.mjc.api.model.UserForCreate;
 import com.epam.mjc.api.model.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -14,4 +15,6 @@ public interface UserMapper {
     UserDto toUserDto(User user);
 
     List<UserDto> toUserDto(List<User> users);
+
+    User toUser(UserForCreate userForCreate);
 }

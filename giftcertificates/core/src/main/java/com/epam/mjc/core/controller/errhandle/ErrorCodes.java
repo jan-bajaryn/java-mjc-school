@@ -25,8 +25,9 @@ public enum ErrorCodes {
     ORDER_NOT_FOUNT("21"),
     PAGINATION("22"),
     MISSED_ID_AND_NAME("23"),
-    PURCHACE_CERTIFICATE_VALIDATOR("24"),
-    WRONG_COUNT("25");
+    PURCHASE_CERTIFICATE_VALIDATOR("24"),
+    WRONG_COUNT("25"),
+    USERNAME_DUPLICATED("26");
 
     private final String code;
 

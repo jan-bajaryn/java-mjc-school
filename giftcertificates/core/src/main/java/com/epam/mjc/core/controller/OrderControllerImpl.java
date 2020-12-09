@@ -80,9 +80,13 @@ public class OrderControllerImpl implements OrderController {
     @PreAuthorize(value = "isAuthenticated()")
     public ResponseEntity<OrderDto> create(@RequestBody OrderForCreate orderForCreate,
                                            @AuthenticationPrincipal User principal) {
-        OrderDto orderDto = orderReturnService.create(orderForCreate);
+        OrderDto orderDto;
         if (principal.getRole() == Role.ADMIN) {
+            orderDto = orderReturnService.create(orderForCreate);
             setSelfLinks(orderDto);
+        } else {
+            orderForCreate.setUserId(principal.getId());
+            orderDto = orderReturnService.create(orderForCreate);
         }
         return new ResponseEntity<>(orderDto, HttpStatus.CREATED);
     }

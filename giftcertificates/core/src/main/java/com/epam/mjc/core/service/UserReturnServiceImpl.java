@@ -1,6 +1,7 @@
 package com.epam.mjc.core.service;
 
 import com.epam.mjc.api.domain.User;
+import com.epam.mjc.api.model.UserForCreate;
 import com.epam.mjc.api.model.dto.UserDto;
 import com.epam.mjc.api.service.UserReturnService;
 import com.epam.mjc.api.service.help.UserService;
@@ -39,5 +40,10 @@ public class UserReturnServiceImpl implements UserReturnService {
     @Override
     public UserDto findById(Long id) {
         return userMapper.toUserDto(userService.findById(id));
+    }
+
+    @Override
+    public UserDto signUp(UserForCreate userForCreate) {
+        return userMapper.toUserDto(userService.signUp(userMapper.toUser(userForCreate)));
     }
 }

@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         userValidator.validateIdNullable(userId);
         return orderRepo.findAllByUserId(
                 userId,
-                PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize) - 1, pageSize)
+                PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)
         );
     }
 

@@ -14,6 +14,7 @@ import com.epam.mjc.api.service.exception.PurchaseCertificateValidatorException;
 import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.exception.TagValidatorException;
+import com.epam.mjc.api.service.exception.UserAlreadyExistsException;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.exception.UserValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
@@ -72,6 +73,9 @@ public interface ExceptionHandlerController {
 
     @ExceptionHandler(CountValidatorException.class)
     ResponseEntity<Object> handleCountValidatorException(CountValidatorException ex);
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex);
 
 
     @ExceptionHandler(Throwable.class)

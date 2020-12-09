@@ -1,5 +1,6 @@
 package com.epam.mjc.core.util;
 
+import com.epam.mjc.api.controller.UserController;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.TagForCreate;
@@ -29,7 +30,7 @@ public class HateoasManagerImpl implements HateoasManager {
 
     @Override
     public void setSelfLinksUser(UserDto byId) {
-        Link selfLink = linkTo(methodOn(UserControllerImpl.class)
+        Link selfLink = linkTo(methodOn(UserController.class)
                 .findAll(null, null, null)).withSelfRel();
         byId.add(selfLink);
     }
