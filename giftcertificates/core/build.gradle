@@ -34,7 +34,7 @@ dependencies {
 
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    api 'org.springframework.boot:spring-boot-starter-logging:2.4.0'
+    api 'org.springframework.boot:spring-boot-starter-logging'
 
     implementation 'org.apache.lucene:lucene-queryparser:8.7.0'
 
