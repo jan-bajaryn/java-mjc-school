@@ -50,11 +50,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isTokenExists(String token) {
-        return userRepo.findByAccessToken(token).isPresent();
-    }
-
-    @Override
     @Transactional
     public User signUp(User user) {
         userValidator.validateUserBeforeCreate(user);

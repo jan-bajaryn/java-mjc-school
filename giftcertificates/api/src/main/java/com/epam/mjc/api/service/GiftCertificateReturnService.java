@@ -3,8 +3,7 @@ package com.epam.mjc.api.service;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 public interface GiftCertificateReturnService {
     GiftCertificateDto create(GiftCertificateModelForCreate giftCertificateModelForCreate);
@@ -15,5 +14,5 @@ public interface GiftCertificateReturnService {
 
     void deleteById(Long id);
 
-    List<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize);
+    CollectionModel<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize);
 }

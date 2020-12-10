@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.JwtAccessTokenConverterConfigurer;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -53,12 +52,6 @@ public class JwtConverter extends DefaultAccessTokenConverter implements JwtAcce
     @Override
     public OAuth2AccessToken extractAccessToken(String value, Map<String, ?> map) {
         log.info("extractAccessToken called");
-
-        boolean isExists = userService.isTokenExists(value);
-        if (!isExists) {
-            throw new InvalidTokenException("There not so access tokens");
-        }
-        // TODO way to deny token and check in database validation
         return super.extractAccessToken(value, map);
     }
 

@@ -9,7 +9,5 @@ public interface UserService {
 
     User findById(Long id);
 
-    boolean isTokenExists(String token);
-
     User signUp(User user);
 }

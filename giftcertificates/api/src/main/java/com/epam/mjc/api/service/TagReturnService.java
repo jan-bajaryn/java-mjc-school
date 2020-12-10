@@ -1,15 +1,14 @@
 package com.epam.mjc.api.service;
 
 import com.epam.mjc.api.model.dto.TagDto;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 public interface TagReturnService {
     TagDto createByName(String name);
 
     void deleteById(Long id);
 
-    List<TagDto> findAll(Integer pageNumber, Integer pageSize);
+    CollectionModel<TagDto> findAll(Integer pageNumber, Integer pageSize);
 
     TagDto findById(Long id);
 
