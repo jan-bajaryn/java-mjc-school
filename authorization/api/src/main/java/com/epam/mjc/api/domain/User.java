@@ -31,23 +31,16 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
-    @Column(name = "access_token")
-    private String accessToken;
-
-    @Column(name = "refresh_token")
-    private String refreshToken;
 
     public User() {
     }
 
 
-    public User(Long id, String username, String password, Role role, String accessToken, String refreshToken) {
+    public User(Long id, String username, String password, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 
     public Long getId() {
@@ -108,22 +101,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -136,10 +113,7 @@ public class User implements UserDetails {
             return false;
         if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
             return false;
-        if (getRole() != user.getRole()) return false;
-        if (getAccessToken() != null ? !getAccessToken().equals(user.getAccessToken()) : user.getAccessToken() != null)
-            return false;
-        return getRefreshToken() != null ? getRefreshToken().equals(user.getRefreshToken()) : user.getRefreshToken() == null;
+        return getRole() == user.getRole();
     }
 
     @Override
@@ -148,8 +122,6 @@ public class User implements UserDetails {
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
-        result = 31 * result + (getAccessToken() != null ? getAccessToken().hashCode() : 0);
-        result = 31 * result + (getRefreshToken() != null ? getRefreshToken().hashCode() : 0);
         return result;
     }
 
@@ -160,8 +132,6 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", accessToken='" + accessToken + '\'' +
-                ", refreshToken='" + refreshToken + '\'' +
                 '}';
     }
 }

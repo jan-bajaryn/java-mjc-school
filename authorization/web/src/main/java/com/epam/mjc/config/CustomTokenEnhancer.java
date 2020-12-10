@@ -1,7 +1,7 @@
 package com.epam.mjc.config;
 
 import com.epam.mjc.api.domain.User;
-import com.epam.mjc.core.service.UserService;
+import com.epam.mjc.api.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
     @Value("${config.oauth2.publicKey}")
     private String publicKey;
 
-    private final UserService userService;
+    private final TokenService tokenService;
 
     @Autowired
-    public CustomTokenEnhancer(UserService userService) {
-        this.userService = userService;
+    public CustomTokenEnhancer(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @PostConstruct
@@ -57,14 +57,13 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
         DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
         customAccessToken.setAdditionalInformation(info);
         OAuth2AccessToken enhance = super.enhance(customAccessToken, authentication);
-        userService.setTokens(user, enhance.getValue(), enhance.getRefreshToken().getValue());
+        tokenService.setTokens(user, enhance.getRefreshToken().getValue());
         return enhance;
     }
 
     @Override
     public OAuth2AccessToken extractAccessToken(String value, Map<String, ?> map) {
-        if (!userService.deleteRefreshTokenIfExists(value)) {
-            // TODO replace with other exception
+        if (!tokenService.isRefreshTokenExists(value)) {
             throw new InvalidTokenException("There not so refresh tokens");
         }
         return super.extractAccessToken(value, map);
