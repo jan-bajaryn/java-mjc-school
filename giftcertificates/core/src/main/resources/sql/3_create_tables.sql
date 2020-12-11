@@ -36,8 +36,6 @@ CREATE TABLE usr
     username varchar(255) NOT NULL,
     password varchar(60)  not null,
     role     smallint,
-    refresh_token varchar(1000),
-    access_token varchar(1000),
     CONSTRAINT uk_usr UNIQUE (username)
 )
 
