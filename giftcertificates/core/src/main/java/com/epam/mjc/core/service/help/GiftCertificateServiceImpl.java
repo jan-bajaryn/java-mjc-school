@@ -1,6 +1,7 @@
 package com.epam.mjc.core.service.help;
 
 import com.epam.mjc.api.dao.GiftCertificateRepo;
+import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.core.dao.specification.GiftCertificateSpecification;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
@@ -83,24 +84,33 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate update(Long id, GiftCertificate certificate) {
-        giftCertificateValidator.validateGiftCertificate(certificate);
+        checkNull(certificate);
         giftCertificateValidator.validateGiftCertificateId(id);
         checkDuplicatedName(certificate, id);
         buildTagsByNames(certificate);
         GiftCertificate toUpdate = findById(id);
 
         copyFieldsToUpdate(certificate, toUpdate);
+        giftCertificateValidator.validateGiftCertificate(toUpdate);
 
         return giftCertificateRepo.save(toUpdate);
     }
 
     private void checkDuplicatedName(GiftCertificate certificate, Long id) {
-        giftCertificateRepo.findByName(certificate.getName())
-                .ifPresent(g -> {
-                    if (!g.getId().equals(id)) {
-                        throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
-                    }
-                });
+        if (certificate.getName() != null) {
+            giftCertificateRepo.findByName(certificate.getName())
+                    .ifPresent(g -> {
+                        if (!g.getId().equals(id)) {
+                            throw new GiftCertificateNameAlreadyExistsException("certificate.name-exists", certificate.getName());
+                        }
+                    });
+        }
+    }
+
+    private void checkNull(GiftCertificate certificate) {
+        if (certificate == null) {
+            throw new GiftCertificateValidatorException("certificate.null");
+        }
     }
 
     private void copyFieldsToUpdate(GiftCertificate certificate, GiftCertificate toUpdate) {
@@ -110,6 +120,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         toUpdate.setDuration(certificate.getDuration() == null ? toUpdate.getDuration() : certificate.getDuration());
         toUpdate.setTags(certificate.getTags() == null ? toUpdate.getTags() : certificate.getTags());
     }
+
+    //begin insert
+
+
+    //end insert
+
+
+
+
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -149,10 +170,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private void buildTagsByNames(GiftCertificate certificate) {
-        if (certificate.getTags() != null) {
+        if (certificate.getTags() != null && !certificate.getTags().isEmpty()) {
             certificate.setTags(tagService.findOrCreateAll(certificate.getTags()));
         }
     }
-
 
 }
