@@ -107,7 +107,7 @@ public class HateoasManagerImpl implements HateoasManager {
     @Override
     public void setSelfLinksAdmin(GiftCertificateDto byId) {
         for (TagDto tag : byId.getTags()) {
-            selfLinksNotAdmin(tag);
+            setSelfLinksAdmin(tag);
         }
         Link selfLink = linkTo(methodOn(GiftCertificateControllerImpl.class)
                 .showById(byId.getId())).withSelfRel();
@@ -147,7 +147,7 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void setCollectionLinksUser(CollectionModel<OrderDto> model)  {
+    public void setCollectionLinksUser(CollectionModel<OrderDto> model) {
         model.add(linkTo(OrderControllerImpl.class).withSelfRel());
         model.add(WebMvcLinkBuilder.linkTo(methodOn(OrderControllerImpl.class).create(new OrderForCreate())).withRel("create"));
     }

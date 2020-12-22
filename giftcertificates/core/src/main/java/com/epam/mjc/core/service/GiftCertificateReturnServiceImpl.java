@@ -6,6 +6,7 @@ import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
+import com.epam.mjc.api.service.SecurityService;
 import com.epam.mjc.api.service.help.GiftCertificateService;
 import com.epam.mjc.api.service.mapper.GiftCertificateDtoMapper;
 import com.epam.mjc.api.service.mapper.SortMapper;
@@ -14,10 +15,10 @@ import com.epam.mjc.api.util.HateoasManager;
 import com.epam.mjc.api.util.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnService {
@@ -27,15 +28,17 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     private final SortMapper sortMapper;
     private final TagNameMapper tagNameMapper;
     private final HateoasManager hateoasManager;
+    private final SecurityService securityService;
 
 
     @Autowired
-    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, SortMapper sortMapper, TagNameMapper tagNameMapper, HateoasManager hateoasManager) {
+    public GiftCertificateReturnServiceImpl(GiftCertificateService service, GiftCertificateDtoMapper giftCertificateDtoMapper, SortMapper sortMapper, TagNameMapper tagNameMapper, HateoasManager hateoasManager, SecurityService securityService) {
         this.service = service;
         this.giftCertificateDtoMapper = giftCertificateDtoMapper;
         this.sortMapper = sortMapper;
         this.tagNameMapper = tagNameMapper;
         this.hateoasManager = hateoasManager;
+        this.securityService = securityService;
     }
 
     @Override
@@ -52,13 +55,13 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
     @Override
     public GiftCertificateDto findById(Long id) {
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> principal = securityService.getPrincipal();
 
         GiftCertificateDto byId = giftCertificateDtoMapper.toGiftCertificateDto(
                 service.findById(id)
         );
 
-        if (principal != null && principal.getRole() == Role.ADMIN) {
+        if (principal.isPresent() && principal.get().getRole() == Role.ADMIN) {
             hateoasManager.setSelfLinksAdmin(byId);
         } else {
             hateoasManager.setSelfLinksNotAdmin(byId);
@@ -83,7 +86,8 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
     @Override
     public CollectionModel<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize) {
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> principal = securityService.getPrincipal();
+
 
         List<GiftCertificateDto> giftCertificateDtos = giftCertificateDtoMapper.toGiftCertificateDto(
                 service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)), pageNumber, pageSize)
@@ -91,7 +95,7 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
         CollectionModel<GiftCertificateDto> model = new CollectionModel<>(giftCertificateDtos);
 
-        if (principal != null && principal.getRole() == Role.ADMIN) {
+        if (principal.isPresent() && principal.get().getRole() == Role.ADMIN) {
             hateoasManager.certificateCollectionLinksAdmin(model);
         } else {
             hateoasManager.certificateCollectionLinksNotAdmin(model);

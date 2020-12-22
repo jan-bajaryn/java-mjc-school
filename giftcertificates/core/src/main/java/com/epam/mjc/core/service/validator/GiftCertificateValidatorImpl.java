@@ -1,11 +1,17 @@
 package com.epam.mjc.core.service.validator;
 
 import com.epam.mjc.api.domain.GiftCertificate;
+import com.epam.mjc.api.domain.Tag;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
@@ -26,7 +32,21 @@ public class GiftCertificateValidatorImpl implements GiftCertificateValidator {
         validateGiftCertificateDescription(giftCertificate.getDescription());
         validateGiftCertificatePrice(giftCertificate.getPrice());
         validateGiftCertificateDuration(giftCertificate.getDuration());
+        validateGiftCertificateTags(giftCertificate.getTags());
 
+    }
+
+    private void validateGiftCertificateTags(List<Tag> tags) {
+        if (tags != null && !tags.isEmpty()) {
+            List<String> names = tags.stream()
+                    .map(Tag::getName)
+                    .collect(Collectors.toList());
+            Set<String> collect = names.stream().filter(i -> Collections.frequency(names, i) > 1)
+                    .collect(Collectors.toSet());
+            if (!collect.isEmpty()) {
+                throw new GiftCertificateValidatorException("certificate.duplicated-tags", Arrays.toString(collect.toArray()));
+            }
+        }
     }
 
     @Override
