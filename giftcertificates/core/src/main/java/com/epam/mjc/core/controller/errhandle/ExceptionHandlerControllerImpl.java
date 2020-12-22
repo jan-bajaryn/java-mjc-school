@@ -2,6 +2,8 @@ package com.epam.mjc.core.controller.errhandle;
 
 import com.epam.mjc.api.controller.errhandle.ExceptionHandlerController;
 import com.epam.mjc.api.controller.errhandle.Translator;
+import com.epam.mjc.api.domain.User;
+import com.epam.mjc.api.service.SecurityService;
 import com.epam.mjc.api.service.exception.CountValidatorException;
 import com.epam.mjc.api.service.exception.EmptyGiftCertificates;
 import com.epam.mjc.api.service.exception.GiftCertificateAlreadyExists;
@@ -27,6 +29,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -38,15 +41,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.Optional;
+
 
 @ControllerAdvice
 public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandler implements ExceptionHandlerController {
 
     private final Translator translator;
+    private final SecurityService securityService;
 
     @Autowired
-    public ExceptionHandlerControllerImpl(Translator translator) {
+    public ExceptionHandlerControllerImpl(Translator translator, SecurityService securityService) {
         this.translator = translator;
+        this.securityService = securityService;
     }
 
     @Override
@@ -163,6 +170,16 @@ public class ExceptionHandlerControllerImpl extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         String errorCode = formatCode(HttpStatus.BAD_REQUEST.value(), ErrorCodes.USERNAME_DUPLICATED);
         return getResponseEntity(ex, errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+        Optional<User> principal = securityService.getPrincipal();
+        if (!principal.isPresent()) {
+            return handleTypicalException(ex, "unauthorized", ErrorCodes.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+        }
+        return handleTypicalException(ex, "forbidden", ErrorCodes.FORBIDDEN, HttpStatus.FORBIDDEN);
+
     }
 
     @Override

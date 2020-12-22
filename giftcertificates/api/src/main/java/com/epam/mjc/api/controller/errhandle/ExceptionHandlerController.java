@@ -19,6 +19,7 @@ import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.exception.UserValidatorException;
 import com.epam.mjc.api.service.exception.WrongQuerySortException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public interface ExceptionHandlerController {
@@ -76,6 +77,9 @@ public interface ExceptionHandlerController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex);
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex);
 
 
     @ExceptionHandler(Throwable.class)

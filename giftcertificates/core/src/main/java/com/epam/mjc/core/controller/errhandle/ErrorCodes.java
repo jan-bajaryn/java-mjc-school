@@ -27,7 +27,9 @@ public enum ErrorCodes {
     MISSED_ID_AND_NAME("23"),
     PURCHASE_CERTIFICATE_VALIDATOR("24"),
     WRONG_COUNT("25"),
-    USERNAME_DUPLICATED("26");
+    USERNAME_DUPLICATED("26"),
+    FORBIDDEN("27"),
+    UNAUTHORIZED("28");
 
     private final String code;
 
