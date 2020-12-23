@@ -47,7 +47,6 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
         Map<String, Object> info = new LinkedHashMap<>(accessToken.getAdditionalInformation());
 
         info.put("id", user.getId());
-        info.put("username", user.getUsername());
 
         DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
         customAccessToken.setAdditionalInformation(info);
@@ -55,6 +54,7 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
         tokenService.setTokens(user, enhance.getRefreshToken().getValue());
         return enhance;
     }
+
 
     @Override
     public OAuth2AccessToken extractAccessToken(String value, Map<String, ?> map) {

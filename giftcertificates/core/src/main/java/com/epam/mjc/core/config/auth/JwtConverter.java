@@ -1,6 +1,5 @@
 package com.epam.mjc.core.config.auth;
 
-import com.epam.mjc.api.service.help.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,11 @@ public class JwtConverter extends DefaultAccessTokenConverter implements JwtAcce
     private static final Logger log = LoggerFactory.getLogger(JwtConverter.class);
 
     private final CustomUserConverter customUserConverter;
-    private final UserService userService;
 
 
     @Autowired
-    public JwtConverter(CustomUserConverter customUserConverter, UserService userService) {
+    public JwtConverter(CustomUserConverter customUserConverter) {
         this.customUserConverter = customUserConverter;
-        this.userService = userService;
     }
 
     @PostConstruct

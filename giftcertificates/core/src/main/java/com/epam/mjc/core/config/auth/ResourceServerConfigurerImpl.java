@@ -30,6 +30,5 @@ public class ResourceServerConfigurerImpl implements ResourceServerConfigurer {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-        ;
     }
 }
