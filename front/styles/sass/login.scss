@@ -1,16 +1,18 @@
 @import "header";
+@import "commons";
+
+$white: #ffffff;
+$outBackground: #c4c4c4;
+$loginBackground: #fcfcfc;
 
 main {
-  height: 85vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f2f2f2;
+
+  @include onAllPage();
 
 
   .form-login {
 
-    background: #fcfcfc;
+    background: $loginBackground;
 
     padding: 40px 20px 20px;
 
@@ -25,8 +27,8 @@ main {
 
     button {
       width: 100%;
-      color: #ffffff;
-      background-color: #6fcf97;
+      color: $white;
+      background-color: $btnColor;
       padding: 12px;
       margin: 8px 0;
       display: inline-block;
@@ -40,7 +42,9 @@ main {
     display: flex;
     justify-content: center;
     .logo_place {
-      background: #c4c4c4;
+      color: $white;
+      font-size: xx-large;
+      background: $outBackground;
       height: 200px;
       width: 200px;
       margin-top: -50%;

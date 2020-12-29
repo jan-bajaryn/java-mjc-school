@@ -1,0 +1,19 @@
+$btnColor: #6fcf97;
+$borderInputColor: #ccc;
+
+
+@mixin onAllPage {
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+}
+
+@mixin btnStyle {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid $borderInputColor;
+  box-sizing: border-box;
+}
