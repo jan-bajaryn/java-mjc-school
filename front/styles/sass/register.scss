@@ -10,6 +10,7 @@ main {
   @include onAllPage();
 
   .register_container {
+    padding-bottom: 20px;
     background: $registerBack;
     min-width: 70%;
 
@@ -39,7 +40,7 @@ main {
           .btn_holder {
             display: flex;
             justify-content: space-between;
-
+            margin-top: 10px;
             button {
               @include btnStyle();
               width: 45%;

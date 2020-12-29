@@ -58,6 +58,7 @@ main {
   background: #f2f2f2;
 }
 main .register_container {
+  padding-bottom: 20px;
   background: #fcfcfc;
   min-width: 70%;
 }
@@ -90,6 +91,7 @@ main .register_container .inputs_container .first_column .item input, main .regi
 main .register_container .inputs_container .first_column .item .btn_holder, main .register_container .inputs_container .second_column .item .btn_holder {
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
 }
 main .register_container .inputs_container .first_column .item .btn_holder button, main .register_container .inputs_container .second_column .item .btn_holder button {
   padding: 12px 20px;
