@@ -1,20 +1,12 @@
 @import "commons";
 @import "header";
 @import "file_upload";
+@import "header_line";
 
-$header_line_color: #bdbdbd;
+
 $labelColor: #828282;
 
-.header_line {
-  background: $header_line_color;
-  line-height: 7vh;
 
-  span {
-    margin-left: 10%;
-    font-size: xx-large;
-    color: $white;
-  }
-}
 
 main {
   display: flex;

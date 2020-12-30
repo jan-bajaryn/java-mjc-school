@@ -13,9 +13,11 @@
   border: 1px solid $borderInputColor;
   box-sizing: border-box;
 }
-label[for=images]{
-  pointer-events:none;
+
+label[for=images] {
+  pointer-events: none;
 }
-i{
+
+i {
   color: #757575;
 }

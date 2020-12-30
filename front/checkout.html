@@ -2,9 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Checkout</title>
+    <link rel="stylesheet" href="styles/sass/checkout.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body>
+
+<header>
+    <div class="logo">
+        <i class="material-icons">menu</i>
+        <span>Logo</span>
+    </div>
+    <div class="search_inputs">
+        <label for="search"></label>
+        <label for="category"></label>
+        <input type="text" id="search" placeholder="Search by item name">
+        <select id="category">
+            <option value="" disabled selected>All categories</option>
+            <option value="new year">New Year</option>
+            <option value="new year">Alcohol</option>
+            <option value="new year">Another category</option>
+        </select>
+    </div>
+
+    <div class="navigation">
+        <i class="material-icons">favorite</i>
+        <i class="material-icons">shopping_cart</i>
+        <div class="links">
+            <a href="?">Login</a>
+            <span> | </span>
+            <a href="?">Sign Up</a>
+        </div>
+    </div>
+</header>
+
+<div class="header_line">
+        <span>
+            Checkout
+        </span>
+</div>
+
+<main>
+    <div class="main_container">
+        <div class="coupons">
+            <div class="coupon">
+                <div class="details">
+                    <div class="image">
+                        <img src="https://img.freepik.com/free-photo/abstract-surface-textures-white-concrete-stone-wall_74190-8184.jpg?size=626&ext=jpg"
+                             alt="image">
+                    </div>
+                    <div class="coupon_name">Coupon Name</div>
+                    <div class="coupon_description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi eveniet harum, illum minus
+                        nobis officia quos rem repellat reprehenderit tempora.
+                    </div>
+                </div>
+                <div class="price">$22</div>
+            </div>
+
+            <div class="coupon">
+                <div class="details">
+                    <div class="image">
+                        <img src="https://img.freepik.com/free-photo/abstract-surface-textures-white-concrete-stone-wall_74190-8184.jpg?size=626&ext=jpg"
+                             alt="image">
+                    </div>
+                    <div class="coupon_name">Coupon Name</div>
+                    <div class="coupon_description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi eveniet harum, illum minus
+                        nobis officia quos rem repellat reprehenderit tempora.
+                    </div>
+                </div>
+                <div class="price">$22</div>
+            </div>
+
+            <div class="coupon">
+                <div class="details">
+                    <div class="image">
+                        <img src="https://img.freepik.com/free-photo/abstract-surface-textures-white-concrete-stone-wall_74190-8184.jpg?size=626&ext=jpg"
+                             alt="image">
+                    </div>
+                    <div class="coupon_name">Coupon Name</div>
+                    <div class="coupon_description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi eveniet harum, illum minus
+                        nobis officia quos rem repellat reprehenderit tempora.
+                    </div>
+                </div>
+                <div class="price">$22</div>
+            </div>
+
+            <div class="coupon">
+                <div class="details">
+                    <div class="image">
+                        <img src="https://img.freepik.com/free-photo/abstract-surface-textures-white-concrete-stone-wall_74190-8184.jpg?size=626&ext=jpg"
+                             alt="image">
+                    </div>
+                    <div class="coupon_name">Coupon Name</div>
+                    <div class="coupon_description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi eveniet harum, illum minus
+                        nobis officia quos rem repellat reprehenderit tempora.
+                    </div>
+                </div>
+                <div class="price">$22</div>
+            </div>
+
+        </div>
+        <div class="line"></div>
+        <div class="total_container">
+            <div class="total">
+                <span>Total</span>
+                <span>$360</span>
+            </div>
+        </div>
+        <div class="btn_container">
+            <div class="btn_place">
+                <button class="transparent_bg">Back</button>
+                <button class="green_bg">Save</button>
+            </div>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>

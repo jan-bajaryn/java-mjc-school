@@ -1,0 +1,144 @@
+header {
+  margin: 15px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+header .logo {
+  display: flex;
+  font-size: 22px;
+  align-items: center;
+}
+header .logo .material-icons {
+  font-size: xx-large;
+  margin-right: 10px;
+  color: #757575;
+}
+header .search_inputs {
+  display: flex;
+  justify-content: center;
+  max-width: 647px;
+}
+header .search_inputs input, header .search_inputs select {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  min-height: 30px;
+}
+header .search_inputs #search {
+  font-size: 12px;
+  flex: 0 0 90%;
+}
+header .search_inputs #category {
+  font-size: 12px;
+  flex: 0 0 10%;
+}
+header .navigation {
+  display: flex;
+  align-items: center;
+}
+header .navigation i {
+  font-size: x-large;
+  color: #757575;
+  margin-right: 12px;
+}
+header .navigation .links a {
+  text-decoration: none;
+  color: #1f1f1f;
+}
+
+.header_line {
+  background: #bdbdbd;
+  line-height: 7vh;
+}
+.header_line span {
+  margin-left: 10%;
+  font-size: xx-large;
+  color: #ffffff;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+}
+main .main_container {
+  width: 50%;
+}
+main .main_container .coupon {
+  margin-top: 5vh;
+  display: flex;
+  justify-content: space-between;
+}
+main .main_container .coupon .details {
+  display: grid;
+  grid-template: "h n" "h d";
+}
+main .main_container .coupon .details .image {
+  grid-area: h;
+  margin-right: 15px;
+}
+main .main_container .coupon .details .image img {
+  max-width: 150px;
+  max-height: 150px;
+}
+main .main_container .coupon .details .coupon_name {
+  grid-area: n;
+  color: #4f4f4f;
+  font-size: x-large;
+}
+main .main_container .coupon .details .coupon_description {
+  grid-area: d;
+  max-width: 60%;
+}
+main .main_container .coupon .price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: large;
+  color: #101010;
+}
+main .main_container .line {
+  border-top: 2px solid #a7a7a7;
+  margin: 20px 0;
+}
+main .main_container .total_container {
+  display: flex;
+  justify-content: flex-end;
+  font-size: large;
+}
+main .main_container .total_container .total {
+  display: flex;
+  justify-content: space-between;
+  width: 20vh;
+}
+main .main_container .btn_container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+main .main_container .btn_container .btn_place {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
+main .main_container .btn_container .btn_place button {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  width: 45%;
+}
+main .main_container .btn_container .btn_place .transparent_bg {
+  background: transparent;
+  color: #828282;
+}
+main .main_container .btn_container .btn_place .green_bg {
+  background: #6fcf97;
+  color: #ffffff;
+}
+
+/*# sourceMappingURL=checkout.css.map */

@@ -1,0 +1,100 @@
+@import 'commons';
+@import 'header';
+@import "header_line";
+
+$headerColor: #4f4f4f;
+$priceColor: #101010;
+
+$lineColor: #a7a7a7;
+
+main {
+  display: flex;
+  justify-content: center;
+
+  .main_container {
+    width: 50%;
+
+    .coupon {
+      margin-top: 5vh;
+      display: flex;
+      justify-content: space-between;
+
+      .details {
+        display: grid;
+        grid-template:
+        'h n'
+        'h d';
+
+        .image{
+          grid-area: h;
+          margin-right: 15px;
+          img{
+            max-width: 150px;
+            max-height: 150px;
+          }
+        }
+        .coupon_name{
+          grid-area: n;
+          color: $headerColor;
+          font-size: x-large;
+        }
+        .coupon_description{
+          grid-area: d;
+          max-width: 60%;
+        }
+      }
+
+      .price{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: large;
+        color: $priceColor;
+      }
+    }
+
+    .line{
+      border-top: 2px solid $lineColor;
+      margin: 20px 0;
+    }
+
+    .total_container{
+      display: flex;
+      justify-content: flex-end;
+      font-size: large;
+      .total{
+        display: flex;
+        justify-content: space-between;
+        width: 20vh;
+      }
+    }
+
+    .btn_container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+
+      .btn_place{
+        display: flex;
+        justify-content: space-between;
+        width: 40%;
+        button {
+          @include btnStyle();
+          width: 45%;
+        }
+
+        .transparent_bg {
+          background: transparent;
+          color: #828282;
+        }
+
+        .green_bg {
+          background: $btnColor;
+          color: $white;
+        }
+      }
+
+    }
+
+  }
+}
