@@ -1,0 +1,21 @@
+@import "commons";
+
+#images {
+  visibility: hidden;
+  height: 0;
+}
+
+#upload {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid $borderInputColor;
+  box-sizing: border-box;
+}
+label[for=images]{
+  pointer-events:none;
+}
+i{
+  color: #757575;
+}

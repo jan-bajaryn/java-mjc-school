@@ -2,9 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>New Coupon</title>
+    <link rel="stylesheet" href="styles/sass/new-item.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 </head>
 <body>
+<header>
+    <div class="logo">
+        <i class="material-icons">menu</i>
+        <span>Logo</span>
+    </div>
+    <div class="search_inputs">
+        <label for="search"></label>
+        <label for="category"></label>
+        <input type="text" id="search" placeholder="Search by item name">
+        <select id="category">
+            <option value="" disabled selected>All categories</option>
+            <option value="new year">New Year</option>
+            <option value="new year">Alcohol</option>
+            <option value="new year">Another category</option>
+        </select>
+    </div>
 
+    <div class="navigation">
+        <i class="material-icons">favorite</i>
+        <i class="material-icons">shopping_cart</i>
+        <div class="links">
+            <a href="?">Login</a>
+            <span> | </span>
+            <a href="?">Sign Up</a>
+        </div>
+    </div>
+</header>
+
+<div class="header_line">
+        <span>
+            Add new Coupon
+        </span>
+</div>
+
+<main>
+
+    <div class="form_container">
+        <div class="form_row">
+            <div class="first_column">
+                <div class="input_content">
+                    <label for="company">
+                        Company
+                    </label>
+                    <input type="text" id="company">
+                </div>
+            </div>
+            <div class="sec_column">
+                <div class="input_content">
+                    <label for="item-name">
+                        Item name
+                    </label>
+                    <input type="text" id="item-name">
+                </div>
+            </div>
+        </div>
+
+        <div class="form_row">
+            <div class="first_column">
+                <div class="input_content">
+                    <label for="category_name">
+                        Company
+                    </label>
+                    <select id="category_name">
+                        <option value="" disabled selected>Category name</option>
+                        <option value="new year">New Year</option>
+                        <option value="new year">Alcohol</option>
+                        <option value="new year">Another category</option>
+                    </select>
+                </div>
+                <div class="input_content">
+                    <label for="valid_to">
+                        Company
+                    </label>
+                    <input type="datetime-local" id="valid_to">
+                </div>
+            </div>
+            <div class="sec_column">
+                <div class="input_content double">
+                    <label for="short_description">
+                        Short Description
+                    </label>
+                    <textarea id="short_description"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form_row">
+            <div class="first_column">
+                <div class="input_content">
+                    <label for="price">
+                        Price
+                    </label>
+                    <input type="text" id="price">
+                </div>
+                <div class="input_content">
+                    <label for="images">
+                        Images
+                    </label>
+                    <input type="file" id="images">
+                    <div id="upload">
+                        <i class="material-icons">
+                            collections
+                        </i>
+                    </div>
+                </div>
+            </div>
+            <div class="sec_column">
+                <div class="input_content double">
+                    <label for="logn_description">
+                        Long Description
+                    </label>
+                    <textarea id="logn_description"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form_row">
+            <div class="first_column"></div>
+            <div class="sec_column">
+                <div class="btn_container">
+                    <button class="transparent_bg">Back</button>
+                    <button class="green_bg">Save</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</main>
 </body>
 </html>
