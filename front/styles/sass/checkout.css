@@ -112,12 +112,12 @@ main .main_container .total_container {
 main .main_container .total_container .total {
   display: flex;
   justify-content: space-between;
-  width: 20vh;
+  width: 20vw;
 }
 main .main_container .btn_container {
+  margin: 20px 0;
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
 }
 main .main_container .btn_container .btn_place {
   display: flex;

@@ -1,0 +1,88 @@
+@import "header";
+@import "commons";
+
+$leftColumnSize: 60vw;
+main {
+  @include onAllPage();
+
+  .main_container {
+    width: 90%;
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      .left_column {
+        width: $leftColumnSize;
+
+        .image {
+
+          img {
+            width: 100%;
+            max-height: 40vh;
+            height: 100%;
+          }
+        }
+
+      }
+
+      .right_column {
+        max-width: 20%;
+        background: $white;
+        padding-left: 20px;
+        padding-right: 20px;
+
+        .coupon_short_description {
+          color: #4f4f4f;
+        }
+
+        .time_container {
+          margin: 10px 0;
+
+          .time_caption {
+            color: #4f4f4f;
+            font-size: small;
+          }
+        }
+
+        .card_footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 20px 0;
+
+          .price {
+            font-size: large;
+          }
+
+          .to_cart {
+            display: flex;
+            align-items: center;
+
+            a {
+              color: #40b4f5;
+              text-decoration: none;
+              margin-right: 10px;
+            }
+
+            i {
+              color: #757575;
+            }
+          }
+        }
+      }
+
+
+    }
+
+    .detailed_description {
+      max-width: $leftColumnSize;
+      margin-top: 50px;
+
+      .description {
+        color: #4f4f4f;
+      }
+    }
+  }
+}

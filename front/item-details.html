@@ -3,9 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
+    <link rel="stylesheet" href="styles/sass/item-details.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body>
+<header>
+    <div class="logo">
+        <i class="material-icons">menu</i>
+        <span>Logo</span>
+    </div>
+    <div class="search_inputs">
+        <label for="search"></label>
+        <label for="category"></label>
+        <input type="text" id="search" placeholder="Search by item name">
+        <select id="category">
+            <option value="" disabled selected>All categories</option>
+            <option value="new year">New Year</option>
+            <option value="new year">Alcohol</option>
+            <option value="new year">Another category</option>
+        </select>
+    </div>
 
+    <div class="navigation">
+        <i class="material-icons">favorite</i>
+        <i class="material-icons">shopping_cart</i>
+        <div class="links">
+            <a href="?">Login</a>
+            <span> | </span>
+            <a href="?">Sign Up</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="main_container">
+        <div class="row">
+            <div class="left_column">
+                <div class="image">
+                    <img src="https://img.freepik.com/free-photo/abstract-surface-textures-white-concrete-stone-wall_74190-8184.jpg?size=626&ext=jpg"
+                         alt="image">
+                </div>
+            </div>
+            <div class="right_column">
+                <div class="card_container">
+                    <h3>Coupon Name</h3>
+                    <div class="coupon_short_description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet architecto dignissimos, dolore
+                        eos hic numquam quisquam voluptatem. Incidunt, iste voluptas?
+                    </div>
+
+                    <div class="time_container">
+                        <div class="time_caption">
+                            Time Left To Buy
+                        </div>
+                        <div class="time_value">
+                            12 days 14 hours
+                        </div>
+                    </div>
+                    <div class="card_footer">
+                        <div class="price">
+                            $235
+                        </div>
+                        <div class="to_cart">
+                            <a href="?">
+                                Add to Cart
+                            </a>
+                            <i class="material-icons">shopping_cart</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detailed_description">
+            <h3>
+                Item Detailed Description
+            </h3>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum est iusto labore laboriosam.
+                Debitis ipsum, repellendus! Cumque ducimus ea in laborum modi molestiae molestias necessitatibus
+                nesciunt numquam velit. Accusamus aut est facere odit perferendis quisquam tempore ut? Ab,
+                dolorem eveniet ex excepturi hic modi neque, numquam obcaecati quo sint sit voluptates? Ad at
+                commodi consequuntur delectus, deleniti doloremque ducimus enim fugiat hic illo in inventore
+                ipsa iure laboriosam libero magnam minus necessitatibus nemo nesciunt non numquam, omnis quaerat
+                quas quasi quia quidem quisquam quod quos ratione rem repellendus reprehenderit rerum sapiente
+                unde ut vitae voluptatem! Deleniti dicta earum molestias perferendis.
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
