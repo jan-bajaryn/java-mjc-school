@@ -6,7 +6,7 @@ $outBackground: #c4c4c4;
 
 
 main {
-  @include onAllPage();
+  @include onAllPage(#f2f2f2);
 
   .register_container {
     padding-bottom: 20px;

@@ -6,7 +6,7 @@ $loginBackground: #fcfcfc;
 
 main {
 
-  @include onAllPage();
+  @include onAllPage(#f2f2f2);
 
 
   .form-login {

@@ -1,0 +1,115 @@
+@import "header";
+@import "commons";
+
+$imageCategorySize: 50px;
+
+.category_list {
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .category_item {
+    margin: 10px 1.5vw;
+    display: flex;
+    flex-direction: column;
+
+    img {
+      height: $imageCategorySize;
+      width: $imageCategorySize;
+    }
+
+    span {
+      margin: 5px 0;
+      color: #383838;
+    }
+  }
+}
+
+main {
+  @include onAllPage(#f2f2f2);
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .coupon_list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 3vh 2vw;
+
+    .coupon_card {
+      margin: 2vh 2vw;
+      max-width: 260px;
+      background: $white;
+
+      .image_part {
+        img {
+          width: 100%;
+          height: 250px;
+        }
+      }
+
+
+      .description_part {
+        margin: 10px;
+        display: grid;
+        grid-template-columns: 60% 40%;
+        row-gap: 10px;
+
+
+        .coupon_name {
+          font-size: large;
+        }
+
+        .brief_description {
+          font-size: smaller;
+        }
+
+        .expires_in {
+          display: flex;
+          justify-content: flex-end;
+          font-size: smaller;
+          color: #999999;
+
+        }
+
+        .icon {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+
+          i {
+            margin-right: 10px;
+            color: $darkGrey;
+          }
+        }
+
+      }
+
+      .line {
+        border-top: 1px solid #f5f5f5;
+      }
+
+      .price_part {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        .price {
+          font-size: large;
+        }
+
+        .add_to_card {
+          button {
+            padding: 5px 15px;
+            display: inline-block;
+            border: 1px solid #bdbdbd;
+            background: transparent;
+            box-sizing: border-box;
+          }
+        }
+      }
+
+    }
+  }
+}
