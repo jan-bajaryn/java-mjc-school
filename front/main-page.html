@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="styles/sass/main-page.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
+
+    <script src="js/main-page.js"></script>
 </head>
 <body>
 <header>
@@ -16,8 +18,9 @@
     <div class="search_inputs">
         <label for="search"></label>
         <label for="category"></label>
-        <input type="text" id="search" placeholder="Search by item name">
-        <select id="category">
+        <input type="text" id="search" placeholder="Search by item name"
+               onkeyup="filter()">
+        <select id="category" onchange="filter()">
             <option value="" disabled selected>All categories</option>
             <option value="new year">New Year</option>
             <option value="new year">Alcohol</option>
@@ -37,26 +40,6 @@
 </header>
 
 <div class="category_list">
-    <div class="category_item">
-        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
-        <span>Category</span>
-    </div>
-    <div class="category_item">
-        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
-        <span>Category</span>
-    </div>
-    <div class="category_item">
-        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
-        <span>Category</span>
-    </div>
-    <div class="category_item">
-        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
-        <span>Category</span>
-    </div>
-    <div class="category_item">
-        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
-        <span>Category</span>
-    </div>
     <div class="category_item">
         <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">
         <span>Category</span>

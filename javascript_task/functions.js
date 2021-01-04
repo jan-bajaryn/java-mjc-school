@@ -151,8 +151,68 @@ function matrixMultiplication(matrix1, matrix2) {
  *      gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello"
  */
 function gather(str) {
+    // let gatherObj = new GatherObj(str);
+    // return (s) => new GatherObj();
+
+    let strings = [];
+
+    return (s) => {
+        return {
+            order: function () {
+                return "a";
+            }
+        }
+    }
+
 
 }
+
+//
+// function func(val) {
+//     var self = this;
+//     this._optional = false;
+//     this._check = false;
+//
+//     const doStaff = (message = 'Doing staff') => {
+//         console.log(message);
+//         return;
+//     };
+//
+//
+//     return {
+//         check: function (n) {
+//             this._check = true;
+//             return this;
+//         },
+//         optional: function (n) {
+//             this._check = false;
+//             this._optional = true;
+//             return this;
+//         },
+//         exec: function () {
+//             if (this._check) doStaff();
+//             if (this._optional) doStaff('Maybe not');
+//         }
+//     }
+// }
+//
+// class GatherObj {
+//     constructor(str) {
+//         this.str = str;
+//     }
+//
+//     result = 0;
+//
+//     get(a) {
+//         this.result = a + b;
+//         return this;
+//     }
+//
+//     order(a) {
+//         this.result = this.result * a;
+//         return this;
+//     }
+// }
 
 
 const expect = require('chai')

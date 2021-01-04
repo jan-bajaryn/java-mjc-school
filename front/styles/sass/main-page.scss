@@ -3,6 +3,12 @@
 
 $imageCategorySize: 50px;
 
+
+@keyframes img-ani {
+  from{opacity:0;}
+  to{opacity: 1;}
+}
+
 .category_list {
   background: #e0e0e0;
   display: flex;
@@ -13,6 +19,9 @@ $imageCategorySize: 50px;
     margin: 10px 1.5vw;
     display: flex;
     flex-direction: column;
+    animation-name:img-ani;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
 
     img {
       height: $imageCategorySize;
@@ -20,6 +29,8 @@ $imageCategorySize: 50px;
     }
 
     span {
+      display: flex;
+      justify-content: center;
       margin: 5px 0;
       color: #383838;
     }
@@ -40,6 +51,9 @@ main {
       margin: 2vh 2vw;
       max-width: 260px;
       background: $white;
+      animation-name:img-ani;
+      animation-duration: 2s;
+      animation-timing-function: ease-in;
 
       .image_part {
         img {

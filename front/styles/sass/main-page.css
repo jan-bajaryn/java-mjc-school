@@ -50,6 +50,14 @@ header .navigation .links a {
   color: #1f1f1f;
 }
 
+@keyframes img-ani {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .category_list {
   background: #e0e0e0;
   display: flex;
@@ -60,12 +68,17 @@ header .navigation .links a {
   margin: 10px 1.5vw;
   display: flex;
   flex-direction: column;
+  animation-name: img-ani;
+  animation-duration: 2s;
+  animation-timing-function: ease-in;
 }
 .category_list .category_item img {
   height: 50px;
   width: 50px;
 }
 .category_list .category_item span {
+  display: flex;
+  justify-content: center;
   margin: 5px 0;
   color: #383838;
 }
@@ -88,6 +101,9 @@ main .coupon_list .coupon_card {
   margin: 2vh 2vw;
   max-width: 260px;
   background: #ffffff;
+  animation-name: img-ani;
+  animation-duration: 2s;
+  animation-timing-function: ease-in;
 }
 main .coupon_list .coupon_card .image_part img {
   width: 100%;
