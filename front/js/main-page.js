@@ -95,27 +95,39 @@ document.addEventListener("DOMContentLoaded", function (event) {
     displayCoupons(coupon_list);
 });
 
+function addTag(i, element) {
+    let newChild = document.createElement("div");
+    newChild.className = "category_item";
+    newChild.style.visibility = 'hidden';
+    newChild.innerHTML =
+        '        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">\n' +
+        '        <span>' + tag_list[i] + '</span>\n';
+    element.appendChild(newChild);
+    return newChild;
+}
+
 function displayTags() {
     let element = document.getElementsByClassName('category_list')[0];
+    element.innerHTML = '';
     let categoriesRoot = document.getElementById('category');
-    insertion = '';
-    insertionInput = '<option value="" disabled selected>All categories</option>'
+    let insertion = '';
+    let insertionInput = '<option value="" disabled selected>All categories</option>'
     for (let i = 0; i < tag_list.length; i++) {
-        insertion +=
-            '    <div class="category_item">\n' +
-            '        <img src="https://www.beautycolorcode.com/ffffff-1280x1024.png" alt="Category">\n' +
-            '        <span>' + tag_list[i] + '</span>\n' +
-            '    </div>';
         insertionInput +=
             '<option value="' + tag_list[i] + '">' + tag_list[i] + '</option>';
     }
-    element.innerHTML = insertion;
     categoriesRoot.innerHTML = insertionInput;
+    let time = 1000;
+    for (let i = 0; i < tag_list.length; i++) {
+        let appended = addTag(i, element);
+        setTimeout(() => appended.style.visibility = 'visible', time);
+        time = time + 1000;
+    }
 }
 
 function displayCoupons(coupons_to_display) {
     let element = document.getElementsByClassName('coupon_list')[0];
-    insertion = '';
+    let insertion = '';
     for (let i = 0; i < coupons_to_display.length; i++) {
         insertion +=
             '<div class="coupon_card">\n' +
@@ -166,3 +178,53 @@ function filter() {
 
     displayCoupons(filtered);
 }
+
+
+function loadMore(coupons_to_display) {
+    let element = document.getElementsByClassName('coupon_list')[0];
+    let insertion = '';
+    for (let i = 0; i < coupons_to_display.length; i++) {
+        insertion +=
+            '<div class="coupon_card">\n' +
+            '            <div class="image_part">\n' +
+            '                <img src="' + coupons_to_display[i].img + '" alt="' + coupons_to_display[i].name + '">\n' +
+            '            </div>\n' +
+            '            <div class="description_part">\n' +
+            '                <div class="coupon_name">\n' +
+            '                    ' + coupons_to_display[i].name + '\n' +
+            '                </div>\n' +
+            '                <div class="icon">\n' +
+            '                    <i class="material-icons">\n' +
+            '                        favorite\n' +
+            '                    </i>\n' +
+            '                </div>\n' +
+            '                <div class="brief_description">\n' +
+            '                    ' + coupons_to_display[i].description + '\n' +
+            '                </div>\n' +
+            '                <div class="expires_in">\n' +
+            '                    Expires in 3 days\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="line"></div>\n' +
+            '            <div class="price_part">\n' +
+            '                <div class="price">\n' +
+            '                    $' + coupons_to_display[i].price + '\n' +
+            '                </div>\n' +
+            '                <div class="add_to_card">\n' +
+            '                    <button>Add to Cart</button>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>';
+    }
+    element.innerHTML += insertion;
+}
+
+window.addEventListener('scroll', () => {
+    let scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    let scrolled = window.scrollY;
+
+    if (scrollable <= scrolled + 1) {
+        loadMore(coupon_list);
+    }
+})
+
