@@ -121,7 +121,18 @@ function towerHanoi(disks) {
  *
  */
 function matrixMultiplication(matrix1, matrix2) {
-
+    let length = matrix1.length;
+    let result = new Array(length);
+    for (let i = 0; i < length; ++i) {
+        result[i] = new Array(length);
+        for (let j = 0; j < length; ++j) {
+            result[i][j] = 0;
+            for (let k = 0; k < length; ++k) {
+                result[i][j] += matrix1[i][k] * matrix2[k][j];
+            }
+        }
+    }
+    return result;
 }
 
 /**
