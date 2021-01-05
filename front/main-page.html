@@ -18,8 +18,8 @@
     <div class="search_inputs">
         <label for="search"></label>
         <label for="category"></label>
-        <input type="text" id="search" placeholder="Search by item name"
-               onkeyup="filter()">
+        <input type="text" id="search" placeholder="Search by item name or description"
+               onkeyup="handleType()">
         <select id="category" onchange="filter()">
             <option value="" disabled selected>All categories</option>
             <option value="new year">New Year</option>

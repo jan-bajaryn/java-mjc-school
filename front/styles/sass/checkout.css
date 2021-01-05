@@ -122,7 +122,7 @@ main .main_container .btn_container {
 main .main_container .btn_container .btn_place {
   display: flex;
   justify-content: space-between;
-  width: 40%;
+  width: 50%;
 }
 main .main_container .btn_container .btn_place button {
   padding: 12px 20px;
@@ -130,7 +130,7 @@ main .main_container .btn_container .btn_place button {
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  width: 45%;
+  width: 30%;
 }
 main .main_container .btn_container .btn_place .transparent_bg {
   background: transparent;

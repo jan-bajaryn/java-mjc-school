@@ -111,7 +111,7 @@ function displayTags() {
     element.innerHTML = '';
     let categoriesRoot = document.getElementById('category');
     let insertion = '';
-    let insertionInput = '<option value="" disabled selected>All categories</option>'
+    let insertionInput = '<option value="" selected>All categories</option>'
     for (let i = 0; i < tag_list.length; i++) {
         insertionInput +=
             '<option value="' + tag_list[i] + '">' + tag_list[i] + '</option>';
@@ -224,7 +224,39 @@ window.addEventListener('scroll', () => {
     let scrolled = window.scrollY;
 
     if (scrollable <= scrolled + 1) {
-        loadMore(coupon_list);
+        // loadMore(coupon_list)
+        handleLoadMore();
     }
 })
+
+
+function throttle(callback, wait, immediate = false) {
+    let timeout = null
+    let initialCall = true
+
+    return function () {
+        const callNow = immediate && initialCall
+        const next = () => {
+            callback.apply(this, arguments)
+            timeout = null
+        }
+
+        if (callNow) {
+            initialCall = false
+            next()
+        }
+
+        if (!timeout) {
+            timeout = setTimeout(next, wait)
+        }
+    }
+}
+
+const handleLoadMore = throttle(() => {
+    loadMore(coupon_list)
+}, 2000)
+
+const handleType = throttle(() => {
+    filter()
+}, 1000)
 

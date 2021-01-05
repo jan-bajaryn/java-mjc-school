@@ -67,18 +67,46 @@ main {
       }
     }
 
+    //.btn_container {
+    //  margin: 20px 0;
+    //  display: flex;
+    //  justify-content: flex-end;
+    //
+    //  .btn_place{
+    //    display: flex;
+    //    justify-content: space-between;
+    //    width: 40%;
+    //    button {
+    //      @include btnStyle();
+    //      width: 45%;
+    //    }
+    //
+    //    .transparent_bg {
+    //      background: transparent;
+    //      color: #828282;
+    //    }
+    //
+    //    .green_bg {
+    //      background: $btnColor;
+    //      color: $white;
+    //    }
+    //  }
+    //
+    //}
+
     .btn_container {
       margin: 20px 0;
       display: flex;
       justify-content: flex-end;
 
-      .btn_place{
+      .btn_place {
         display: flex;
         justify-content: space-between;
-        width: 40%;
+        width: 50%;
+
         button {
           @include btnStyle();
-          width: 45%;
+          width: 30%;
         }
 
         .transparent_bg {
