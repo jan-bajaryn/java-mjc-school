@@ -1,28 +1,50 @@
 import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
+import {Link, Redirect} from "react-router-dom";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 
-export default class LoginPage extends Component<any> {
+
+interface IProps {
+}
+
+interface IState {
+    redirect?: boolean;
+}
+
+export default class LoginPage extends Component<IProps, IState> {
     private username: React.RefObject<HTMLInputElement>;
     private password: React.RefObject<HTMLInputElement>;
 
-    constructor() {
-        super();
+    // private state: IState;
+
+    constructor(props: IProps) {
+        super(props);
         // this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.username = React.createRef();
-        this.password = React.createRef();
+        this.username = React.createRef<HTMLInputElement>();
+        this.password = React.createRef<HTMLInputElement>();
+
+        this.state = {
+            redirect: false
+        }
+
     }
 
     private handleFormSubmit = async (
-        event: React.FormEvent<HTMLFormElement>
+        event: any
     ) => {
         event.preventDefault();
 
         const endpoint = "http://localhost:9000/oauth/token";
-        const username = this.username.current.value;
-        const password = this.password.current.value;
+        let username: string = '';
+        if (this.username.current) {
+            username = this.username.current.value;
+        }
+        let password: string = '';
+        if (this.password.current) {
+            password = this.password.current.value;
+        }
         const user_object = {
             grant_type: 'password',
             username: username,
@@ -42,11 +64,9 @@ export default class LoginPage extends Component<any> {
         ).then(res => {
             localStorage.setItem("authorization", res.data.token);
             localStorage.setItem("refresh_token", res.data.refresh_token);
-            // console.log("Authorities = ", res.data.authorities)
-            // console.log("Authority = ", res.data.authorities[0])
-            // localStorage.setItem("role", res.data.authorities[0])
-            // console.log("Role = ", localStorage.getItem("role"))
-            // return this.handleDashboard();
+            this.setState({
+                redirect: true
+            });
         }).catch((error) => {
             console.log(error);
         });
@@ -76,6 +96,10 @@ export default class LoginPage extends Component<any> {
                     <div>
                         <button onSubmit={() => this.handleFormSubmit(this)}>Login</button>
                     </div>
+                    {
+                        this.state.redirect &&
+                        <Redirect to={"/login"}/>
+                    }
                     {/*</form>*/}
                 </div>
             </main>
