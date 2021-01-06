@@ -2,8 +2,6 @@ import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
 import {Link, Redirect} from "react-router-dom";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 
 interface IProps {
