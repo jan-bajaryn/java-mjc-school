@@ -1,0 +1,51 @@
+main {
+  min-height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+}
+main .form-login {
+  background: #fcfcfc;
+  padding: 40px 20px 20px;
+}
+main .form-login input {
+  width: 300px;
+  height: 25px;
+  margin-bottom: 10px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  min-height: 30px;
+}
+main .form-login button {
+  width: 100%;
+  color: #ffffff;
+  background-color: #6fcf97;
+  padding: 12px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+main .logo_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+main .logo_container .logo_place {
+  color: #ffffff;
+  font-size: xx-large;
+  background: #c4c4c4;
+  height: 200px;
+  width: 200px;
+  margin-top: -50%;
+  border-radius: 50%;
+  line-height: 200px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/*# sourceMappingURL=login.css.map */

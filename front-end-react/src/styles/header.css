@@ -1,0 +1,53 @@
+header {
+  margin: 15px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+header .logo {
+  display: flex;
+  font-size: 22px;
+  align-items: center;
+}
+header .logo .material-icons {
+  font-size: xx-large;
+  margin-right: 10px;
+  color: #c4c4c4;
+}
+header .search_inputs {
+  display: flex;
+  justify-content: center;
+  max-width: 647px;
+}
+header .search_inputs input, header .search_inputs select {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  min-height: 30px;
+}
+header .search_inputs #search {
+  font-size: 12px;
+  flex: 0 0 90%;
+}
+header .search_inputs #category {
+  font-size: 12px;
+  flex: 0 0 10%;
+}
+header .navigation {
+  display: flex;
+  align-items: center;
+}
+header .navigation i {
+  font-size: x-large;
+  color: #c4c4c4;
+  margin-right: 12px;
+}
+header .navigation .links a {
+  text-decoration: none;
+  color: #1f1f1f;
+}
+
+/*# sourceMappingURL=header.css.map */
