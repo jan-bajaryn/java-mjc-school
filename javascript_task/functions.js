@@ -159,12 +159,13 @@ function gather(str) {
     return (s) => {
         return {
             order: function () {
-                return "a";
+
+            },
+            gather: function () {
+
             }
         }
     }
-
-
 }
 
 //

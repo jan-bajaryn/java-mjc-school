@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 
 interface IProps {
@@ -12,28 +12,24 @@ interface IState {
 }
 
 export default class LoginPage extends Component<IProps, IState> {
-    private username: React.RefObject<HTMLInputElement>;
-    private password: React.RefObject<HTMLInputElement>;
+    private username = React.createRef<HTMLInputElement>();
+    private password = React.createRef<HTMLInputElement>();
 
-    // private state: IState;
 
     constructor(props: IProps) {
         super(props);
-        // this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.username = React.createRef<HTMLInputElement>();
-        this.password = React.createRef<HTMLInputElement>();
-
+        // this.username = React.createRef<HTMLInputElement>();
+        // this.password = React.createRef<HTMLInputElement>();
         this.state = {
             redirect: false
         }
 
     }
 
-    private handleFormSubmit = async (
-        event: any
-    ) => {
-        event.preventDefault();
-
+    private handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
         const endpoint = "http://localhost:9000/oauth/token";
         let username: string = '';
         if (this.username.current) {
@@ -43,24 +39,27 @@ export default class LoginPage extends Component<IProps, IState> {
         if (this.password.current) {
             password = this.password.current.value;
         }
-        const user_object = {
-            grant_type: 'password',
-            username: username,
-            password: password
-        };
+        console.log("username = " + username)
+        console.log("password = " + password)
+
+        const params = new URLSearchParams();
+        params.append('grant_type', 'password');
+        params.append('username', username);
+        params.append('password', password);
+
 
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic Y2xpZW50aWQ6cGFzc3dvcmQ='
         }
 
         axios.post(
-            endpoint, user_object,
+            endpoint, params,
             {
                 headers: headers
             }
         ).then(res => {
-            localStorage.setItem("authorization", res.data.token);
+            localStorage.setItem("authorization", res.data.access_token);
             localStorage.setItem("refresh_token", res.data.refresh_token);
             this.setState({
                 redirect: true
@@ -80,27 +79,28 @@ export default class LoginPage extends Component<IProps, IState> {
                             <span>Logo</span>
                         </div>
                     </div>
-                    {/*<form>*/}
-                    <div>
-                        <label>
-                            <input type="text" placeholder="Login" ref={this.username}/>
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <input type="password" placeholder="Password" ref={this.password}/>
-                        </label>
-                    </div>
-                    <div>
-                        <button onSubmit={() => this.handleFormSubmit(this)}>Login</button>
-                    </div>
-                    {
-                        this.state.redirect &&
-                        <Redirect to={"/login"}/>
-                    }
-                    {/*</form>*/}
+                    <form onSubmit={this.handleSubmit} noValidate={true}>
+                        <div>
+                            <label>
+                                <input type="text" placeholder="Login" ref={this.username}/>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="password" placeholder="Password" ref={this.password}/>
+                            </label>
+                        </div>
+                        <div>
+                            <button>Login</button>
+                        </div>
+                        {/*{*/}
+                        {/*    this.state.redirect &&*/}
+                        {/*    <Redirect to={"/"}/>*/}
+                        {/*}*/}
+                    </form>
                 </div>
             </main>
         )
     }
+
 }
