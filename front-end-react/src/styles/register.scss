@@ -1,0 +1,75 @@
+@import "header";
+@import "commons";
+
+$registerBack: #fcfcfc;
+$outBackground: #c4c4c4;
+
+
+main {
+  @include onAllPage(#f2f2f2);
+
+  .register_container {
+    padding-bottom: 20px;
+    background: $registerBack;
+    min-width: 70%;
+
+    .inputs_container >form {
+      display: flex;
+      justify-content: center;
+
+      .first_column, .second_column {
+        display: flex;
+        flex-direction: column;
+        margin-right: 25px;
+        width: 40%;
+
+        .item {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          margin: 0 25px;
+          color: #828282;
+
+          input {
+            @include inputStyle();
+            max-height: 35px;
+            width: 100%;
+          }
+
+          .btn_holder {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            button {
+              @include btnStyle();
+              width: 45%;
+            }
+
+            .transparent_bg {
+              background: transparent;
+            }
+
+            .green_bg {
+              background: $btnColor;
+            }
+          }
+        }
+      }
+
+
+    }
+
+    .logo_container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      background: $outBackground;
+      color: $white;
+      font-size: xx-large;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  }
+
+
+}

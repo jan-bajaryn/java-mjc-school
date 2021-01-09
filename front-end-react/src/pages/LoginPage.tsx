@@ -58,8 +58,11 @@ class LoginPage extends Component<IProps, IState> {
         ).then(res => {
             localStorage.setItem("authorization", res.data.access_token);
             localStorage.setItem("refresh_token", res.data.refresh_token);
+
+            this.props.history.push("/");
+
         }).catch((error) => {
-            console.log(error);
+            console.log("login error = " + error);
         });
     };
 

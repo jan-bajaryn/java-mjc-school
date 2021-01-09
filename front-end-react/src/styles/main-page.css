@@ -16,9 +16,6 @@
   margin: 10px 1.5vw;
   display: flex;
   flex-direction: column;
-  animation-name: img-ani;
-  animation-duration: 2s;
-  animation-timing-function: ease-in;
 }
 .category_list .category_item img {
   height: 50px;
@@ -49,9 +46,6 @@ main .coupon_list .coupon_card {
   margin: 2vh 2vw;
   max-width: 260px;
   background: #ffffff;
-  animation-name: img-ani;
-  animation-duration: 2s;
-  animation-timing-function: ease-in;
 }
 main .coupon_list .coupon_card .image_part img {
   width: 100%;

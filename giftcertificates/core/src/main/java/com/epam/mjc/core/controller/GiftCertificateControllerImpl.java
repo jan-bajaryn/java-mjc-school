@@ -5,7 +5,6 @@ import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
-import com.epam.mjc.api.util.HateoasManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/certificates")
+@CrossOrigin("*")
 public class GiftCertificateControllerImpl implements GiftCertificateController {
 
 
@@ -30,13 +31,11 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateControllerImpl.class);
 
-    private final HateoasManager hateoasManager;
     private final GiftCertificateReturnService giftCertificateReturnService;
 
 
     @Autowired
-    public GiftCertificateControllerImpl(HateoasManager hateoasManager, GiftCertificateReturnService giftCertificateReturnService) {
-        this.hateoasManager = hateoasManager;
+    public GiftCertificateControllerImpl(GiftCertificateReturnService giftCertificateReturnService) {
         this.giftCertificateReturnService = giftCertificateReturnService;
     }
 
