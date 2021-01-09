@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import '../styles/header.css'
+import {RouteComponentProps, withRouter} from "react-router-dom";
 
-interface PieceProps {
+interface PieceProps extends RouteComponentProps<any> {
 }
 
-class Header extends Component<PieceProps> {
-
+class Header extends Component<PieceProps, any> {
 
     render() {
         return (
@@ -41,4 +41,4 @@ class Header extends Component<PieceProps> {
 
 }
 
-export default Header;
+export default withRouter(Header);

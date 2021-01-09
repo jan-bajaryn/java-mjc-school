@@ -1,6 +1,7 @@
 import {Component} from "react";
+import {withRouter} from "react-router-dom";
 
-export default class RegistrationPage extends Component<any, any> {
+class RegistrationPage extends Component<any, any> {
     render() {
         return (
             <main>
@@ -52,3 +53,5 @@ export default class RegistrationPage extends Component<any, any> {
         )
     }
 }
+
+export default withRouter(RegistrationPage);

@@ -1,25 +1,22 @@
 import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
-import {Redirect} from "react-router-dom";
+import {withRouter, RouteComponentProps} from 'react-router-dom';
 
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-    redirect?: boolean;
 }
 
-export default class LoginPage extends Component<IProps, IState> {
+class LoginPage extends Component<IProps, IState> {
     private username = React.createRef<HTMLInputElement>();
     private password = React.createRef<HTMLInputElement>();
 
 
     constructor(props: IProps) {
         super(props);
-        // this.username = React.createRef<HTMLInputElement>();
-        // this.password = React.createRef<HTMLInputElement>();
         this.state = {
             redirect: false
         }
@@ -61,9 +58,6 @@ export default class LoginPage extends Component<IProps, IState> {
         ).then(res => {
             localStorage.setItem("authorization", res.data.access_token);
             localStorage.setItem("refresh_token", res.data.refresh_token);
-            this.setState({
-                redirect: true
-            });
         }).catch((error) => {
             console.log(error);
         });
@@ -93,10 +87,6 @@ export default class LoginPage extends Component<IProps, IState> {
                         <div>
                             <button>Login</button>
                         </div>
-                        {/*{*/}
-                        {/*    this.state.redirect &&*/}
-                        {/*    <Redirect to={"/"}/>*/}
-                        {/*}*/}
                     </form>
                 </div>
             </main>
@@ -104,3 +94,5 @@ export default class LoginPage extends Component<IProps, IState> {
     }
 
 }
+
+export default withRouter(LoginPage);

@@ -1,7 +1,8 @@
 import {Component} from "react";
 import '../styles/main-page.css'
+import {withRouter} from "react-router-dom";
 
-export default class MainPage extends Component<any> {
+class MainPage extends Component<any> {
     render() {
         return (
             <main>
@@ -47,3 +48,5 @@ export default class MainPage extends Component<any> {
         )
     }
 }
+
+export default withRouter(MainPage);
