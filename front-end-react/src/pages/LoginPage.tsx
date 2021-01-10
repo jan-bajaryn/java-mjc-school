@@ -2,12 +2,14 @@ import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
 import {withRouter, RouteComponentProps} from 'react-router-dom';
+import Header from "../components/Header";
 
 
 interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
+    itemCount: number;
 }
 
 class LoginPage extends Component<IProps, IState> {
@@ -18,9 +20,19 @@ class LoginPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            redirect: false
+            itemCount: this.calcItemCount()
         }
 
+    }
+
+    private calcItemCount() {
+        let item = localStorage.getItem('cart');
+        if (item == null) {
+            return null;
+        } else {
+            let parse = JSON.parse(item);
+            return parse.length
+        }
     }
 
     private handleSubmit = async (
@@ -69,30 +81,33 @@ class LoginPage extends Component<IProps, IState> {
 
     render() {
         return (
-            <main>
-                <div className="form-login">
-                    <div className="logo_container">
-                        <div className="logo_place">
-                            <span>Logo</span>
+            <div>
+                <Header cartItems={this.state.itemCount}/>
+                <main>
+                    <div className="form-login">
+                        <div className="logo_container">
+                            <div className="logo_place">
+                                <span>Logo</span>
+                            </div>
                         </div>
+                        <form onSubmit={this.handleSubmit} noValidate={true}>
+                            <div>
+                                <label>
+                                    <input type="text" placeholder="Login" ref={this.username}/>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="password" placeholder="Password" ref={this.password}/>
+                                </label>
+                            </div>
+                            <div>
+                                <button>Login</button>
+                            </div>
+                        </form>
                     </div>
-                    <form onSubmit={this.handleSubmit} noValidate={true}>
-                        <div>
-                            <label>
-                                <input type="text" placeholder="Login" ref={this.username}/>
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                <input type="password" placeholder="Password" ref={this.password}/>
-                            </label>
-                        </div>
-                        <div>
-                            <button>Login</button>
-                        </div>
-                    </form>
-                </div>
-            </main>
+                </main>
+            </div>
         )
     }
 

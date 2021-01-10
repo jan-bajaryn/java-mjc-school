@@ -12,7 +12,6 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                <Header/>
                 <Route exact path="/">
                     <MainPage/>
                 </Route>

@@ -1,11 +1,31 @@
 import React, {Component} from 'react';
 import '../styles/header.css'
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import Certificate from "../entity/Certificate";
 
 interface PieceProps extends RouteComponentProps<any> {
+    cartItems?: number;
 }
 
-class Header extends Component<PieceProps, any> {
+interface IState {
+}
+
+class Header extends Component<PieceProps, IState> {
+
+    constructor(props: PieceProps) {
+        super(props);
+
+    }
+
+    componentDidMount() {
+        let item = localStorage.getItem('cart');
+        if (item == null) {
+            this.setState({cartItems: 0})
+        } else {
+            let parse = JSON.parse(item);
+            this.setState({cartItems: parse.length})
+        }
+    }
 
     render() {
         return (
@@ -19,7 +39,7 @@ class Header extends Component<PieceProps, any> {
                     <label htmlFor="category"/>
                     <input type="text" id="search" placeholder="Search by item name or description"/>
                     <select id="category">
-                        <option value="" disabled selected>All categories</option>
+                        <option value="" disabled>All categories</option>
                         <option value="new year">New Year</option>
                         <option value="new year">Alcohol</option>
                         <option value="new year">Another category</option>
@@ -29,6 +49,10 @@ class Header extends Component<PieceProps, any> {
                 <div className="navigation">
                     <i className="material-icons">favorite</i>
                     <i className="material-icons">shopping_cart</i>
+                    {
+                        this.props.cartItems &&
+                        <small>{this.props.cartItems}</small>
+                    }
                     <div className="links">
                         {/*<Link href="?">Login</Link>*/}
                         <Link to={"/login"}>Login</Link>
