@@ -1,11 +1,3 @@
-@keyframes img-ani {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 .category_list {
   background: #e0e0e0;
   display: flex;
@@ -104,6 +96,10 @@ main .coupon_list .coupon_card .price_part .add_to_card button {
   border: 1px solid #bdbdbd;
   background: transparent;
   box-sizing: border-box;
+}
+
+.chip__array input {
+  width: 100%;
 }
 
 /*# sourceMappingURL=main-page.css.map */

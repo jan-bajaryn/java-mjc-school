@@ -48,4 +48,9 @@ main .logo_container .logo_place {
   margin-bottom: 20px;
 }
 
+.error_message {
+  font-size: small;
+  color: red;
+}
+
 /*# sourceMappingURL=login.css.map */

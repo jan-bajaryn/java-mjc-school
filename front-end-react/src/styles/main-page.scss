@@ -2,16 +2,6 @@
 
 $imageCategorySize: 50px;
 
-
-@keyframes img-ani {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .category_list {
   background: #e0e0e0;
   display: flex;
@@ -134,5 +124,11 @@ main {
       }
 
     }
+  }
+}
+
+.chip__array {
+  input {
+    width: 100%;
   }
 }

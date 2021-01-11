@@ -39,6 +39,7 @@ main {
     width: 100%;
     display: flex;
     justify-content: center;
+
     .logo_place {
       color: $white;
       font-size: xx-large;
@@ -53,4 +54,9 @@ main {
       margin-bottom: 20px;
     }
   }
+}
+
+.error_message {
+  font-size: small;
+  color: red;
 }

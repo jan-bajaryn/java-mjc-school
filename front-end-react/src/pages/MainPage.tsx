@@ -140,7 +140,7 @@ class MainPage extends Component<IProps, IState> {
 
             <div>
                 <Header cartItems={this.state.itemCount}/>
-                <div className={'container my-3'}>
+                <div className={'container my-3 pt-5'}>
                     {
                         this.state.displayFilters ?
                             <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Hide
@@ -152,53 +152,53 @@ class MainPage extends Component<IProps, IState> {
                 </div>
                 {
                     this.state.displayFilters &&
-                    <div className={'form__container mx-5 mb-5'}>
-                        <div className={'row text-center'}>
-                            <div className="form-group col-6">
-                                <label htmlFor="partName">Name</label>
-                                <input type="text" className="form-control" placeholder="Enter name" id="partName"
-                                       value={this.state.partName}
-                                       onChange={event => this.setState({partName: event.target.value})}/>
+                    <div className={'d-flex justify-content-center'}>
+                        <div className={'form__container mx-5 mb-5 w-50'}>
+                            <div className={'row text-center'}>
+                                <div className="form-group col-6">
+                                    <input type="text" className="form-control" placeholder="Enter name" id="partName"
+                                           value={this.state.partName}
+                                           onChange={event => this.setState({partName: event.target.value})}/>
+                                </div>
+                                <div className="form-group col-6">
+                                    <input type="text" className="form-control" placeholder="Enter description"
+                                           id="partDescription" value={this.state.partDescription}
+                                           onChange={event => this.setState({partDescription: event.target.value})}/>
+                                </div>
                             </div>
-                            <div className="form-group col-6">
-                                <label htmlFor="partDescription">Description</label>
-                                <input type="text" className="form-control" placeholder="Enter description"
-                                       id="partDescription" value={this.state.partDescription}
-                                       onChange={event => this.setState({partDescription: event.target.value})}/>
-                            </div>
-                        </div>
-                        <div className="form-group text-center row">
-                            <div className={'col-6 text-left'}>
-                                <ChipInput
-                                    label={'Tags'}
-                                    value={this.state.tagNames}
-                                    onAdd={chip => this.handleAddTag(chip)}
-                                    onDelete={chip => this.handleDeleteTag(chip)}/>
-                            </div>
-                            <div className={'col-6 text-center'}>
-                                <div className={'radio text-left'}>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="sort"
-                                               id="exampleRadios1" value="LAST_UPDATE:asc"
-                                               checked={this.state.sort === 'LAST_UPDATE:asc'}
-                                               onChange={event => this.setState({sort: 'LAST_UPDATE:asc'})}/>
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Sort by last update
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="sort"
-                                               id="exampleRadios2" value="NAME:asc"
-                                               checked={this.state.sort === 'NAME:asc'}
-                                               onChange={event => this.setState({sort: 'NAME:asc'})}/>
-                                        <label className="form-check-label" htmlFor="exampleRadios2">
-                                            Sort by name
-                                        </label>
+                            <div className="form-group text-center row">
+                                <div className={'col-6 text-left chip__array'}>
+                                    <ChipInput
+                                        label={'Tags'}
+                                        value={this.state.tagNames}
+                                        onAdd={chip => this.handleAddTag(chip)}
+                                        onDelete={chip => this.handleDeleteTag(chip)}/>
+                                </div>
+                                <div className={'col-6 text-center'}>
+                                    <div className={'radio text-left'}>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="sort"
+                                                   id="exampleRadios1" value="LAST_UPDATE:asc"
+                                                   checked={this.state.sort === 'LAST_UPDATE:asc'}
+                                                   onChange={event => this.setState({sort: 'LAST_UPDATE:asc'})}/>
+                                            <label className="form-check-label" htmlFor="exampleRadios1">
+                                                Sort by last update
+                                            </label>
+                                        </div>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="sort"
+                                                   id="exampleRadios2" value="NAME:asc"
+                                                   checked={this.state.sort === 'NAME:asc'}
+                                                   onChange={event => this.setState({sort: 'NAME:asc'})}/>
+                                            <label className="form-check-label" htmlFor="exampleRadios2">
+                                                Sort by name
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <button onClick={event => this.filter()} className="btn btn-primary">Submit</button>
                         </div>
-                        <button onClick={event => this.filter()} className="btn btn-primary">Submit</button>
                     </div>
                 }
                 <main>
