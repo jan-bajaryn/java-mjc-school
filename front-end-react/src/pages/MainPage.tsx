@@ -1,10 +1,13 @@
-import React, {Component} from "react";
+import React, {Component, createRef} from "react";
 import '../styles/main-page.css'
 import {BrowserRouter, RouteComponentProps, withRouter} from "react-router-dom";
 import axios from "axios";
 import Certificate from "../entity/Certificate";
 import Header from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.css';
+import ChipInput from 'material-ui-chip-input'
+
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -12,17 +15,20 @@ interface IProps extends RouteComponentProps<any> {
 
 interface IState {
     items: Certificate[];
-    tagNames?: string;
-    pageSize: number;
-    pageNumber: number;
+
+    tagNames: string[];
+    sort?: string;
+
     partName: string;
     partDescription: string;
-    sort?: string;
     displayFilters: boolean;
+    pageSize: number;
+    pageNumber: number;
 
     itemCount?: number;
-    totalCount: number;
+    totalPageCount: number;
 }
+
 
 class MainPage extends Component<IProps, IState> {
 
@@ -38,8 +44,11 @@ class MainPage extends Component<IProps, IState> {
             itemCount: this.calcItemCount(),
             pageNumber: 1,
             pageSize: 5,
-            totalCount: 1000
-        });
+            totalPageCount: 1000,
+            tagNames: [],
+            // sort: new Map([['NAME', 'asc'], ['LAST_UPDATE', 'DE']])
+            sort: 'LAST_UPDATE:asc'
+        })
         console.log('before build search')
     }
 
@@ -57,7 +66,7 @@ class MainPage extends Component<IProps, IState> {
         const query = new URLSearchParams(location);
         let tagNames = query.get('tagNames');
         if (tagNames) {
-            this.setState({tagNames: tagNames})
+            this.setState({tagNames: tagNames.split(',')})
         }
         let pageSize = query.get('pageSize');
         if (pageSize) {
@@ -93,13 +102,15 @@ class MainPage extends Component<IProps, IState> {
         console.log("loadResources, location = " + location);
 
         axios.get(endpoint).then(res => {
-            let data = res.data._embedded.giftCertificateDtoList;
+            let data = res.data.items;
+            let totalPageCount = res.data.totalPageCount;
             console.log("data = " + data)
+            console.log("totalPageCount = " + totalPageCount)
             let list: Certificate[] = this.parseCertificateList(data);
-            this.setState({items: list});
+            this.setState({items: list, totalPageCount: totalPageCount});
         }).catch((error) => {
             console.log("error = " + error);
-            this.setState({items: []})
+            this.setState({items: [], totalPageCount: 1000})
         });
     }
 
@@ -113,30 +124,81 @@ class MainPage extends Component<IProps, IState> {
     }
 
 
+    handleAddTag = (chip) => {
+        this.setState(prev => ({
+            tagNames: [...prev.tagNames, chip]
+        }));
+    }
+    handleDeleteTag = (chip) => {
+        this.setState({
+            tagNames: this.state.tagNames.filter((e) => e !== chip)
+        });
+    }
+
     render() {
         return (
 
             <div>
                 <Header cartItems={this.state.itemCount}/>
-                <div className={'container'}>
-                    <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Filter</button>
+                <div className={'container my-3'}>
+                    {
+                        this.state.displayFilters ?
+                            <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Hide
+                                filters</button>
+                            :
+                            <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Show
+                                Filters</button>
+                    }
                 </div>
                 {
                     this.state.displayFilters &&
-                    <div className={'form__container row text-center mx-5'}>
-                        <div className="form-group col-6">
-                            <label htmlFor="partName">Name</label>
-                            <input type="text" className="form-control" placeholder="Enter name" id="partName"
-                                   value={this.state.partName}
-                                   onChange={event => this.setState({partName: event.target.value})}/>
+                    <div className={'form__container mx-5 mb-5'}>
+                        <div className={'row text-center'}>
+                            <div className="form-group col-6">
+                                <label htmlFor="partName">Name</label>
+                                <input type="text" className="form-control" placeholder="Enter name" id="partName"
+                                       value={this.state.partName}
+                                       onChange={event => this.setState({partName: event.target.value})}/>
+                            </div>
+                            <div className="form-group col-6">
+                                <label htmlFor="partDescription">Description</label>
+                                <input type="text" className="form-control" placeholder="Enter description"
+                                       id="partDescription" value={this.state.partDescription}
+                                       onChange={event => this.setState({partDescription: event.target.value})}/>
+                            </div>
                         </div>
-                        <div className="form-group col-6">
-                            <label htmlFor="partDescription">Description</label>
-                            <input type="text" className="form-control" placeholder="Enter description"
-                                   id="partDescription" value={this.state.partDescription}
-                                   onChange={event => this.setState({partDescription: event.target.value})}/>
+                        <div className="form-group text-center row">
+                            <div className={'col-6 text-left'}>
+                                <ChipInput
+                                    label={'Tags'}
+                                    value={this.state.tagNames}
+                                    onAdd={chip => this.handleAddTag(chip)}
+                                    onDelete={chip => this.handleDeleteTag(chip)}/>
+                            </div>
+                            <div className={'col-6 text-center'}>
+                                <div className={'radio text-left'}>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="sort"
+                                               id="exampleRadios1" value="LAST_UPDATE:asc"
+                                               checked={this.state.sort === 'LAST_UPDATE:asc'}
+                                               onChange={event => this.setState({sort: 'LAST_UPDATE:asc'})}/>
+                                        <label className="form-check-label" htmlFor="exampleRadios1">
+                                            Sort by last update
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="sort"
+                                               id="exampleRadios2" value="NAME:asc"
+                                               checked={this.state.sort === 'NAME:asc'}
+                                               onChange={event => this.setState({sort: 'NAME:asc'})}/>
+                                        <label className="form-check-label" htmlFor="exampleRadios2">
+                                            Sort by name
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button onClick={event => this.filter(event)} className="btn btn-primary">Filter</button>
+                        <button onClick={event => this.filter()} className="btn btn-primary">Submit</button>
                     </div>
                 }
                 <main>
@@ -154,17 +216,21 @@ class MainPage extends Component<IProps, IState> {
                                             {el.name}
                                         </div>
                                         <div className="icon">
-                                            <i className="material-icons">
-                                                favorite
-                                            </i>
                                         </div>
                                         <div className="brief_description">
                                             {el.description.substr(0, 41)}
                                         </div>
                                         <div className="expires_in">
-                                            Expires in 3 days
                                         </div>
                                     </div>
+                                    <div className="tag_display">
+                                        {
+                                            el.tags.map((value, index) => (
+                                                <span key={index} className={'tag_holder'}>#{value}</span>
+                                            ))
+                                        }
+                                    </div>
+
                                     <div className="line"/>
                                     <div className="price_part">
                                         <div className="price">
@@ -187,43 +253,66 @@ class MainPage extends Component<IProps, IState> {
                                 <li className="page-item disabled"><a className="page-link"
                                                                       href="?">Previous</a></li>
                                 :
-                                <li className="page-item"><a className="page-link" href="?">Previous</a>
+                                <li className="page-item">
+                                    <a className="page-link" href="?"
+                                       onClick={event => this.onClickPagination(event, this.state.pageNumber - 1)}>
+                                        Previous
+                                    </a>
                                 </li>
                         }
                         {
                             [this.state.pageNumber - 3, this.state.pageNumber - 2, this.state.pageNumber - 1].map((value, index) => (
                                     value >= 1 &&
-                                    <li key={index} className="page-item active"><a className="page-link"
-                                                                                    href="?">{value}</a></li>
+                                    <li key={index} className="page-item">
+                                        <a className="page-link"
+                                           href="?" onClick={event => this.onClickPagination(event, value)}>
+                                            {value}
+                                        </a>
+                                    </li>
                                 )
                             )
                         }
 
-
-                        <li className="page-item active"><a className="page-link"
-                                                            href="?">{this.state.pageNumber}</a></li>
+                        <li className="page-item active">
+                            <a className="page-link"
+                               href="?" onClick={event => this.onClickPagination(event, this.state.pageNumber)}>
+                                {this.state.pageNumber}
+                            </a>
+                        </li>
 
                         {
                             [this.state.pageNumber + 1, this.state.pageNumber + 2, this.state.pageNumber + 3].map((value, index) => (
-                                    value >= 1 &&
-                                    <li key={index} className="page-item"><a className="page-link"
-                                                                             href="?">{value}</a></li>
+                                    this.state.totalPageCount >= value &&
+                                    <li key={index} className="page-item">
+                                        <a className="page-link"
+                                           href="?" onClick={event => this.onClickPagination(event, value)}>
+                                            {value}
+                                        </a>
+                                    </li>
                                 )
                             )
                         }
                         {
-                            (this.state.totalCount / this.state.pageSize) <= this.state.pageNumber ?
-                                <li className="page-item disabled"><a className="page-link"
-                                                                      href="?">Next</a></li>
+                            this.state.totalPageCount > this.state.pageNumber ?
+                                <li className="page-item">
+                                    <a className="page-link" href="?"
+                                       onClick={event => this.onClickPagination(event, this.state.pageNumber + 1)}>
+                                        Next
+                                    </a>
+                                </li>
                                 :
-                                <li className="page-item"><a className="page-link" href="?">Next</a></li>
+                                <li className="page-item disabled">
+                                    <a className="page-link" href="?">
+                                        Next
+                                    </a>
+                                </li>
                         }
                     </ul>
 
                     <div className="form-group w-10 col-1">
                         <label>
-                            <select className="form-control btn-lg" value={this.state.pageNumber}
-                                    onChange={event => this.setState({pageSize: Number.parseInt(event.target.value)})}>
+                            <select className="form-control btn-lg" value={this.state.pageSize}
+                                    onChange={event => this.changePageSize(event)}>
                                 <option>5</option>
                                 <option>10</option>
                                 <option>15</option>
@@ -240,26 +329,45 @@ class MainPage extends Component<IProps, IState> {
         )
     }
 
-    private filter(event: React.MouseEvent<HTMLButtonElement>) {
+    private changePageSize(event: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState(prev => (({pageNumber: 1, pageSize: Number.parseInt(event.target.value)})),
+            () => this.filter());
+    }
+
+    private filter() {
         console.log("this.state.partName = " + this.state.partName)
         console.log("this.state.partDescription = " + this.state.partDescription)
         console.log("this.state.pageSize = " + this.state.pageSize)
+        console.log("this.state.pageNumber = " + this.state.pageNumber)
         const query = new URLSearchParams(this.props.location.search);
-        if (this.state.partName) {
-            query.set('partName', this.state.partName);
-        } else {
-            query.delete('partDescription');
-        }
-
-        if (this.state.partDescription) {
-            query.set('partDescription', this.state.partDescription);
-        } else {
-            query.delete('partDescription');
-        }
+        this.setParamQuery(query, this.state.partName, 'partName');
+        this.setParamQuery(query, this.state.partDescription, 'partDescription');
+        this.setParamQuery(query, this.state.pageNumber, 'pageNumber');
+        this.setParamQuery(query, this.state.pageSize, 'pageSize');
+        this.setParamQuery(query, this.state.sort, 'sort');
+        this.setParamQueryArray(query, this.state.tagNames, 'tagNames');
         let path = "?" + query.toString();
         this.props.history.replace(path);
         this.loadResources(path);
         this.buildSearch(path);
+    }
+
+    private setParamQueryArray(query: URLSearchParams, values: string[], name: string) {
+        console.log("enter method setParamQueryArray")
+        if (values.length !== 0) {
+            console.log("set something")
+            query.set(name, values.join(','));
+        } else {
+            query.delete(name);
+        }
+    }
+
+    private setParamQuery(query: URLSearchParams, value: any, name: string) {
+        if (value) {
+            query.set(name, value);
+        } else {
+            query.delete(name);
+        }
     }
 
     private addCard(id: number, event: React.MouseEvent<HTMLButtonElement>) {
@@ -280,6 +388,23 @@ class MainPage extends Component<IProps, IState> {
         this.setState(prevState => ({
             displayFilters: !prevState.displayFilters
         }));
+    }
+
+    private onClickPagination(event: React.MouseEvent<HTMLAnchorElement>, input: number) {
+        event.preventDefault();
+        console.log("onclick pagination = " + input)
+        this.setState({pageNumber: input}, () => this.filter());
+    }
+
+    private parseSort(sort: string): Map<string, string> {
+        let map: Map<string, string> = new Map<string, string>();
+        if (sort) {
+            sort.split(',').forEach(value => {
+                let strings = value.split(':');
+                map.set(strings[0], strings[1]);
+            })
+        }
+        return map;
     }
 }
 

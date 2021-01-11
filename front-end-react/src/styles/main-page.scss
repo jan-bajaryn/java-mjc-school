@@ -4,8 +4,12 @@ $imageCategorySize: 50px;
 
 
 @keyframes img-ani {
-  from{opacity:0;}
-  to{opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .category_list {
@@ -92,11 +96,23 @@ main {
 
       }
 
+      .tag_display {
+        display: flex;
+        flex-wrap: wrap;
+
+        span.tag_holder {
+          margin: 0 5px;
+        }
+
+      }
+
+
       .line {
         border-top: 1px solid #f5f5f5;
       }
 
       .price_part {
+        align-self: flex-end;
         display: flex;
         justify-content: space-between;
         align-items: center;

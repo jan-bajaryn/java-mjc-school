@@ -78,10 +78,18 @@ main .coupon_list .coupon_card .description_part .icon i {
   margin-right: 10px;
   color: #757575;
 }
+main .coupon_list .coupon_card .tag_display {
+  display: flex;
+  flex-wrap: wrap;
+}
+main .coupon_list .coupon_card .tag_display span.tag_holder {
+  margin: 0 5px;
+}
 main .coupon_list .coupon_card .line {
   border-top: 1px solid #f5f5f5;
 }
 main .coupon_list .coupon_card .price_part {
+  align-self: flex-end;
   display: flex;
   justify-content: space-between;
   align-items: center;

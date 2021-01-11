@@ -14,8 +14,8 @@ import com.epam.mjc.api.service.help.OrderService;
 import com.epam.mjc.api.service.help.UserService;
 import com.epam.mjc.core.service.validator.CountValidator;
 import com.epam.mjc.core.service.validator.OrderValidator;
+import com.epam.mjc.core.service.validator.PaginationValidator;
 import com.epam.mjc.core.service.validator.UserValidator;
-import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,33 +40,33 @@ public class OrderServiceImpl implements OrderService {
     private final OrderValidator orderValidator;
     private final UserValidator userValidator;
     private final GiftCertificateService giftCertificateService;
-    private final PaginationCalculator paginationCalculator;
     private final CountValidator countValidator;
     private final PurchaseCertificateService purchaseCertificateService;
+    private final PaginationValidator paginationValidator;
 
     @Autowired
-    public OrderServiceImpl(OrderRepo orderRepo, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService, PaginationCalculator paginationCalculator, CountValidator countValidator, PurchaseCertificateService purchaseCertificateService) {
+    public OrderServiceImpl(OrderRepo orderRepo, UserService userService, OrderValidator orderValidator, UserValidator userValidator, GiftCertificateService giftCertificateService, CountValidator countValidator, PurchaseCertificateService purchaseCertificateService, PaginationValidator paginationValidator) {
         this.orderRepo = orderRepo;
         this.userService = userService;
         this.orderValidator = orderValidator;
         this.userValidator = userValidator;
         this.giftCertificateService = giftCertificateService;
-        this.paginationCalculator = paginationCalculator;
         this.countValidator = countValidator;
         this.purchaseCertificateService = purchaseCertificateService;
+        this.paginationValidator = paginationValidator;
     }
 
     @Override
     public List<Order> search(Long userId, Integer pageNumber, Integer pageSize) {
-
+        paginationValidator.validatePagination(pageNumber, pageSize);
         if (userId == null) {
-            return orderRepo.findAll(PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)).getContent();
+            return orderRepo.findAll(PageRequest.of(pageNumber-1, pageSize)).getContent();
         }
 
         userValidator.validateIdNullable(userId);
         return orderRepo.findAllByUserId(
                 userId,
-                PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)
+                PageRequest.of(pageNumber, pageSize)
         );
     }
 

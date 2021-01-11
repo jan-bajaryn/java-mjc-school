@@ -1,9 +1,11 @@
 package com.epam.mjc.core.service;
 
+import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Role;
 import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import com.epam.mjc.api.service.SecurityService;
@@ -14,7 +16,7 @@ import com.epam.mjc.api.service.mapper.TagNameMapper;
 import com.epam.mjc.api.util.HateoasManager;
 import com.epam.mjc.api.util.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,15 +87,16 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public CollectionModel<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize) {
+    public GiftCertificateCollectionDto search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize) {
         Optional<User> principal = securityService.getPrincipal();
 
 
+        Page<GiftCertificate> search = service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)), pageNumber, pageSize);
         List<GiftCertificateDto> giftCertificateDtos = giftCertificateDtoMapper.toGiftCertificateDto(
-                service.search(new SearchParams(tagNameMapper.toTagNameList(tagName), partName, partDescription, sortMapper.toSortParams(sort)), pageNumber, pageSize)
+                search.getContent()
         );
 
-        CollectionModel<GiftCertificateDto> model = new CollectionModel<>(giftCertificateDtos);
+        GiftCertificateCollectionDto model = new GiftCertificateCollectionDto(search.getTotalPages(), giftCertificateDtos);
 
         if (principal.isPresent() && principal.get().getRole() == Role.ADMIN) {
             hateoasManager.certificateCollectionLinksAdmin(model);
@@ -103,4 +106,5 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
 
         return model;
     }
+
 }

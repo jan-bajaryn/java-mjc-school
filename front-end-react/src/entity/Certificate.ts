@@ -80,7 +80,9 @@ export default class Certificate {
         cert.price = obj.price;
         cert.createDate = new Date(obj.createDate)
         cert.lastUpdateDate = new Date(obj.lastUpdateDate)
-        cert.tags = [];
+        cert.tags = obj.tags.map(t => t.name);
+        console.log('cert.tags[0] = ' + cert.tags[0])
+        console.log('cert.tags[1] = ' + cert.tags[1])
         return cert;
     }
 }

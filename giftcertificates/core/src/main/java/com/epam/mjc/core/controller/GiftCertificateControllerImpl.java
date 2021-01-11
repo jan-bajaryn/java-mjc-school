@@ -3,12 +3,12 @@ package com.epam.mjc.core.controller;
 import com.epam.mjc.api.controller.GiftCertificateController;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
+import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,7 +71,7 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     }
 
     @Override
-    public ResponseEntity<CollectionModel<GiftCertificateDto>> certificateSearch(
+    public ResponseEntity<GiftCertificateCollectionDto> certificateSearch(
             @RequestParam(required = false, name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,
@@ -83,6 +83,5 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
                 giftCertificateReturnService.search(tagNames, partName, partDescription, sort, pageNumber, pageSize)
         );
     }
-
 
 }

@@ -6,7 +6,7 @@ import com.epam.mjc.api.service.exception.TagAlreadyExistsException;
 import com.epam.mjc.api.service.exception.TagNotFoundException;
 import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.validator.TagValidator;
-import com.epam.mjc.core.util.PaginationCalculator;
+import com.epam.mjc.core.service.validator.PaginationValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -24,21 +24,21 @@ import java.util.stream.Stream;
 public class TagServiceImpl implements TagService {
     private final TagRepo tagRepo;
     private final TagValidator tagValidator;
-    private final PaginationCalculator paginationCalculator;
-
+    private final PaginationValidator paginationValidator;
 
     private static final Logger log = LoggerFactory.getLogger(TagServiceImpl.class);
 
-    public TagServiceImpl(TagRepo tagRepo, TagValidator tagValidator, PaginationCalculator paginationCalculator) {
+    public TagServiceImpl(TagRepo tagRepo, TagValidator tagValidator, PaginationValidator paginationValidator) {
         this.tagRepo = tagRepo;
         this.tagValidator = tagValidator;
-        this.paginationCalculator = paginationCalculator;
+        this.paginationValidator = paginationValidator;
     }
 
 
     @Override
     public List<Tag> findAll(Integer pageNumber, Integer pageSize) {
-        return tagRepo.findAll(PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)).getContent();
+        paginationValidator.validatePagination(pageNumber, pageSize);
+        return tagRepo.findAll(PageRequest.of(pageNumber-1, pageSize)).getContent();
     }
 
     @Override
@@ -82,8 +82,8 @@ public class TagServiceImpl implements TagService {
         List<Tag> existing =
                 tagRepo.findAllExistingByNames(
                         tags.stream()
-                        .map(Tag::getName)
-                        .collect(Collectors.toList())
+                                .map(Tag::getName)
+                                .collect(Collectors.toList())
                 );
 
         List<Tag> toAdd = new ArrayList<>(tags);
@@ -110,7 +110,6 @@ public class TagServiceImpl implements TagService {
         }
         throw new IllegalArgumentException();
     }
-
 
 
     @Override

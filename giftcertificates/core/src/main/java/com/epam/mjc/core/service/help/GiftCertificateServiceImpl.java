@@ -12,10 +12,11 @@ import com.epam.mjc.api.service.help.TagService;
 import com.epam.mjc.api.service.validator.GiftCertificateValidator;
 import com.epam.mjc.api.util.SearchParams;
 import com.epam.mjc.api.util.sort.SortParam;
-import com.epam.mjc.core.util.PaginationCalculator;
+import com.epam.mjc.core.service.validator.PaginationValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,16 +31,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateRepo giftCertificateRepo;
     private final TagService tagService;
     private final GiftCertificateValidator giftCertificateValidator;
-    private final PaginationCalculator paginationCalculator;
+    private final PaginationValidator paginationValidator;
 
     private static final Logger log = LoggerFactory.getLogger(GiftCertificateServiceImpl.class);
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateRepo giftCertificateRepo, TagService tagService, GiftCertificateValidator giftCertificateValidator, PaginationCalculator paginationCalculator) {
+    public GiftCertificateServiceImpl(GiftCertificateRepo giftCertificateRepo, TagService tagService, GiftCertificateValidator giftCertificateValidator, PaginationValidator paginationValidator) {
         this.giftCertificateRepo = giftCertificateRepo;
         this.tagService = tagService;
         this.giftCertificateValidator = giftCertificateValidator;
-        this.paginationCalculator = paginationCalculator;
+        this.paginationValidator = paginationValidator;
     }
 
     @Override
@@ -127,22 +128,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     //end insert
 
 
-
-
-
-
-
     @Override
     @Transactional(readOnly = true)
-    public List<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize) {
+    public Page<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize) {
 
+        paginationValidator.validatePagination(pageNumber, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize, buildSort(searchParams));
 
-        PageRequest pageRequest = PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize, buildSort(searchParams));
-
-        return giftCertificateRepo.findAll(
+        Page<GiftCertificate> all = giftCertificateRepo.findAll(
                 GiftCertificateSpecification.search(searchParams.getPartName(), searchParams.getPartDescription(), searchParams.getTagNames()),
                 pageRequest
-        ).getContent();
+        );
+        return all;
     }
 
     private Sort buildSort(SearchParams searchParams) {

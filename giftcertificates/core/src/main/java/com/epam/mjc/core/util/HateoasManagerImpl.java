@@ -6,6 +6,7 @@ import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.model.TagForCreate;
+import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.model.dto.OrderDto;
 import com.epam.mjc.api.model.dto.TagDto;
@@ -119,8 +120,8 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void certificateCollectionLinksAdmin(CollectionModel<GiftCertificateDto> model) {
-        for (GiftCertificateDto giftCertificateDto : model) {
+    public void certificateCollectionLinksAdmin(GiftCertificateCollectionDto model) {
+        for (GiftCertificateDto giftCertificateDto : model.getItems()) {
             setSelfLinksAdmin(giftCertificateDto);
         }
         model.add(linkTo(GiftCertificateControllerImpl.class).withSelfRel());
@@ -132,8 +133,8 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void certificateCollectionLinksNotAdmin(CollectionModel<GiftCertificateDto> model) {
-        for (GiftCertificateDto giftCertificateDto : model) {
+    public void certificateCollectionLinksNotAdmin(GiftCertificateCollectionDto model) {
+        for (GiftCertificateDto giftCertificateDto : model.getItems()) {
             setSelfLinksNotAdmin(giftCertificateDto);
         }
         model.add(linkTo(GiftCertificateControllerImpl.class).withSelfRel());

@@ -2,8 +2,7 @@ package com.epam.mjc.api.service.help;
 
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.util.SearchParams;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Service interface to work with {@link GiftCertificate}
@@ -55,8 +54,10 @@ public interface GiftCertificateService {
      *
      * @param searchParams {@link SearchParams} parameters to search {@link GiftCertificate}
      *                     from database
+     * @return
      */
-    List<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize);
+    Page<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize);
 
     GiftCertificate findByName(String name);
+
 }

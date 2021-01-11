@@ -7,8 +7,8 @@ import com.epam.mjc.api.service.exception.UserAlreadyExistsException;
 import com.epam.mjc.api.service.exception.UserNotFoundException;
 import com.epam.mjc.api.service.help.UserService;
 import com.epam.mjc.core.service.auth.CustomPasswordEncoder;
+import com.epam.mjc.core.service.validator.PaginationValidator;
 import com.epam.mjc.core.service.validator.UserValidator;
-import com.epam.mjc.core.util.PaginationCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,22 +25,23 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final UserValidator userValidator;
-    private final PaginationCalculator paginationCalculator;
     private final CustomPasswordEncoder customPasswordEncoder;
+    private final PaginationValidator paginationValidator;
 
     @Autowired
-    public UserServiceImpl(UserRepo userRepo, UserValidator userValidator, PaginationCalculator paginationCalculator, CustomPasswordEncoder customPasswordEncoder) {
+    public UserServiceImpl(UserRepo userRepo, UserValidator userValidator, CustomPasswordEncoder customPasswordEncoder, PaginationValidator paginationValidator) {
         this.userRepo = userRepo;
         this.userValidator = userValidator;
-        this.paginationCalculator = paginationCalculator;
         this.customPasswordEncoder = customPasswordEncoder;
+        this.paginationValidator = paginationValidator;
     }
 
 
     @Override
     public List<User> findAll(Integer pageNumber, Integer pageSize) {
         log.debug("findAll: pageSize = {}", pageSize);
-        return userRepo.findAll(PageRequest.of(paginationCalculator.calculateBegin(pageNumber, pageSize), pageSize)).getContent();
+        paginationValidator.validatePagination(pageNumber, pageSize);
+        return userRepo.findAll(PageRequest.of(pageNumber-1, pageSize)).getContent();
     }
 
     @Override
