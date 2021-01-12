@@ -9,6 +9,7 @@ import ChipInput from 'material-ui-chip-input'
 
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import AuthorizationHandleService from "../errhandle/AuthorizationHandleService";
+import Pagination from "../components/Pagination";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -252,67 +253,9 @@ class MainPage extends Component<IProps, IState> {
                 </main>
 
                 <div className={'row m-5 align-middle'}>
-                    <ul className="pagination justify-content-center pagination-lg col-11">
-                        {
-                            (!this.state.pageNumber || this.state.pageNumber <= 1) ?
-                                <li className="page-item disabled"><a className="page-link"
-                                                                      href="?">Previous</a></li>
-                                :
-                                <li className="page-item">
-                                    <a className="page-link" href="?"
-                                       onClick={event => this.onClickPagination(event, this.state.pageNumber - 1)}>
-                                        Previous
-                                    </a>
-                                </li>
-                        }
-                        {
-                            [this.state.pageNumber - 3, this.state.pageNumber - 2, this.state.pageNumber - 1].map((value, index) => (
-                                    value >= 1 &&
-                                    <li key={index} className="page-item">
-                                        <a className="page-link"
-                                           href="?" onClick={event => this.onClickPagination(event, value)}>
-                                            {value}
-                                        </a>
-                                    </li>
-                                )
-                            )
-                        }
-
-                        <li className="page-item active">
-                            <a className="page-link"
-                               href="?" onClick={event => this.onClickPagination(event, this.state.pageNumber)}>
-                                {this.state.pageNumber}
-                            </a>
-                        </li>
-
-                        {
-                            [this.state.pageNumber + 1, this.state.pageNumber + 2, this.state.pageNumber + 3].map((value, index) => (
-                                    this.state.totalPageCount >= value &&
-                                    <li key={index} className="page-item">
-                                        <a className="page-link"
-                                           href="?" onClick={event => this.onClickPagination(event, value)}>
-                                            {value}
-                                        </a>
-                                    </li>
-                                )
-                            )
-                        }
-                        {
-                            this.state.totalPageCount > this.state.pageNumber ?
-                                <li className="page-item">
-                                    <a className="page-link" href="?"
-                                       onClick={event => this.onClickPagination(event, this.state.pageNumber + 1)}>
-                                        Next
-                                    </a>
-                                </li>
-                                :
-                                <li className="page-item disabled">
-                                    <a className="page-link" href="?">
-                                        Next
-                                    </a>
-                                </li>
-                        }
-                    </ul>
+                    <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
+                                totalPageCount={this.state.totalPageCount}
+                                onClickPagination={(event, input) => this.onClickPagination(event, input)}/>
 
                     <div className="form-group w-10 col-1">
                         <label>
