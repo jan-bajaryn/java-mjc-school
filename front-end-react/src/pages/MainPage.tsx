@@ -42,7 +42,7 @@ class MainPage extends Component<IProps, IState> {
             displayFilters: true,
             partName: '',
             partDescription: '',
-            itemCount: this.calcItemCount(),
+            itemCount: MainPage.calcItemCount(),
             pageNumber: 1,
             pageSize: 5,
             totalPageCount: 1000,
@@ -53,7 +53,7 @@ class MainPage extends Component<IProps, IState> {
         console.log('before build search')
     }
 
-    private calcItemCount() {
+    private static calcItemCount() {
         let item = localStorage.getItem('cart');
         if (item == null) {
             return null;
@@ -107,7 +107,7 @@ class MainPage extends Component<IProps, IState> {
             let totalPageCount = res.data.totalPageCount;
             console.log("data = " + data)
             console.log("totalPageCount = " + totalPageCount)
-            let list: Certificate[] = this.parseCertificateList(data);
+            let list: Certificate[] = MainPage.parseCertificateList(data);
             this.setState({items: list, totalPageCount: totalPageCount});
         }).catch((error) => {
             console.log("error = " + error);
@@ -119,7 +119,7 @@ class MainPage extends Component<IProps, IState> {
         });
     }
 
-    private parseCertificateList(data: any): Certificate[] {
+    private static parseCertificateList(data: any): Certificate[] {
         let list: Certificate[] = [];
         for (let i = 0; i < data.length; i++) {
             let obj = data[i];
@@ -148,10 +148,10 @@ class MainPage extends Component<IProps, IState> {
                 <div className={'container my-3 pt-5'}>
                     {
                         this.state.displayFilters ?
-                            <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Hide
+                            <button className={'btn btn-primary'} onClick={() => this.toggleFilter()}>Hide
                                 filters</button>
                             :
-                            <button className={'btn btn-primary'} onClick={e => this.toggleFilter(e)}>Show
+                            <button className={'btn btn-primary'} onClick={() => this.toggleFilter()}>Show
                                 Filters</button>
                     }
                 </div>
@@ -185,7 +185,7 @@ class MainPage extends Component<IProps, IState> {
                                             <input className="form-check-input" type="radio" name="sort"
                                                    id="exampleRadios1" value="LAST_UPDATE:asc"
                                                    checked={this.state.sort === 'LAST_UPDATE:asc'}
-                                                   onChange={event => this.setState({sort: 'LAST_UPDATE:asc'})}/>
+                                                   onChange={() => this.setState({sort: 'LAST_UPDATE:asc'})}/>
                                             <label className="form-check-label" htmlFor="exampleRadios1">
                                                 Sort by last update
                                             </label>
@@ -194,7 +194,7 @@ class MainPage extends Component<IProps, IState> {
                                             <input className="form-check-input" type="radio" name="sort"
                                                    id="exampleRadios2" value="NAME:asc"
                                                    checked={this.state.sort === 'NAME:asc'}
-                                                   onChange={event => this.setState({sort: 'NAME:asc'})}/>
+                                                   onChange={() => this.setState({sort: 'NAME:asc'})}/>
                                             <label className="form-check-label" htmlFor="exampleRadios2">
                                                 Sort by name
                                             </label>
@@ -202,7 +202,7 @@ class MainPage extends Component<IProps, IState> {
                                     </div>
                                 </div>
                             </div>
-                            <button onClick={event => this.filter()} className="btn btn-primary">Submit</button>
+                            <button onClick={() => this.filter()} className="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 }
@@ -242,7 +242,7 @@ class MainPage extends Component<IProps, IState> {
                                             ${el.price}
                                         </div>
                                         <div className="add_to_card">
-                                            <button onClick={event => this.addCard(el.id, event)}>Add to Cart</button>
+                                            <button onClick={() => this.addCard(el.id)}>Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>
@@ -335,7 +335,7 @@ class MainPage extends Component<IProps, IState> {
     }
 
     private changePageSize(event: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState(prev => (({pageNumber: 1, pageSize: Number.parseInt(event.target.value)})),
+        this.setState(() => (({pageNumber: 1, pageSize: Number.parseInt(event.target.value)})),
             () => this.filter());
     }
 
@@ -345,19 +345,19 @@ class MainPage extends Component<IProps, IState> {
         console.log("this.state.pageSize = " + this.state.pageSize)
         console.log("this.state.pageNumber = " + this.state.pageNumber)
         const query = new URLSearchParams(this.props.location.search);
-        this.setParamQuery(query, this.state.partName, 'partName');
-        this.setParamQuery(query, this.state.partDescription, 'partDescription');
-        this.setParamQuery(query, this.state.pageNumber, 'pageNumber');
-        this.setParamQuery(query, this.state.pageSize, 'pageSize');
-        this.setParamQuery(query, this.state.sort, 'sort');
-        this.setParamQueryArray(query, this.state.tagNames, 'tagNames');
+        MainPage.setParamQuery(query, this.state.partName, 'partName');
+        MainPage.setParamQuery(query, this.state.partDescription, 'partDescription');
+        MainPage.setParamQuery(query, this.state.pageNumber, 'pageNumber');
+        MainPage.setParamQuery(query, this.state.pageSize, 'pageSize');
+        MainPage.setParamQuery(query, this.state.sort, 'sort');
+        MainPage.setParamQueryArray(query, this.state.tagNames, 'tagNames');
         let path = "?" + query.toString();
         this.props.history.replace(path);
         this.loadResources(path);
         this.buildSearch(path);
     }
 
-    private setParamQueryArray(query: URLSearchParams, values: string[], name: string) {
+    private static setParamQueryArray(query: URLSearchParams, values: string[], name: string) {
         console.log("enter method setParamQueryArray")
         if (values.length !== 0) {
             console.log("set something")
@@ -367,7 +367,7 @@ class MainPage extends Component<IProps, IState> {
         }
     }
 
-    private setParamQuery(query: URLSearchParams, value: any, name: string) {
+    private static setParamQuery(query: URLSearchParams, value: any, name: string) {
         if (value) {
             query.set(name, value);
         } else {
@@ -375,7 +375,7 @@ class MainPage extends Component<IProps, IState> {
         }
     }
 
-    private addCard(id: number, event: React.MouseEvent<HTMLButtonElement>) {
+    private addCard(id: number) {
         console.log("executed");
         let item = localStorage.getItem('cart');
         console.log(item);
@@ -389,7 +389,7 @@ class MainPage extends Component<IProps, IState> {
         }
     }
 
-    private toggleFilter(event: any): void {
+    private toggleFilter(): void {
         this.setState(prevState => ({
             displayFilters: !prevState.displayFilters
         }));
@@ -401,16 +401,16 @@ class MainPage extends Component<IProps, IState> {
         this.setState({pageNumber: input}, () => this.filter());
     }
 
-    private parseSort(sort: string): Map<string, string> {
-        let map: Map<string, string> = new Map<string, string>();
-        if (sort) {
-            sort.split(',').forEach(value => {
-                let strings = value.split(':');
-                map.set(strings[0], strings[1]);
-            })
-        }
-        return map;
-    }
+    // private parseSort(sort: string): Map<string, string> {
+    //     let map: Map<string, string> = new Map<string, string>();
+    //     if (sort) {
+    //         sort.split(',').forEach(value => {
+    //             let strings = value.split(':');
+    //             map.set(strings[0], strings[1]);
+    //         })
+    //     }
+    //     return map;
+    // }
 }
 
 export default withRouter(MainPage);

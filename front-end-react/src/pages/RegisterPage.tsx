@@ -4,6 +4,7 @@ import '../styles/register.css'
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import Header from "../components/Header";
+import AuthorizationHandleService from "../errhandle/AuthorizationHandleService";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -30,7 +31,7 @@ class RegisterPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            itemCount: this.calcItemCount(),
+            itemCount: RegisterPage.calcItemCount(),
             bad_name: false,
             bad_password: false,
             bad_username: false,
@@ -38,7 +39,7 @@ class RegisterPage extends Component<IProps, IState> {
         }
     }
 
-    private calcItemCount() {
+    private static calcItemCount() {
         let item = localStorage.getItem('cart');
         if (item == null) {
             return null;
@@ -54,10 +55,10 @@ class RegisterPage extends Component<IProps, IState> {
         e.preventDefault();
         const endpoint = "http://localhost:8080/users";
 
-        let username: string = this.exctractRef(this.username);
-        let password: string = this.exctractRef(this.password);
-        let repeat_password: string = this.exctractRef(this.repeat_password);
-        let first_name: string = this.exctractRef(this.first_name);
+        let username: string = RegisterPage.exctractRef(this.username);
+        let password: string = RegisterPage.exctractRef(this.password);
+        let repeat_password: string = RegisterPage.exctractRef(this.repeat_password);
+        let first_name: string = RegisterPage.exctractRef(this.first_name);
 
         if (!this.isFormValid(username, password, repeat_password, first_name)) {
             return;
@@ -71,7 +72,7 @@ class RegisterPage extends Component<IProps, IState> {
 
         axios.post(endpoint,
             data
-        ).then(res => {
+        ).then(() => {
             this.props.history.push("/login");
         }).catch((error) => {
             if (error.response.data.errorCode === '40026') {
@@ -81,6 +82,11 @@ class RegisterPage extends Component<IProps, IState> {
                 this.setState({err_msg: error.response.data.message})
             }
             console.log("login error = " + error);
+            AuthorizationHandleService.handleTokenExpired(
+                error,
+                () => this.handleSubmit(e),
+                () => window.location.reload()
+            )
         });
 
     };
@@ -108,7 +114,7 @@ class RegisterPage extends Component<IProps, IState> {
     }
 
 
-    private exctractRef(ref: RefObject<HTMLInputElement>) {
+    private static exctractRef(ref: RefObject<HTMLInputElement>) {
         if (ref.current) {
             return ref.current.value;
         }
@@ -139,7 +145,7 @@ class RegisterPage extends Component<IProps, IState> {
                                             this.state.bad_username ?
                                                 <input type="text" id="login_name" ref={this.username}
                                                        className={'form-control is-invalid'}
-                                                       onChange={event => this.setState({bad_username: false})}/>
+                                                       onChange={() => this.setState({bad_username: false})}/>
                                                 :
                                                 <input type="text" id="login_name" ref={this.username}
                                                        className={'form-control'}/>
@@ -151,7 +157,7 @@ class RegisterPage extends Component<IProps, IState> {
                                             this.state.bad_password ?
                                                 <input type="password" id="password" ref={this.password}
                                                        className={'form-control is-invalid'}
-                                                       onChange={event => this.setState({bad_password: false})}/>
+                                                       onChange={() => this.setState({bad_password: false})}/>
                                                 :
                                                 <input type="password" id="password" ref={this.password}
                                                        className={'form-control'}/>
@@ -167,7 +173,7 @@ class RegisterPage extends Component<IProps, IState> {
                                             this.state.bad_name ?
                                                 <input type="text" id="first_name" ref={this.first_name}
                                                        className={'form-control is-invalid'}
-                                                       onChange={event => this.setState({bad_name: false})}/>
+                                                       onChange={() => this.setState({bad_name: false})}/>
                                                 :
                                                 <input type="text" id="first_name" ref={this.first_name}
                                                        className={'form-control'}/>
@@ -180,7 +186,7 @@ class RegisterPage extends Component<IProps, IState> {
                                             this.state.bad_repeat_password ?
                                                 <input type="password" id="repeat_password" ref={this.repeat_password}
                                                        className={'form-control is-invalid'}
-                                                       onChange={event => this.setState({bad_repeat_password: false})}/>
+                                                       onChange={() => this.setState({bad_repeat_password: false})}/>
                                                 :
                                                 <input type="password" id="repeat_password" ref={this.repeat_password}
                                                        className={'form-control'}/>

@@ -23,7 +23,7 @@ class LoginPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            itemCount: this.calcItemCount(),
+            itemCount: LoginPage.calcItemCount(),
             bad_credentials: false,
             bad_username: false,
             bad_password: false
@@ -31,7 +31,7 @@ class LoginPage extends Component<IProps, IState> {
 
     }
 
-    private calcItemCount() {
+    private static calcItemCount() {
         let item = localStorage.getItem('cart');
         if (item == null) {
             return null;
@@ -125,7 +125,7 @@ class LoginPage extends Component<IProps, IState> {
                                         <label>
                                             <input type="text" placeholder="Login" ref={this.username}
                                                    className={'is-invalid form-control'}
-                                                   onChange={event => this.setState({bad_username: false})}/>
+                                                   onChange={() => this.setState({bad_username: false})}/>
                                             <br/>
                                             <span className={'error_message'}>Incorrect Username</span>
                                         </label>
@@ -142,7 +142,7 @@ class LoginPage extends Component<IProps, IState> {
                                         <label>
                                             <input type="password" placeholder="Password" ref={this.password}
                                                    className={'is-invalid form-control'}
-                                                   onChange={event => this.setState({bad_password: false})}/>
+                                                   onChange={() => this.setState({bad_password: false})}/>
                                             <br/>
                                             <span className={'error_message'}>Incorrect Password</span>
                                         </label>

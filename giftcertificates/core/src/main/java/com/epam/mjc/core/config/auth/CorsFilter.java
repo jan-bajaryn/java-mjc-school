@@ -1,9 +1,8 @@
-package com.epam.mjc.config;
+package com.epam.mjc.core.config.auth;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
