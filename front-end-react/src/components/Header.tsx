@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/header.css'
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
-import Certificate from "../entity/Certificate";
 
 interface PieceProps extends RouteComponentProps<any> {
     cartItems?: number;

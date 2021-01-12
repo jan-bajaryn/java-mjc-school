@@ -1,15 +1,15 @@
-main {
+main.login {
   min-height: 85vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #f2f2f2;
 }
-main .form-login {
+main.login .form-login {
   background: #fcfcfc;
   padding: 40px 20px 20px;
 }
-main .form-login input {
+main.login .form-login input {
   width: 300px;
   height: 25px;
   margin-bottom: 10px;
@@ -20,7 +20,7 @@ main .form-login input {
   box-sizing: border-box;
   min-height: 30px;
 }
-main .form-login button {
+main.login .form-login button {
   width: 100%;
   color: #ffffff;
   background-color: #6fcf97;
@@ -30,12 +30,12 @@ main .form-login button {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
-main .logo_container {
+main.login .logo_container {
   width: 100%;
   display: flex;
   justify-content: center;
 }
-main .logo_container .logo_place {
+main.login .logo_container .logo_place {
   color: #ffffff;
   font-size: xx-large;
   background: #c4c4c4;

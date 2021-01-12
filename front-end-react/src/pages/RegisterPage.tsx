@@ -4,7 +4,7 @@ import '../styles/register.css'
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import Header from "../components/Header";
-import AuthorizationHandleService from "../errhandle/AuthorizationHandleService";
+import AuthorizationHandleService from "../services/AuthorizationHandleService";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -125,7 +125,7 @@ class RegisterPage extends Component<IProps, IState> {
         return (
             <div>
                 <Header cartItems={this.state.itemCount}/>
-                <main className={'mt-5 pt-5'}>
+                <main className={'mt-5 pt-5 register_container'}>
                     <div className="register_container">
                         <div className="logo_container">
                             <span>Register</span>

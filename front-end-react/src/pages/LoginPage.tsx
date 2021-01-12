@@ -111,7 +111,7 @@ class LoginPage extends Component<IProps, IState> {
         return (
             <div>
                 <Header cartItems={this.state.itemCount}/>
-                <main className={'pt-5 mt-5'}>
+                <main className={'pt-5 mt-5 login'}>
                     <div className="form-login">
                         <div className="logo_container">
                             <div className="logo_place">

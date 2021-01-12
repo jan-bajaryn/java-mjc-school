@@ -1,14 +1,12 @@
-import React, {Component, createRef} from "react";
+import React, {Component} from "react";
 import '../styles/main-page.css'
-import {BrowserRouter, RouteComponentProps, withRouter} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router-dom";
 import axios from "axios";
 import Certificate from "../entity/Certificate";
 import Header from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.css';
 import ChipInput from 'material-ui-chip-input'
-
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import AuthorizationHandleService from "../errhandle/AuthorizationHandleService";
+import AuthorizationHandleService from "../services/AuthorizationHandleService";
 import Pagination from "../components/Pagination";
 
 
@@ -108,7 +106,7 @@ class MainPage extends Component<IProps, IState> {
             let totalPageCount = res.data.totalPageCount;
             console.log("data = " + data)
             console.log("totalPageCount = " + totalPageCount)
-            let list: Certificate[] = MainPage.parseCertificateList(data);
+            let list: Certificate[] = Certificate.parseCertificateList(data);
             this.setState({items: list, totalPageCount: totalPageCount});
         }).catch((error) => {
             console.log("error = " + error);
@@ -119,16 +117,6 @@ class MainPage extends Component<IProps, IState> {
             )
         });
     }
-
-    private static parseCertificateList(data: any): Certificate[] {
-        let list: Certificate[] = [];
-        for (let i = 0; i < data.length; i++) {
-            let obj = data[i];
-            list.push(Certificate.parse(obj));
-        }
-        return list;
-    }
-
 
     handleAddTag = (chip) => {
         this.setState(prev => ({
@@ -207,7 +195,7 @@ class MainPage extends Component<IProps, IState> {
                         </div>
                     </div>
                 }
-                <main>
+                <main className={'main-page'}>
                     <div className="coupon_list">
                         {
                             this.state.items && this.state.items.map((el, i) => (

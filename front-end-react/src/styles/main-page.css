@@ -20,7 +20,7 @@
   color: #383838;
 }
 
-main {
+main.main-page {
   min-height: 85vh;
   display: flex;
   justify-content: center;
@@ -29,68 +29,68 @@ main {
   justify-content: flex-start;
   align-items: flex-start;
 }
-main .coupon_list {
+main.main-page .coupon_list {
   display: flex;
   flex-wrap: wrap;
   margin: 3vh 2vw;
 }
-main .coupon_list .coupon_card {
+main.main-page .coupon_list .coupon_card {
   margin: 2vh 2vw;
-  max-width: 260px;
+  width: 260px;
   background: #ffffff;
 }
-main .coupon_list .coupon_card .image_part img {
+main.main-page .coupon_list .coupon_card .image_part img {
   width: 100%;
   height: 250px;
 }
-main .coupon_list .coupon_card .description_part {
+main.main-page .coupon_list .coupon_card .description_part {
   margin: 10px;
   display: grid;
   grid-template-columns: 60% 40%;
   row-gap: 10px;
 }
-main .coupon_list .coupon_card .description_part .coupon_name {
+main.main-page .coupon_list .coupon_card .description_part .coupon_name {
   font-size: large;
 }
-main .coupon_list .coupon_card .description_part .brief_description {
+main.main-page .coupon_list .coupon_card .description_part .brief_description {
   font-size: smaller;
 }
-main .coupon_list .coupon_card .description_part .expires_in {
+main.main-page .coupon_list .coupon_card .description_part .expires_in {
   display: flex;
   justify-content: flex-end;
   font-size: smaller;
   color: #999999;
 }
-main .coupon_list .coupon_card .description_part .icon {
+main.main-page .coupon_list .coupon_card .description_part .icon {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
-main .coupon_list .coupon_card .description_part .icon i {
+main.main-page .coupon_list .coupon_card .description_part .icon i {
   margin-right: 10px;
   color: #757575;
 }
-main .coupon_list .coupon_card .tag_display {
+main.main-page .coupon_list .coupon_card .tag_display {
   display: flex;
   flex-wrap: wrap;
 }
-main .coupon_list .coupon_card .tag_display span.tag_holder {
+main.main-page .coupon_list .coupon_card .tag_display span.tag_holder {
   margin: 0 5px;
 }
-main .coupon_list .coupon_card .line {
+main.main-page .coupon_list .coupon_card .line {
   border-top: 1px solid #f5f5f5;
 }
-main .coupon_list .coupon_card .price_part {
+main.main-page .coupon_list .coupon_card .price_part {
   align-self: flex-end;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
 }
-main .coupon_list .coupon_card .price_part .price {
+main.main-page .coupon_list .coupon_card .price_part .price {
   font-size: large;
 }
-main .coupon_list .coupon_card .price_part .add_to_card button {
+main.main-page .coupon_list .coupon_card .price_part .add_to_card button {
   padding: 5px 15px;
   display: inline-block;
   border: 1px solid #bdbdbd;

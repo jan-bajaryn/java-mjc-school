@@ -1,11 +1,10 @@
-@import "header";
 @import "commons";
 
 $registerBack: #fcfcfc;
 $outBackground: #c4c4c4;
 
 
-main {
+main.register_container {
   @include onAllPage(#f2f2f2);
 
   .register_container {

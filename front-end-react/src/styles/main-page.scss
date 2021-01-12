@@ -27,7 +27,7 @@ $imageCategorySize: 50px;
   }
 }
 
-main {
+main.main-page {
   @include onAllPage(#f2f2f2);
   justify-content: flex-start;
   align-items: flex-start;
@@ -39,7 +39,7 @@ main {
 
     .coupon_card {
       margin: 2vh 2vw;
-      max-width: 260px;
+      width: 260px;
       background: $white;
 
       .image_part {

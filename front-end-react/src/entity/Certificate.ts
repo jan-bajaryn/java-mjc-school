@@ -81,8 +81,16 @@ export default class Certificate {
         cert.createDate = new Date(obj.createDate)
         cert.lastUpdateDate = new Date(obj.lastUpdateDate)
         cert.tags = obj.tags.map(t => t.name);
-        console.log('cert.tags[0] = ' + cert.tags[0])
-        console.log('cert.tags[1] = ' + cert.tags[1])
         return cert;
+    }
+
+    static parseCertificateList(data: any): Certificate[] {
+        let list: Certificate[] = [];
+        for (let i = 0; i < data.length; i++) {
+            let obj = data[i];
+            console.log('obj.name = ' + obj.name)
+            list.push(Certificate.parse(obj));
+        }
+        return list;
     }
 }
