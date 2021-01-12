@@ -5,7 +5,7 @@ axios.interceptors.request.use(
     function (config) {
         let jwtToken = localStorage.getItem("authorization");
         console.log("jwtToken = " + jwtToken);
-        if (jwtToken) {
+        if (jwtToken && !config.headers["Authorization"]) {
             config.headers["Authorization"] = "Bearer " + jwtToken;
         }
         return config;

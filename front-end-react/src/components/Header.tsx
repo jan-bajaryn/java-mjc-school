@@ -23,7 +23,9 @@ class Header extends Component<PieceProps, IState> {
     }
 
     componentDidMount() {
-        this.setState({role: localStorage.getItem('role')})
+        let item = localStorage.getItem('role');
+        console.log("Header: role = " + item);
+        this.setState({role: item})
     }
 
     render() {

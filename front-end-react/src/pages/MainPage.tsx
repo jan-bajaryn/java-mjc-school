@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import ChipInput from 'material-ui-chip-input'
 
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import AuthorizationHandleService from "../errhandle/AuthorizationHandleService";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -110,7 +111,11 @@ class MainPage extends Component<IProps, IState> {
             this.setState({items: list, totalPageCount: totalPageCount});
         }).catch((error) => {
             console.log("error = " + error);
-            this.setState({items: [], totalPageCount: 1000})
+            AuthorizationHandleService.handleTokenExpired(
+                error,
+                () => this.loadResources(location),
+                () => window.location.reload()
+            )
         });
     }
 
