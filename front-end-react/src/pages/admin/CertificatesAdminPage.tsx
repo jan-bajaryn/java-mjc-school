@@ -8,6 +8,7 @@ import Certificate from "../../entity/Certificate";
 import axios from "axios";
 import AuthorizationHandleService from "../../services/AuthorizationHandleService";
 import Pagination from "../../components/Pagination";
+import ChipInput from "material-ui-chip-input";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -25,6 +26,8 @@ interface IState {
 
     itemCount?: number;
     totalPageCount: number;
+    currentItem?: Certificate;
+    err_msg?: string;
 }
 
 class CertificatesAdminPage extends Component<IProps, IState> {
@@ -59,9 +62,21 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         formatter: (cell, row) => {
             return (
                 <div>
-                    <button className={'btn btn-primary'}>View</button>
-                    <button className={'btn btn-success'}>Edit</button>
-                    <button className={'btn btn-secondary'}>Delete</button>
+                    <button className={'btn btn-primary'}
+                            onClick={() => this.setState({currentItem: row})}
+                            data-toggle="modal" data-target="#viewModal">
+                        View
+                    </button>
+                    <button className={'btn btn-success'}
+                            onClick={() => this.setState({currentItem: row})}
+                            data-toggle="modal" data-target="#editModal">
+                        Edit
+                    </button>
+                    <button type="button" onClick={() => this.setState({currentItem: row})}
+                            className="btn btn-primary"
+                            data-toggle="modal" data-target="#deleteModal">
+                        Delete
+                    </button>
                 </div>
             )
         }
@@ -162,6 +177,13 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             <div>
                 <Header/>
                 <main className={'mt-5 pt-5'}>
+                    {
+                        this.state.err_msg &&
+                        <div className="alert alert-warning" role="alert">
+                            {this.state.err_msg}
+                        </div>
+                    }
+
                     <div className={'filter__part'}>
 
                     </div>
@@ -193,9 +215,115 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         </div>
                     </div>
 
+                    <div className="modal fade" id="deleteModal" tabIndex={-1} role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="deleteModalLabel">Delete certificate</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <span>Are you sure you want to delete certificate with name </span>
+                                    {
+                                        this.state.currentItem &&
+                                        <span>{this.state.currentItem.name}</span>
+                                    }
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" className="btn btn-primary" data-dismiss="modal"
+                                            onClick={event => this.handleDeleteItem(event)}>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="modal fade" id="editModal" tabIndex={-1} role="dialog"
+                         aria-labelledby="editModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="editModalLabel">Edit certificate</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="form-group text-left">
+                                        <label htmlFor="name">Name</label>
+                                        <input type="text" className="form-control" placeholder="Enter Name"
+                                               id="name"/>
+                                    </div>
+                                    <div className="form-group text-left">
+                                        <label htmlFor="description">Description:</label>
+                                        <textarea className="form-control" rows={5} id="description"
+                                                  placeholder={"Enter Description"}/>
+                                    </div>
+
+                                    <div className="form-group text-left">
+                                        <label htmlFor="price">Price</label>
+                                        <input type="number" step={'any'} className="form-control"
+                                               placeholder="Enter Price"
+                                               id="price"/>
+                                    </div>
+
+                                    <div className="form-group text-left">
+                                        <label htmlFor="duration">Duration</label>
+                                        <input type="number" className="form-control" placeholder="Enter Duration"
+                                               id="duration"/>
+                                    </div>
+
+                                    <div className="form-group text-left">
+                                        <ChipInput
+                                            label={'Tags'}
+                                            defaultValue={[]}
+                                            // value={this.state.tagNames}
+                                            // onAdd={chip => this.handleAddTag(chip)}
+                                            // onDelete={chip => this.handleDeleteTag(chip)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" className="btn btn-primary" data-dismiss="modal"
+                                            onClick={event => this.handleDeleteItem(event)}>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         );
+    }
+
+    private handleDeleteItem(event: React.MouseEvent<HTMLButtonElement>) {
+        if (this.state.currentItem) {
+
+            const endpoint = "http://localhost:8080/certificates/" + this.state.currentItem.id;
+
+            axios.delete(endpoint).then(() => {
+                this.filter();
+            }).catch((error) => {
+                if (error.response.data.errorCode === '4044') {
+                    this.setState({err_msg: 'Certificate not already deleted'})
+                }
+                console.log("error = " + error);
+                AuthorizationHandleService.handleTokenExpired(
+                    error,
+                    () => this.handleDeleteItem(event),
+                    () => window.location.reload()
+                )
+            });
+        }
     }
 
     private changePageSize(event: React.ChangeEvent<HTMLSelectElement>) {

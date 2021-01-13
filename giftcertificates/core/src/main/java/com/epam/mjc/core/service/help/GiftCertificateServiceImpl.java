@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         giftCertificateValidator.validateGiftCertificate(giftCertificate);
         checkIfNameExists(giftCertificate);
+
+        giftCertificate.setCreateDate(LocalDateTime.now());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
 
         GiftCertificate created = giftCertificateRepo.save(giftCertificate);
         created.setTags(tagService.findOrCreateAll(created.getTags()));
@@ -120,20 +124,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         toUpdate.setPrice(certificate.getPrice() == null ? toUpdate.getPrice() : certificate.getPrice());
         toUpdate.setDuration(certificate.getDuration() == null ? toUpdate.getDuration() : certificate.getDuration());
         toUpdate.setTags(certificate.getTags() == null ? toUpdate.getTags() : certificate.getTags());
+        toUpdate.setLastUpdateDate(LocalDateTime.now());
     }
-
-    //begin insert
-
-
-    //end insert
-
 
     @Override
     @Transactional(readOnly = true)
     public Page<GiftCertificate> search(SearchParams searchParams, Integer pageNumber, Integer pageSize) {
 
         paginationValidator.validatePagination(pageNumber, pageSize);
-        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize, buildSort(searchParams));
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize, buildSort(searchParams));
 
         Page<GiftCertificate> all = giftCertificateRepo.findAll(
                 GiftCertificateSpecification.search(searchParams.getPartName(), searchParams.getPartDescription(), searchParams.getTagNames()),
