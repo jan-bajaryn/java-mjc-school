@@ -88,6 +88,7 @@ class Header extends Component<PieceProps, IState> {
                                     event.preventDefault();
                                     LocalStorageHelper.logout();
                                     this.props.history.push('/login');
+                                    window.location.reload();
                                 }} className="nav-link">
                                     Log out
                                 </Link>

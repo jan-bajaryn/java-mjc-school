@@ -37,6 +37,19 @@ main.main-page {
     flex-wrap: wrap;
     margin: 3vh 2vw;
 
+    img {
+      width: 260px;
+      height: 250px;
+    }
+
+    .card {
+      width: 18rem;
+    }
+
+    .card-body-header {
+      height: 120px;
+    }
+
     .coupon_card {
       margin: 2vh 2vw;
       width: 260px;

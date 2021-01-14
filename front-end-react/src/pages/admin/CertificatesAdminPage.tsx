@@ -42,6 +42,8 @@ interface IState {
     filterString: string[]
 }
 
+const MAX_DESCRIPTION_LENGTH = 500;
+
 class CertificatesAdminPage extends Component<IProps, IState> {
 
     constructor(props: IProps) {
@@ -346,14 +348,22 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                         <label htmlFor="name">Name</label>
                                         <input type="text" className="form-control" placeholder="Enter Name"
                                                value={this.state.editName}
-                                               onChange={event => this.setState({editName: event.target.value})}
+                                               onChange={event => {
+                                                   if (event.target.value.length <= 255) {
+                                                       this.setState({editName: event.target.value})
+                                                   }
+                                               }}
                                                id="name"/>
                                     </div>
                                     <div className="form-group text-left">
                                         <label htmlFor="description">Description:</label>
                                         <textarea className="form-control" rows={5} id="description"
                                                   value={this.state.editDescription}
-                                                  onChange={event => this.setState({editDescription: event.target.value})}
+                                                  onChange={event => {
+                                                      if (event.target.value.length <= MAX_DESCRIPTION_LENGTH) {
+                                                          this.setState({editDescription: event.target.value})
+                                                      }
+                                                  }}
                                                   placeholder={"Enter Description"}/>
                                     </div>
 
@@ -362,6 +372,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                         <input type="number" step={'any'} className="form-control"
                                                value={this.state.editPrice}
                                                placeholder="Enter Price"
+                                               min={0}
                                                onChange={event => this.setState({editPrice: Number.parseFloat(event.target.value)})}
                                                id="price"/>
                                     </div>
@@ -370,6 +381,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                         <label htmlFor="duration">Duration</label>
                                         <input type="number" className="form-control" placeholder="Enter Duration"
                                                value={this.state.editDuration}
+                                               min={0}
                                                onChange={event => this.setState({editDuration: Number.parseFloat(event.target.value)})}
                                                id="duration"/>
                                     </div>

@@ -34,6 +34,16 @@ main.main-page .coupon_list {
   flex-wrap: wrap;
   margin: 3vh 2vw;
 }
+main.main-page .coupon_list img {
+  width: 260px;
+  height: 250px;
+}
+main.main-page .coupon_list .card {
+  width: 18rem;
+}
+main.main-page .coupon_list .card-body-header {
+  height: 120px;
+}
 main.main-page .coupon_list .coupon_card {
   margin: 2vh 2vw;
   width: 260px;
