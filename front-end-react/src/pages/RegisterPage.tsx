@@ -5,13 +5,14 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import Header from "../components/Header";
 import AuthorizationHandleService from "../services/AuthorizationHandleService";
+import LocalStorageHelper from "../services/LocalStorageHelper";
+import RefExtractor from "../services/RefExtractor";
 
 
 interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-    itemCount: number;
     bad_username: boolean;
     bad_password: boolean;
     bad_name: boolean;
@@ -31,21 +32,10 @@ class RegisterPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            itemCount: RegisterPage.calcItemCount(),
             bad_name: false,
             bad_password: false,
             bad_username: false,
             bad_repeat_password: false
-        }
-    }
-
-    private static calcItemCount() {
-        let item = localStorage.getItem('cart');
-        if (item == null) {
-            return null;
-        } else {
-            let parse = JSON.parse(item);
-            return parse.length
         }
     }
 
@@ -55,10 +45,10 @@ class RegisterPage extends Component<IProps, IState> {
         e.preventDefault();
         const endpoint = "http://localhost:8080/users";
 
-        let username: string = RegisterPage.exctractRef(this.username);
-        let password: string = RegisterPage.exctractRef(this.password);
-        let repeat_password: string = RegisterPage.exctractRef(this.repeat_password);
-        let first_name: string = RegisterPage.exctractRef(this.first_name);
+        let username: string = RefExtractor.exctractRef(this.username);
+        let password: string = RefExtractor.exctractRef(this.password);
+        let repeat_password: string = RefExtractor.exctractRef(this.repeat_password);
+        let first_name: string = RefExtractor.exctractRef(this.first_name);
 
         if (!this.isFormValid(username, password, repeat_password, first_name)) {
             return;
@@ -114,17 +104,10 @@ class RegisterPage extends Component<IProps, IState> {
     }
 
 
-    private static exctractRef(ref: RefObject<HTMLInputElement>) {
-        if (ref.current) {
-            return ref.current.value;
-        }
-        return '';
-    }
-
     render() {
         return (
             <div>
-                <Header cartItems={this.state.itemCount}/>
+                <Header cartItems={LocalStorageHelper.calcItemCount()}/>
                 <main className={'mt-5 pt-5 register_container'}>
                     <div className="register_container">
                         <div className="logo_container">

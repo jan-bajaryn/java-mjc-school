@@ -1,4 +1,5 @@
 import axios from "axios";
+import LocalStorageHelper from "./LocalStorageHelper";
 
 export default class AuthorizationHandleService {
     static handleTokenExpired(error, successCallback, badCallback) {
@@ -30,24 +31,17 @@ export default class AuthorizationHandleService {
                 }
             ).then(res => {
                 console.log("refresh procedure success")
-                localStorage.setItem("authorization", res.data.access_token);
-                localStorage.setItem("refresh_token", res.data.refresh_token);
-                localStorage.setItem("role", res.data.role);
-                localStorage.setItem("userId", res.data.id);
+                LocalStorageHelper.login(
+                    res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username
+                );
                 successCallback();
             }).catch((error) => {
                 console.log("refresh procedure error")
                 console.log("error refresh procedure = " + error);
-                this.removeInfo();
+                LocalStorageHelper.logout();
                 badCallback();
             });
         }
     }
 
-    private static removeInfo() {
-        localStorage.removeItem("authorization");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("role");
-        localStorage.removeItem("userId");
-    }
 }

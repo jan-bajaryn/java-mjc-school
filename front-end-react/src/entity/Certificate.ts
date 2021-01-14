@@ -78,6 +78,7 @@ export default class Certificate {
         cert.name = obj.name;
         cert.description = obj.description;
         cert.price = obj.price;
+        cert.duration = obj.duration;
         cert.createDate = new Date(obj.createDate)
         cert.lastUpdateDate = new Date(obj.lastUpdateDate)
         cert.tags = obj.tags.map(t => t.name);

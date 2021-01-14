@@ -9,9 +9,11 @@ import axios from "axios";
 import AuthorizationHandleService from "../../services/AuthorizationHandleService";
 import Pagination from "../../components/Pagination";
 import ChipInput from "material-ui-chip-input";
+import LocalStorageHelper from "../../services/LocalStorageHelper";
 
 interface IProps extends RouteComponentProps<any> {
 }
+
 
 interface IState {
     items: Certificate[];
@@ -26,17 +28,62 @@ interface IState {
 
     itemCount?: number;
     totalPageCount: number;
-    currentItem?: Certificate;
+    currentItem?: Certificate | null;
     err_msg?: string;
+
+    editName: string;
+    editDescription: string;
+    editPrice: number;
+    editDuration: number;
+    editTags: string[];
+
+    writeOrEditCaption?: string;
+
+    filterString: string[]
 }
 
 class CertificatesAdminPage extends Component<IProps, IState> {
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            editDescription: "", editDuration: 0, editName: "", editPrice: 0, editTags: [],
+
+            items: [],
+            partName: '',
+            partDescription: '',
+            pageNumber: 1,
+            pageSize: 5,
+            totalPageCount: 1000,
+            tagNames: [],
+            sort: 'LAST_UPDATE:asc',
+            filterString: []
+        }
+    }
+
 
     private columns = [{
         dataField: '_lastUpdateDate',
         text: 'Update date',
         sort: true,
         formatter: CertificatesAdminPage.dateFormatter,
+        sortFunc: (a: Date, b: Date, order, dataField, rowA, rowB) => {
+            function compareDates(a: Date, b: Date) {
+                if (a > b) {
+                    return 1;
+                }
+                if (a < b) {
+                    return -1;
+                }
+                return 0;
+            }
+
+            if (order === 'asc') {
+                return compareDates(a, b);
+            } else {
+                return compareDates(b, a);
+            }
+        },
         onSort: (field, order) => {
             this.setState({sort: 'LAST_UPDATE:' + order}, () => this.filter())
         }
@@ -59,7 +106,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         text: 'Price',
     }, {
         text: 'Actions',
-        formatter: (cell, row) => {
+        formatter: (cell, row: Certificate) => {
             return (
                 <div>
                     <button className={'btn btn-primary'}
@@ -68,7 +115,17 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         View
                     </button>
                     <button className={'btn btn-success'}
-                            onClick={() => this.setState({currentItem: row})}
+                            onClick={() => {
+                                this.setState({currentItem: row})
+                                this.setState({
+                                    editDescription: row.description,
+                                    editName: row.name,
+                                    editDuration: row.duration,
+                                    editPrice: row.price,
+                                    editTags: [...row.tags],
+                                    writeOrEditCaption: "Edit"
+                                })
+                            }}
                             data-toggle="modal" data-target="#editModal">
                         Edit
                     </button>
@@ -82,22 +139,9 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         }
     }];
 
-    constructor(props: IProps) {
-        super(props);
-        this.state = {
-            items: [],
-            partName: '',
-            partDescription: '',
-            pageNumber: 1,
-            pageSize: 5,
-            totalPageCount: 1000,
-            tagNames: [],
-            sort: 'LAST_UPDATE:asc'
-        }
-    }
-
 
     componentDidMount() {
+        this.checkForAdmin();
         this.loadResources(this.props.location.search);
         this.buildSearch(this.props.location.search);
     }
@@ -117,10 +161,14 @@ class CertificatesAdminPage extends Component<IProps, IState> {
 
     private static dateFormatter(cell: Date, row) {
         return (
-            <div>{'' + cell.getFullYear() + '-' + (cell.getMonth() + 1) + '-' + cell.getDay() + ' ' + cell.getHours() + ':' + cell.getMinutes()}</div>
+            <div>{CertificatesAdminPage.dateParseString(cell)}</div>
         )
     }
 
+
+    private static dateParseString(cell: Date) {
+        return '' + cell.getFullYear() + '-' + (cell.getMonth() + 1) + '-' + cell.getDay() + ' ' + cell.getHours() + ':' + cell.getMinutes();
+    }
 
     private buildSearch(location: string) {
         const query = new URLSearchParams(location);
@@ -175,8 +223,59 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     render() {
         return (
             <div>
-                <Header/>
+                <Header cartItems={LocalStorageHelper.calcItemCount()}/>
                 <main className={'mt-5 pt-5'}>
+                    <div className="container">
+                        <div className="text-center my-5 d-flex align-content-end justify-content-center">
+                            <ChipInput
+                                label={'Filter'}
+                                value={this.filterValue()}
+                                onAdd={chip => {
+                                    const pattern = new RegExp("^(#\\().+\\)$")
+                                    if (chip.match(pattern)) {
+                                        this.setState(prev => ({tagNames: [...prev.tagNames, chip.substr(2, chip.length - 3)]}))
+                                    } else {
+                                        this.setState({partName: chip})
+                                    }
+                                }}
+                                onDelete={chip => {
+                                    const pattern = new RegExp("^(#\\().+\\)$");
+                                    if (chip.match(pattern)) {
+                                        this.setState({
+                                            tagNames: this.state.tagNames.filter((e) => e !== chip.substr(2, chip.length - 3))
+                                        })
+                                    } else {
+                                        this.setState({partName: ''})
+                                    }
+
+                                }}
+                            />
+                            <div className={'ml-3 d-flex'}>
+                                <button className={'btn btn-primary align-self-end'}
+                                        onClick={() => this.filter()}>
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <button className={'btn btn-primary'}
+                                    onClick={() => {
+                                        this.setState({currentItem: null})
+                                        this.setState({
+                                            editDescription: '',
+                                            editName: '',
+                                            editDuration: 0,
+                                            editPrice: 0,
+                                            editTags: [],
+                                            writeOrEditCaption: "Create"
+                                        })
+                                    }}
+                                    data-toggle="modal" data-target="#editModal">
+                                Create
+                            </button>
+                        </div>
+                    </div>
+
                     {
                         this.state.err_msg &&
                         <div className="alert alert-warning" role="alert">
@@ -193,27 +292,10 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                         columns={this.columns}/>
                     </div>
 
-                    <div className={'row m-5 align-middle'}>
-                        <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
-                                    totalPageCount={this.state.totalPageCount}
-                                    onClickPagination={(event, input) => this.onClickPagination(event, input)}/>
-
-                        <div className="form-group w-10 col-1">
-                            <label>
-                                <select className="form-control btn-lg" value={this.state.pageSize}
-                                        onChange={event => this.changePageSize(event)}>
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>15</option>
-                                    <option>20</option>
-                                    <option>25</option>
-                                    <option>30</option>
-                                    <option>50</option>
-                                    <option>100</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
+                    <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
+                                totalPageCount={this.state.totalPageCount}
+                                onClickPagination={(event, input) => this.onClickPagination(event, input)}
+                                changePageSize={event => this.changePageSize(event)}/>
 
                     <div className="modal fade" id="deleteModal" tabIndex={-1} role="dialog"
                          aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -249,7 +331,12 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         <div className="modal-dialog" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="editModalLabel">Edit certificate</h5>
+                                    <h5 className="modal-title" id="editModalLabel">
+                                        {
+                                            this.state.writeOrEditCaption &&
+                                            <span>{this.state.writeOrEditCaption}</span>
+                                        } certificate
+                                    </h5>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -258,34 +345,45 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                     <div className="form-group text-left">
                                         <label htmlFor="name">Name</label>
                                         <input type="text" className="form-control" placeholder="Enter Name"
+                                               value={this.state.editName}
+                                               onChange={event => this.setState({editName: event.target.value})}
                                                id="name"/>
                                     </div>
                                     <div className="form-group text-left">
                                         <label htmlFor="description">Description:</label>
                                         <textarea className="form-control" rows={5} id="description"
+                                                  value={this.state.editDescription}
+                                                  onChange={event => this.setState({editDescription: event.target.value})}
                                                   placeholder={"Enter Description"}/>
                                     </div>
 
                                     <div className="form-group text-left">
                                         <label htmlFor="price">Price</label>
                                         <input type="number" step={'any'} className="form-control"
+                                               value={this.state.editPrice}
                                                placeholder="Enter Price"
+                                               onChange={event => this.setState({editPrice: Number.parseFloat(event.target.value)})}
                                                id="price"/>
                                     </div>
 
                                     <div className="form-group text-left">
                                         <label htmlFor="duration">Duration</label>
                                         <input type="number" className="form-control" placeholder="Enter Duration"
+                                               value={this.state.editDuration}
+                                               onChange={event => this.setState({editDuration: Number.parseFloat(event.target.value)})}
                                                id="duration"/>
                                     </div>
 
                                     <div className="form-group text-left">
                                         <ChipInput
                                             label={'Tags'}
-                                            defaultValue={[]}
-                                            // value={this.state.tagNames}
-                                            // onAdd={chip => this.handleAddTag(chip)}
-                                            // onDelete={chip => this.handleDeleteTag(chip)}
+                                            value={this.state.editTags}
+                                            onAdd={chip => this.setState(prev => ({
+                                                editTags: [...prev.editTags, chip]
+                                            }))}
+                                            onDelete={chip => this.setState({
+                                                editTags: this.state.editTags.filter((e) => e !== chip)
+                                            })}
                                         />
                                     </div>
                                 </div>
@@ -293,13 +391,90 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
                                     </button>
                                     <button type="button" className="btn btn-primary" data-dismiss="modal"
-                                            onClick={event => this.handleDeleteItem(event)}>
-                                        Delete
+                                            onClick={event => this.handleCreateOrEdit(event)}>
+                                        {
+                                            this.state.writeOrEditCaption &&
+                                            <span>{this.state.writeOrEditCaption}</span>
+                                        }
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div className="modal fade" id="viewModal" tabIndex={-1} role="dialog"
+                         aria-labelledby="viewModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="viewModalLabel">
+                                        View certificate
+                                    </h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <table className="table">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Name</th>
+                                            <td>{this.state.currentItem?.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Description</th>
+                                            <td>{this.state.currentItem?.description}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Price</th>
+                                            <td>{this.state.currentItem?.price}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Duration</th>
+                                            <td>{this.state.currentItem?.duration}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row">Created</th>
+                                            <td>
+                                                {
+                                                    this.state.currentItem &&
+                                                    <span>{CertificatesAdminPage.dateParseString(this.state.currentItem.createDate)}</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Updated</th>
+                                            <td>
+                                                {
+                                                    this.state.currentItem &&
+                                                    <span>{CertificatesAdminPage.dateParseString(this.state.currentItem.lastUpdateDate)}</span>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row">Tags</th>
+                                            <td className={'d-flex flex-wrap'}>
+                                                {
+                                                    this.state.currentItem &&
+                                                    this.state.currentItem.tags.map((value, index) => (
+                                                        <span className={'ml-1'}>#{value}</span>
+                                                    ))
+                                                }
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </main>
             </div>
         );
@@ -338,6 +513,9 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     }
 
     private filter() {
+        if (this.checkForAdmin()) {
+            return;
+        }
         const query = new URLSearchParams(this.props.location.search);
         CertificatesAdminPage.setParamQuery(query, this.state.partName, 'partName');
         CertificatesAdminPage.setParamQuery(query, this.state.partDescription, 'partDescription');
@@ -369,6 +547,103 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         }
     }
 
+    private handleCreateOrEdit(event: React.MouseEvent<HTMLButtonElement>) {
+
+        if (this.state.currentItem) {
+            this.edit(event);
+        } else {
+            this.create(event);
+        }
+
+        // if (!this.isFormValid(username, password, repeat_password, first_name)) {
+        //     return;
+        // }
+    }
+
+    private edit(event: React.MouseEvent<HTMLButtonElement>) {
+        if (this.state.currentItem) {
+
+            const endpoint = 'http://localhost:8080/certificates/' + this.state.currentItem.id;
+            let data = {
+                name: this.state.editName,
+                description: this.state.editDescription,
+                price: this.state.editPrice,
+                duration: this.state.editDuration,
+                tags: this.state.editTags.map(value => {
+                    return {
+                        name: value
+                    }
+                })
+            }
+
+
+            axios.patch(endpoint,
+                data
+            ).then(() => {
+                this.filter();
+            }).catch((error) => {
+                // if (error.response.data.errorCode === '40026') {
+                //     this.setState({err_msg: 'User with so username already exists'})
+                // }
+                // if (error.response.data.errorCode === '40019') {
+                //     this.setState({err_msg: error.response.data.message})
+                // }
+                AuthorizationHandleService.handleTokenExpired(
+                    error,
+                    () => this.edit(event),
+                    () => window.location.reload()
+                )
+            });
+        }
+    }
+
+    private create(event: React.MouseEvent<HTMLButtonElement>) {
+
+        const endpoint = 'http://localhost:8080/certificates';
+        let data = {
+            name: this.state.editName,
+            description: this.state.editDescription,
+            price: this.state.editPrice,
+            duration: this.state.editDuration,
+            tags: this.state.editTags.map(value => {
+                return {
+                    name: value
+                }
+            })
+        }
+
+
+        axios.post(endpoint,
+            data
+        ).then(() => {
+            this.setState({pageNumber: 1}, () => this.filter());
+        }).catch((error) => {
+            AuthorizationHandleService.handleTokenExpired(
+                error,
+                () => this.create(event),
+                () => window.location.reload()
+            )
+        });
+
+    }
+
+    private filterValue() {
+        let tags = this.state.tagNames.map(el => '#(' + el + ')');
+        if (this.state.partName && this.state.partName !== '') {
+            return [this.state.partName, ...tags];
+        } else {
+            return [...tags];
+        }
+    }
+
+    private checkForAdmin(): boolean {
+        let item = localStorage.getItem('role');
+        if (item !== 'ADMIN') {
+            this.props.history.push('/login');
+            return true;
+        }
+        return false;
+    }
 }
 
 export default withRouter(CertificatesAdminPage);

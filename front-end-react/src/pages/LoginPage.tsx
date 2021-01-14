@@ -4,12 +4,13 @@ import axios from "axios";
 import {withRouter, RouteComponentProps} from 'react-router-dom';
 import Header from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.css';
+import LocalStorageHelper from "../services/LocalStorageHelper";
+import RefExtractor from "../services/RefExtractor";
 
 interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-    itemCount: number;
     bad_credentials: boolean;
     bad_username: boolean;
     bad_password: boolean;
@@ -23,7 +24,6 @@ class LoginPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            itemCount: LoginPage.calcItemCount(),
             bad_credentials: false,
             bad_username: false,
             bad_password: false
@@ -31,29 +31,14 @@ class LoginPage extends Component<IProps, IState> {
 
     }
 
-    private static calcItemCount() {
-        let item = localStorage.getItem('cart');
-        if (item == null) {
-            return null;
-        } else {
-            let parse = JSON.parse(item);
-            return parse.length
-        }
-    }
-
     private handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         e.preventDefault();
         const endpoint = "http://localhost:9000/oauth/token";
-        let username: string = '';
-        if (this.username.current) {
-            username = this.username.current.value;
-        }
-        let password: string = '';
-        if (this.password.current) {
-            password = this.password.current.value;
-        }
+
+        let username: string = RefExtractor.exctractRef(this.username);
+        let password: string = RefExtractor.exctractRef(this.password);
 
         if (!this.validateForm(username, password)) {
             return;
@@ -78,10 +63,7 @@ class LoginPage extends Component<IProps, IState> {
                 headers: headers
             }
         ).then(res => {
-            localStorage.setItem("authorization", res.data.access_token);
-            localStorage.setItem("refresh_token", res.data.refresh_token);
-            localStorage.setItem("role", res.data.role);
-            localStorage.setItem("userId", res.data.id);
+            LocalStorageHelper.login(res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username);
 
             this.props.history.push("/");
 
@@ -110,7 +92,7 @@ class LoginPage extends Component<IProps, IState> {
     render() {
         return (
             <div>
-                <Header cartItems={this.state.itemCount}/>
+                <Header cartItems={LocalStorageHelper.calcItemCount()}/>
                 <main className={'pt-5 mt-5 login'}>
                     <div className="form-login">
                         <div className="logo_container">

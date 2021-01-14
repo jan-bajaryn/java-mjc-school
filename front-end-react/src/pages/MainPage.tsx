@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import ChipInput from 'material-ui-chip-input'
 import AuthorizationHandleService from "../services/AuthorizationHandleService";
 import Pagination from "../components/Pagination";
+import LocalStorageHelper from "../services/LocalStorageHelper";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -41,7 +42,7 @@ class MainPage extends Component<IProps, IState> {
             displayFilters: true,
             partName: '',
             partDescription: '',
-            itemCount: MainPage.calcItemCount(),
+            itemCount: LocalStorageHelper.calcItemCount(),
             pageNumber: 1,
             pageSize: 5,
             totalPageCount: 1000,
@@ -50,16 +51,6 @@ class MainPage extends Component<IProps, IState> {
             sort: 'LAST_UPDATE:asc'
         })
         console.log('before build search')
-    }
-
-    private static calcItemCount() {
-        let item = localStorage.getItem('cart');
-        if (item == null) {
-            return null;
-        } else {
-            let parse = JSON.parse(item);
-            return parse.length
-        }
     }
 
     private buildSearch(location: string) {
@@ -240,27 +231,11 @@ class MainPage extends Component<IProps, IState> {
                     </div>
                 </main>
 
-                <div className={'row m-5 align-middle'}>
-                    <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
-                                totalPageCount={this.state.totalPageCount}
-                                onClickPagination={(event, input) => this.onClickPagination(event, input)}/>
+                <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
+                            totalPageCount={this.state.totalPageCount}
+                            onClickPagination={(event, input) => this.onClickPagination(event, input)}
+                            changePageSize={(event) => this.changePageSize(event)}/>
 
-                    <div className="form-group w-10 col-1">
-                        <label>
-                            <select className="form-control btn-lg" value={this.state.pageSize}
-                                    onChange={event => this.changePageSize(event)}>
-                                <option>5</option>
-                                <option>10</option>
-                                <option>15</option>
-                                <option>20</option>
-                                <option>25</option>
-                                <option>30</option>
-                                <option>50</option>
-                                <option>100</option>
-                            </select>
-                        </label>
-                    </div>
-                </div>
             </div>
         )
     }

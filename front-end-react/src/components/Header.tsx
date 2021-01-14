@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/header.css'
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import LocalStorageHelper from "../services/LocalStorageHelper";
 
 interface PieceProps extends RouteComponentProps<any> {
     cartItems?: number;
 }
 
 interface IState {
-    role: null | string
+    role: null | string,
+    username: string | null
 }
 
 class Header extends Component<PieceProps, IState> {
@@ -16,15 +18,17 @@ class Header extends Component<PieceProps, IState> {
     constructor(props: PieceProps) {
         super(props);
         this.state = {
-            role: null
+            role: null,
+            username: null
         }
 
     }
 
     componentDidMount() {
         let item = localStorage.getItem('role');
+        let username = localStorage.getItem('username');
         console.log("Header: role = " + item);
-        this.setState({role: item})
+        this.setState({role: item, username: username});
     }
 
     render() {
@@ -52,8 +56,18 @@ class Header extends Component<PieceProps, IState> {
                     </ul>
 
                     <ul className="navbar-nav">
+
                         <li className={'nav-item'}>
-                            <Link to={'/basket'} className="nav-link">
+                            <Link to={'/cabinet'} className="nav-link disabled">
+                                {
+                                    this.state.username &&
+                                    <span>{this.state.username}</span>
+                                }
+                            </Link>
+                        </li>
+
+                        <li className={'nav-item'}>
+                            <Link to={'/basket'} className="nav-link disabled">
                                 <i className="material-icons">shopping_cart</i>
                                 {
                                     this.props.cartItems &&
@@ -67,39 +81,22 @@ class Header extends Component<PieceProps, IState> {
                         <li className={'nav-item'}>
                             <Link to={"/register"} className="nav-link">Sign Up</Link>
                         </li>
+                        {
+                            LocalStorageHelper.isLogged() &&
+                            <li className={'nav-item'}>
+                                <Link to={"/logout"} onClick={(event) => {
+                                    event.preventDefault();
+                                    LocalStorageHelper.logout();
+                                    this.props.history.push('/login');
+                                }} className="nav-link">
+                                    Log out
+                                </Link>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </nav>
-            //     <div className="logo">
-            // <i className="material-icons">menu</i>
-            // <span>Logo</span>
-            //                 </div>
-            //                 <div className="search_inputs">
-            //                     <label htmlFor="search"/>
-            //                     <label htmlFor="category"/>
-            //                     <input type="text" id="search" placeholder="Search by item name or description"/>
-            //                     <select id="category">
-            //                         <option value="" disabled>All categories</option>
-            //                         <option value="new year">New Year</option>
-            //                         <option value="new year">Alcohol</option>
-            //                         <option value="new year">Another category</option>
-            //                     </select>
-            //                 </div>
-            //
-            //                 <div className="navigation">
-            //                     <i className="material-icons">favorite</i>
-            //                     <i className="material-icons">shopping_cart</i>
-            //                     {
-            //                         this.props.cartItems &&
-            //                         <small>{this.props.cartItems}</small>
-            //                     }
-            //                     <div className="links">
-            //                         {/*<Link href="?">Login</Link>*/}
-            //                         <Link to={"/login"}>Login</Link>
-            //                         <span> | </span>
-            //                         <Link to={"/register"}>Sign Up</Link>
-            //                     </div>
-            //                 </div>
         );
     }
 
