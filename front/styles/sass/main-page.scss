@@ -5,8 +5,12 @@ $imageCategorySize: 50px;
 
 
 @keyframes img-ani {
-  from{opacity:0;}
-  to{opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .category_list {
@@ -19,9 +23,9 @@ $imageCategorySize: 50px;
     margin: 10px 1.5vw;
     display: flex;
     flex-direction: column;
-    animation-name:img-ani;
-    animation-duration: 2s;
-    animation-timing-function: ease-in;
+    //animation-name: img-ani;
+    //animation-duration: 2s;
+    //animation-timing-function: ease-in;
 
     img {
       height: $imageCategorySize;
@@ -51,9 +55,6 @@ main {
       margin: 2vh 2vw;
       max-width: 260px;
       background: $white;
-      animation-name:img-ani;
-      animation-duration: 2s;
-      animation-timing-function: ease-in;
 
       .image_part {
         img {
@@ -74,17 +75,6 @@ main {
           font-size: large;
         }
 
-        .brief_description {
-          font-size: smaller;
-        }
-
-        .expires_in {
-          display: flex;
-          justify-content: flex-end;
-          font-size: smaller;
-          color: #999999;
-
-        }
 
         .icon {
           display: flex;
@@ -97,6 +87,10 @@ main {
           }
         }
 
+      }
+
+      .brief_description {
+        font-size: smaller;
       }
 
       .line {
@@ -126,4 +120,5 @@ main {
 
     }
   }
+
 }
