@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CertificatesAdminPage from "./pages/admin/CertificatesAdminPage";
 import './Interceptors'
+import Footer from "./components/Footer";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <RegisterPage/>
                 </Route>
             </BrowserRouter>
+            <Footer/>
         </div>
     );
 }

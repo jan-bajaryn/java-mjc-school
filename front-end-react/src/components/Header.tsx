@@ -33,7 +33,7 @@ class Header extends Component<PieceProps, IState> {
 
     render() {
         return (
-            <nav className="navbar navbar-expand-lg navbar-light justify-content-center bg-white fixed-top">
+            <nav className="navbar navbar-expand-lg navbar-dark justify-content-center fixed-top bg-dark">
                 <Link to={'/'} className="navbar-brand" href="#">Home</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

@@ -224,7 +224,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
 
     render() {
         return (
-            <div>
+            <div className={'bg-light'}>
                 <Header cartItems={LocalStorageHelper.calcItemCount()}/>
                 <main className={'mt-5 pt-5'}>
                     <div className="container">
