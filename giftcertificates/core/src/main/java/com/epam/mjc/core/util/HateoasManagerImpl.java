@@ -6,7 +6,7 @@ import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
 import com.epam.mjc.api.model.OrderForCreate;
 import com.epam.mjc.api.model.TagForCreate;
-import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
+import com.epam.mjc.api.model.dto.CollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.model.dto.OrderDto;
 import com.epam.mjc.api.model.dto.TagDto;
@@ -120,7 +120,7 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void certificateCollectionLinksAdmin(GiftCertificateCollectionDto model) {
+    public void certificateCollectionLinksAdmin(CollectionDto<GiftCertificateDto> model) {
         for (GiftCertificateDto giftCertificateDto : model.getItems()) {
             setSelfLinksAdmin(giftCertificateDto);
         }
@@ -133,7 +133,7 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void certificateCollectionLinksNotAdmin(GiftCertificateCollectionDto model) {
+    public void certificateCollectionLinksNotAdmin(CollectionDto<GiftCertificateDto> model) {
         for (GiftCertificateDto giftCertificateDto : model.getItems()) {
             setSelfLinksNotAdmin(giftCertificateDto);
         }
@@ -148,14 +148,14 @@ public class HateoasManagerImpl implements HateoasManager {
     }
 
     @Override
-    public void setCollectionLinksUser(CollectionModel<OrderDto> model) {
+    public void setCollectionLinksUser(CollectionDto<OrderDto> model) {
         model.add(linkTo(OrderControllerImpl.class).withSelfRel());
         model.add(WebMvcLinkBuilder.linkTo(methodOn(OrderControllerImpl.class).create(new OrderForCreate())).withRel("create"));
     }
 
     @Override
-    public void setCollectionLinksOrderAdmin(CollectionModel<OrderDto> model) {
-        for (OrderDto orderDto : model) {
+    public void setCollectionLinksOrderAdmin(CollectionDto<OrderDto> model) {
+        for (OrderDto orderDto : model.getItems()) {
             setSelfLinks(orderDto);
         }
         model.add(linkTo(OrderControllerImpl.class).withSelfRel());

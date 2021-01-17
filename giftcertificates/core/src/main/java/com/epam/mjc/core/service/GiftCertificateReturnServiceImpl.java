@@ -5,7 +5,7 @@ import com.epam.mjc.api.domain.Role;
 import com.epam.mjc.api.domain.User;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
+import com.epam.mjc.api.model.dto.CollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import com.epam.mjc.api.service.SecurityService;
@@ -87,7 +87,7 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
     }
 
     @Override
-    public GiftCertificateCollectionDto search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize) {
+    public CollectionDto<GiftCertificateDto> search(String tagName, String partName, String partDescription, String sort, Integer pageNumber, Integer pageSize) {
         Optional<User> principal = securityService.getPrincipal();
 
 
@@ -96,7 +96,7 @@ public class GiftCertificateReturnServiceImpl implements GiftCertificateReturnSe
                 search.getContent()
         );
 
-        GiftCertificateCollectionDto model = new GiftCertificateCollectionDto(search.getTotalPages(), giftCertificateDtos);
+        CollectionDto<GiftCertificateDto> model = new CollectionDto<>(search.getTotalPages(), giftCertificateDtos);
 
         if (principal.isPresent() && principal.get().getRole() == Role.ADMIN) {
             hateoasManager.certificateCollectionLinksAdmin(model);

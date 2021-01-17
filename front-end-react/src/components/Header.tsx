@@ -38,7 +38,7 @@ class Header extends Component<PieceProps, IState> {
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
+                    <span className="navbar-toggler-icon"/>
                 </button>
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -58,7 +58,7 @@ class Header extends Component<PieceProps, IState> {
                     <ul className="navbar-nav">
 
                         <li className={'nav-item'}>
-                            <Link to={'/cabinet'} className="nav-link disabled">
+                            <Link to={'/orders'} className="nav-link">
                                 {
                                     this.state.username &&
                                     <span>{this.state.username}</span>

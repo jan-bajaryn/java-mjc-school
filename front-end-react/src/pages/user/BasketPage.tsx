@@ -156,10 +156,22 @@ class BasketPage extends Component<IProps, IState> {
                     count: value[1]
                 }
             });
-        let data = {
-            userId: LocalStorageHelper.getUserId(),
-            giftCertificates: retCerts,
+        let role = LocalStorageHelper.getRole();
+        let data
+        if (role === 'ADMIN') {
+            data = {
+                userId: LocalStorageHelper.getUserId(),
+                giftCertificates: retCerts,
+            }
+        } else if (role === 'USER') {
+            data = {
+                giftCertificates: retCerts,
+            }
+        } else {
+            this.props.history.push('/login');
+            return;
         }
+
 
         axios.post(endpoint,
             data

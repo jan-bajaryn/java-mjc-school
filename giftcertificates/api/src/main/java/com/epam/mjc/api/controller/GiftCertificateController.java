@@ -2,7 +2,7 @@ package com.epam.mjc.api.controller;
 
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
+import com.epam.mjc.api.model.dto.CollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public interface GiftCertificateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<GiftCertificateCollectionDto> certificateSearch(
+    ResponseEntity<CollectionDto<GiftCertificateDto>> certificateSearch(
             @RequestParam(required = false, name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,

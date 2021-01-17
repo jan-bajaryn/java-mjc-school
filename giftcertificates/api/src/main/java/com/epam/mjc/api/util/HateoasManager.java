@@ -1,6 +1,6 @@
 package com.epam.mjc.api.util;
 
-import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
+import com.epam.mjc.api.model.dto.CollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.model.dto.OrderDto;
 import com.epam.mjc.api.model.dto.TagDto;
@@ -26,13 +26,13 @@ public interface HateoasManager {
 
     void setSelfLinksAdmin(GiftCertificateDto byId);
 
-    void certificateCollectionLinksAdmin(GiftCertificateCollectionDto model);
+    void certificateCollectionLinksAdmin(CollectionDto<GiftCertificateDto> model);
 
-    void certificateCollectionLinksNotAdmin(GiftCertificateCollectionDto model);
+    void certificateCollectionLinksNotAdmin(CollectionDto<GiftCertificateDto> model);
 
     void setSelfLinks(OrderDto byId);
 
-    void setCollectionLinksUser(CollectionModel<OrderDto> model);
+    void setCollectionLinksUser(CollectionDto<OrderDto> model);
 
-    void setCollectionLinksOrderAdmin(CollectionModel<OrderDto> model);
+    void setCollectionLinksOrderAdmin(CollectionDto<OrderDto> model);
 }

@@ -4,15 +4,15 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Collection;
 
-public class GiftCertificateCollectionDto extends RepresentationModel<GiftCertificateCollectionDto> {
+public class CollectionDto<T> extends RepresentationModel<CollectionDto<T>> {
 
     private Integer totalPageCount;
-    private Collection<GiftCertificateDto> items;
+    private Collection<T> items;
 
-    public GiftCertificateCollectionDto() {
+    public CollectionDto() {
     }
 
-    public GiftCertificateCollectionDto(Integer totalPageCount, Collection<GiftCertificateDto> items) {
+    public CollectionDto(Integer totalPageCount, Collection<T> items) {
         this.totalPageCount = totalPageCount;
         this.items = items;
     }
@@ -25,11 +25,11 @@ public class GiftCertificateCollectionDto extends RepresentationModel<GiftCertif
         this.totalPageCount = totalPageCount;
     }
 
-    public Collection<GiftCertificateDto> getItems() {
+    public Collection<T> getItems() {
         return items;
     }
 
-    public void setItems(Collection<GiftCertificateDto> items) {
+    public void setItems(Collection<T> items) {
         this.items = items;
     }
 
@@ -39,7 +39,7 @@ public class GiftCertificateCollectionDto extends RepresentationModel<GiftCertif
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        GiftCertificateCollectionDto that = (GiftCertificateCollectionDto) o;
+        CollectionDto<?> that = (CollectionDto<?>) o;
 
         if (getTotalPageCount() != null ? !getTotalPageCount().equals(that.getTotalPageCount()) : that.getTotalPageCount() != null)
             return false;
@@ -56,7 +56,7 @@ public class GiftCertificateCollectionDto extends RepresentationModel<GiftCertif
 
     @Override
     public String toString() {
-        return "GiftCertificateCollectionDto{" +
+        return "CollectionDto{" +
                 "totalPageCount=" + totalPageCount +
                 ", items=" + items +
                 '}';

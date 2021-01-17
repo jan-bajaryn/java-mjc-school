@@ -3,6 +3,7 @@ package com.epam.mjc.core.service.help;
 import com.epam.mjc.api.dao.OrderRepo;
 import com.epam.mjc.api.domain.GiftCertificate;
 import com.epam.mjc.api.domain.Order;
+import com.epam.mjc.api.domain.Order_;
 import com.epam.mjc.api.domain.PurchaseCertificate;
 import com.epam.mjc.api.model.CertificateRequestModel;
 import com.epam.mjc.api.model.OrderForCreate;
@@ -19,7 +20,9 @@ import com.epam.mjc.core.service.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,16 +60,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> search(Long userId, Integer pageNumber, Integer pageSize) {
+    public Page<Order> search(Long userId, Integer pageNumber, Integer pageSize) {
+        log.info("userId = {}, pageNumber = {},pageSize={}", userId, pageNumber, pageSize);
         paginationValidator.validatePagination(pageNumber, pageSize);
         if (userId == null) {
-            return orderRepo.findAll(PageRequest.of(pageNumber-1, pageSize)).getContent();
+            return orderRepo.findAll(PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE)));
         }
 
         userValidator.validateIdNullable(userId);
         return orderRepo.findAllByUserId(
                 userId,
-                PageRequest.of(pageNumber, pageSize)
+                PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE))
         );
     }
 

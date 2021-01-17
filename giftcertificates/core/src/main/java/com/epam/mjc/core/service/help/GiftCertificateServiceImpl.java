@@ -134,11 +134,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         paginationValidator.validatePagination(pageNumber, pageSize);
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize, buildSort(searchParams));
 
-        Page<GiftCertificate> all = giftCertificateRepo.findAll(
+        return giftCertificateRepo.findAll(
                 GiftCertificateSpecification.search(searchParams.getPartName(), searchParams.getPartDescription(), searchParams.getTagNames()),
                 pageRequest
         );
-        return all;
     }
 
     private Sort buildSort(SearchParams searchParams) {

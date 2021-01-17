@@ -8,6 +8,7 @@ import './Interceptors'
 import Footer from "./components/Footer";
 import CartPage from "./pages/user/BasketPage";
 import BasketPage from "./pages/user/BasketPage";
+import UserOrdersPage from "./pages/user/UserOrdersPage";
 
 function App() {
     return (
@@ -27,6 +28,9 @@ function App() {
                 </Route>
                 <Route exact path="/basket">
                     <BasketPage/>
+                </Route>
+                <Route exact path="/orders">
+                    <UserOrdersPage/>
                 </Route>
             </BrowserRouter>
             {/*<Footer/>*/}

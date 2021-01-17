@@ -3,7 +3,7 @@ package com.epam.mjc.core.controller;
 import com.epam.mjc.api.controller.GiftCertificateController;
 import com.epam.mjc.api.model.GiftCertificateModel;
 import com.epam.mjc.api.model.GiftCertificateModelForCreate;
-import com.epam.mjc.api.model.dto.GiftCertificateCollectionDto;
+import com.epam.mjc.api.model.dto.CollectionDto;
 import com.epam.mjc.api.model.dto.GiftCertificateDto;
 import com.epam.mjc.api.service.GiftCertificateReturnService;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class GiftCertificateControllerImpl implements GiftCertificateController 
     }
 
     @Override
-    public ResponseEntity<GiftCertificateCollectionDto> certificateSearch(
+    public ResponseEntity<CollectionDto<GiftCertificateDto>> certificateSearch(
             @RequestParam(required = false, name = "tagNames") String tagNames,
             @RequestParam(required = false) String partName,
             @RequestParam(required = false) String partDescription,

@@ -10,6 +10,7 @@ import AuthorizationHandleService from "../../services/AuthorizationHandleServic
 import Pagination from "../../components/Pagination";
 import ChipInput from "material-ui-chip-input";
 import LocalStorageHelper from "../../services/LocalStorageHelper";
+import Parser from "../../services/Parser";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -163,14 +164,10 @@ class CertificatesAdminPage extends Component<IProps, IState> {
 
     private static dateFormatter(cell: Date, row) {
         return (
-            <div>{CertificatesAdminPage.dateParseString(cell)}</div>
+            <div>{Parser.dateParseString(cell)}</div>
         )
     }
 
-
-    private static dateParseString(cell: Date) {
-        return '' + cell.getFullYear() + '-' + (cell.getMonth() + 1) + '-' + cell.getDay() + ' ' + cell.getHours() + ':' + cell.getMinutes();
-    }
 
     private buildSearch(location: string) {
         const query = new URLSearchParams(location);
@@ -451,7 +448,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                             <td>
                                                 {
                                                     this.state.currentItem &&
-                                                    <span>{CertificatesAdminPage.dateParseString(this.state.currentItem.createDate)}</span>
+                                                    <span>{Parser.dateParseString(this.state.currentItem.createDate)}</span>
                                                 }
                                             </td>
                                         </tr>
@@ -460,7 +457,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                             <td>
                                                 {
                                                     this.state.currentItem &&
-                                                    <span>{CertificatesAdminPage.dateParseString(this.state.currentItem.lastUpdateDate)}</span>
+                                                    <span>{Parser.dateParseString(this.state.currentItem.lastUpdateDate)}</span>
                                                 }
                                             </td>
                                         </tr>

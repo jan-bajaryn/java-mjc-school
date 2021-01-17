@@ -69,4 +69,8 @@ export default class LocalStorageHelper {
     static clearBasket() {
         localStorage.removeItem('cart');
     }
+
+    static getRole(): string | null {
+        return localStorage.getItem('role');
+    }
 }
