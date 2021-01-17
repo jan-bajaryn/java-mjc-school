@@ -1,66 +1,69 @@
 @import 'commons';
-@import 'header';
 @import "header_line";
 
 $headerColor: #4f4f4f;
 $priceColor: #101010;
 
-main {
+main.checkout {
   display: flex;
   justify-content: center;
 
   .main_container {
     width: 50%;
 
-    .coupon {
-      margin-top: 5vh;
-      display: flex;
-      justify-content: space-between;
+    //margin-top: 5vh;
+    //display: flex;
+    //justify-content: flex-end;
 
-      .details {
-        display: grid;
-        grid-template:
-        'h n'
-        'h d';
+    .details {
+      display: grid;
+      grid-template:
+        'n mp'
+        'd mp';
 
-        .image{
-          grid-area: h;
-          margin-right: 15px;
-          img{
-            max-width: 150px;
-            max-height: 150px;
-          }
-        }
-        .coupon_name{
-          grid-area: n;
-          color: $headerColor;
-          font-size: x-large;
-        }
-        .coupon_description{
-          grid-area: d;
-          max-width: 60%;
+
+      .minus__plus {
+        grid-area: mp;
+        max-width: 200px;
+
+        button {
+          height: 37px;
+          width: 38px;
         }
       }
 
-      .price{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: large;
-        color: $priceColor;
+      .coupon_name {
+        grid-area: n;
+        color: $headerColor;
+        font-size: x-large;
+      }
+
+      .coupon_description {
+        grid-area: d;
+        max-width: 70%;
+        font-size: smaller;
       }
     }
 
-    .line{
+    .price {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: large;
+      color: $priceColor;
+    }
+
+    .line {
       border-top: 2px solid $lineColor;
       margin: 20px 0;
     }
 
-    .total_container{
+    .total_container {
       display: flex;
       justify-content: flex-end;
       font-size: large;
-      .total{
+
+      .total {
         display: flex;
         justify-content: space-between;
         width: 20vw;
@@ -79,7 +82,7 @@ main {
 
         button {
           @include btnStyle();
-          width: 30%;
+          width: 40%;
         }
 
         .transparent_bg {

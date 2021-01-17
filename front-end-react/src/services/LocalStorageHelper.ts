@@ -1,12 +1,40 @@
 export default class LocalStorageHelper {
     static calcItemCount() {
-        let item = localStorage.getItem('cart');
-        if (item == null) {
-            return null;
+        let basket = this.getBasket();
+        return Array.from(this.getBasket().values())
+            .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+        // return 1;
+        // return 0;
+    }
+
+    static putItemBasket(id: number) {
+        let basket = this.getBasket();
+        let current = basket.get(id);
+        if (current) {
+            basket.set(id, current + 1);
         } else {
-            let parse = JSON.parse(item);
-            return parse.length
+            basket.set(id, 1);
         }
+        this.saveBasket(basket);
+    }
+
+    static removeItemBasket(id: number) {
+        let basket = this.getBasket();
+        let current = basket.get(id);
+        if (current) {
+            let newCount = current - 1;
+            if (newCount < 1) {
+                basket.delete(id);
+            } else {
+                basket.set(id, newCount);
+            }
+            this.saveBasket(basket);
+        }
+    }
+
+    private static saveBasket(map: Map<number, number>) {
+        console.log('save basket = ', JSON.stringify(Array.from(map.entries())));
+        localStorage.setItem('cart', JSON.stringify(Array.from(map.entries())));
     }
 
     static logout() {
@@ -27,5 +55,18 @@ export default class LocalStorageHelper {
 
     static isLogged(): boolean {
         return localStorage.getItem('authorization') !== null;
+    }
+
+    static getBasket(): Map<number, number> {
+        let item = localStorage.getItem('cart');
+        return item === null ? new Map([]) : new Map(JSON.parse(item));
+    }
+
+    static getUserId() {
+        return localStorage.getItem('userId');
+    }
+
+    static clearBasket() {
+        localStorage.removeItem('cart');
     }
 }

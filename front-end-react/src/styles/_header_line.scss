@@ -1,0 +1,15 @@
+@import "commons";
+
+$header_line_color: #bdbdbd;
+
+
+.header_line {
+  background: $header_line_color;
+  line-height: 7vh;
+
+  span {
+    margin-left: 10%;
+    font-size: xx-large;
+    color: $white;
+  }
+}

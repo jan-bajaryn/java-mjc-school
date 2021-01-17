@@ -33,7 +33,7 @@ class Header extends Component<PieceProps, IState> {
 
     render() {
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark justify-content-center fixed-top bg-dark">
+            <nav className="navbar navbar-expand-lg navbar-light justify-content-center fixed-top bg-white">
                 <Link to={'/'} className="navbar-brand" href="#">Home</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -67,11 +67,13 @@ class Header extends Component<PieceProps, IState> {
                         </li>
 
                         <li className={'nav-item'}>
-                            <Link to={'/basket'} className="nav-link disabled">
+                            <Link to={'/basket'} className="nav-link">
                                 <i className="material-icons">shopping_cart</i>
                                 {
-                                    this.props.cartItems &&
-                                    <small>{this.props.cartItems}</small>
+                                    this.props.cartItems ?
+                                        <small>{this.props.cartItems}</small>
+                                        :
+                                        <small>{LocalStorageHelper.calcItemCount()}</small>
                                 }
                             </Link>
                         </li>
