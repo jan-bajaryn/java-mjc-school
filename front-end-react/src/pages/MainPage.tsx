@@ -9,6 +9,7 @@ import AuthorizationHandleService from "../services/AuthorizationHandleService";
 import Pagination from "../components/Pagination";
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import '../styles/main-page.css'
+import QueryUrlParamHelper from "../services/QueryUrlParamHelper";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -47,7 +48,6 @@ class MainPage extends Component<IProps, IState> {
             pageSize: 5,
             totalPageCount: 1000,
             tagNames: [],
-            // sort: new Map([['NAME', 'asc'], ['LAST_UPDATE', 'DE']])
             sort: 'LAST_UPDATE:asc'
         })
         console.log('before build search')
@@ -247,35 +247,18 @@ class MainPage extends Component<IProps, IState> {
         console.log("this.state.pageSize = " + this.state.pageSize)
         console.log("this.state.pageNumber = " + this.state.pageNumber)
         const query = new URLSearchParams(this.props.location.search);
-        MainPage.setParamQuery(query, this.state.partName, 'partName');
-        MainPage.setParamQuery(query, this.state.partDescription, 'partDescription');
-        MainPage.setParamQuery(query, this.state.pageNumber, 'pageNumber');
-        MainPage.setParamQuery(query, this.state.pageSize, 'pageSize');
-        MainPage.setParamQuery(query, this.state.sort, 'sort');
-        MainPage.setParamQueryArray(query, this.state.tagNames, 'tagNames');
+        QueryUrlParamHelper.setParamQuery(query, this.state.partName, 'partName');
+        QueryUrlParamHelper.setParamQuery(query, this.state.partDescription, 'partDescription');
+        QueryUrlParamHelper.setParamQuery(query, this.state.pageNumber, 'pageNumber');
+        QueryUrlParamHelper.setParamQuery(query, this.state.pageSize, 'pageSize');
+        QueryUrlParamHelper.setParamQuery(query, this.state.sort, 'sort');
+        QueryUrlParamHelper.setParamQueryArray(query, this.state.tagNames, 'tagNames');
         let path = "?" + query.toString();
         this.props.history.replace(path);
         this.loadResources(path);
         this.buildSearch(path);
     }
 
-    private static setParamQueryArray(query: URLSearchParams, values: string[], name: string) {
-        console.log("enter method setParamQueryArray")
-        if (values.length !== 0) {
-            console.log("set something")
-            query.set(name, values.join(','));
-        } else {
-            query.delete(name);
-        }
-    }
-
-    private static setParamQuery(query: URLSearchParams, value: any, name: string) {
-        if (value) {
-            query.set(name, value);
-        } else {
-            query.delete(name);
-        }
-    }
 
     private addCard(id: number) {
         LocalStorageHelper.putItemBasket(id);
@@ -293,17 +276,6 @@ class MainPage extends Component<IProps, IState> {
         console.log("onclick pagination = " + input)
         this.setState({pageNumber: input}, () => this.filter());
     }
-
-    // private parseSort(sort: string): Map<string, string> {
-    //     let map: Map<string, string> = new Map<string, string>();
-    //     if (sort) {
-    //         sort.split(',').forEach(value => {
-    //             let strings = value.split(':');
-    //             map.set(strings[0], strings[1]);
-    //         })
-    //     }
-    //     return map;
-    // }
 }
 
 export default withRouter(MainPage);
