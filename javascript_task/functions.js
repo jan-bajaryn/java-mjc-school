@@ -151,70 +151,37 @@ function matrixMultiplication(matrix1, matrix2) {
  *      gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello"
  */
 function gather(str) {
-    // let gatherObj = new GatherObj(str);
-    // return (s) => new GatherObj();
+    return gatherHelper(str, []);
+}
 
-    let strings = [];
+function gatherHelper(str, strs) {
+    let strings = [...strs, str];
 
-    return (s) => {
-        return {
-            order: function () {
-
-            },
-            gather: function () {
-
-            }
+    return {
+        order: function (i) {
+            return order(i, strings, []);
+        },
+        gather: function (s) {
+            return gatherHelper(s, strings)
         }
     }
 }
 
-//
-// function func(val) {
-//     var self = this;
-//     this._optional = false;
-//     this._check = false;
-//
-//     const doStaff = (message = 'Doing staff') => {
-//         console.log(message);
-//         return;
-//     };
-//
-//
-//     return {
-//         check: function (n) {
-//             this._check = true;
-//             return this;
-//         },
-//         optional: function (n) {
-//             this._check = false;
-//             this._optional = true;
-//             return this;
-//         },
-//         exec: function () {
-//             if (this._check) doStaff();
-//             if (this._optional) doStaff('Maybe not');
-//         }
-//     }
-// }
-//
-// class GatherObj {
-//     constructor(str) {
-//         this.str = str;
-//     }
-//
-//     result = 0;
-//
-//     get(a) {
-//         this.result = a + b;
-//         return this;
-//     }
-//
-//     order(a) {
-//         this.result = this.result * a;
-//         return this;
-//     }
-// }
-
+function order(i, ordStrings, orderInts) {
+    let newInts = [...orderInts, i];
+    return {
+        order: function (newInt) {
+            return order(newInt, ordStrings, newInts)
+        },
+        get: function () {
+            let resultStr = '';
+            for (let j = 0; j < newInts.length; j++) {
+                resultStr += ordStrings[newInts[j]];
+            }
+            return resultStr;
+        }
+    }
+}
 
 const expect = require('chai')
     .use(require('chai-datetime'))
@@ -254,7 +221,6 @@ describe('toBase2Converter', () => {
     });
 });
 
-// TODO report mistake in task text
 describe('substringOccurrencesCounter', () => {
     it('\'a\', \'test it\' -> 0', () => {
         expect(substringOccurrencesCounter('a', 'test it')).to.equal(0);
@@ -299,3 +265,18 @@ describe('towerHanoi', () => {
 });
 
 
+describe('Gather', () => {
+    it('gather("a")("b")("c").order(0)(1)(2).get() ➞ "abc"', () => {
+        expect(gather('a').gather('b').gather('c').order(0).order(1).order(2).get())
+            .to.equal('abc');
+    });
+    it('gather("a")("b")("c").order(2)(1)(0).get() ➞ "cba"', () => {
+        expect(gather('a').gather('b').gather('c').order(2).order(1).order(0).get())
+            .to.equal('cba');
+    });
+    it('gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello"', () => {
+        expect(gather('e').gather('l').gather('o').gather("l").gather("!").gather("h")
+            .order(5).order(0).order(1).order(3).order(2).order(4).get())
+            .to.equal('hello!');
+    });
+});
