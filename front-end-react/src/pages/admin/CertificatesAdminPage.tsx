@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {RouteComponentProps, withRouter} from "react-router-dom";
+import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import Header from "../../components/Header";
 // import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -155,8 +155,10 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             <div className={'d-flex flex-wrap'}>{
                 cell.map((el, i) => (
                     <span key={i} className={'mr-1'}>
-                #{el}
-            </span>
+                         <Link to={'/?tagNames=' + el}>
+                             #{el}
+                         </Link>
+                    </span>
                 ))
             }</div>
         )
@@ -468,7 +470,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                                 {
                                                     this.state.currentItem &&
                                                     this.state.currentItem.tags.map((value, index) => (
-                                                        <span className={'ml-1'}>#{value}</span>
+                                                        <span className={'ml-1'}>
+                                                            <Link to={'/?tagNames=' + value}>
+                                                                #{value}
+                                                            </Link>
+                                                        </span>
                                                     ))
                                                 }
                                             </td>

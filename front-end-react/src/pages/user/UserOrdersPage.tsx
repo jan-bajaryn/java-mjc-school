@@ -49,6 +49,11 @@ class UserOrdersPage extends Component<IProps, IState> {
     }, {
         dataField: 'price',
         text: 'Price',
+        formatter: (cell: Date, row) => {
+            return (
+                <div>${cell}</div>
+            )
+        }
     },];
     private expandRow = {
         renderer: row => (
@@ -68,7 +73,7 @@ class UserOrdersPage extends Component<IProps, IState> {
                             <tr>
                                 <td>{el.name}</td>
                                 <td>{el.count}</td>
-                                <td>{el.priceForOne * el.count}</td>
+                                <td>${el.priceForOne * el.count}</td>
                             </tr>
                         ))
                     }
@@ -103,6 +108,9 @@ class UserOrdersPage extends Component<IProps, IState> {
                 <div className={'mt-5 pt-5'}/>
                 <main>
                     <div className="container">
+                        <div className={'text-center mb-3'}>
+                            <h1>Orders</h1>
+                        </div>
                         <BootstrapTable bootstrap4={true} keyField='id'
                                         data={this.state.orders}
                                         columns={this.columns}
