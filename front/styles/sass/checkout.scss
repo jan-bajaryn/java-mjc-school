@@ -23,26 +23,29 @@ main {
         'h n'
         'h d';
 
-        .image{
+        .image {
           grid-area: h;
           margin-right: 15px;
-          img{
+
+          img {
             max-width: 150px;
             max-height: 150px;
           }
         }
-        .coupon_name{
+
+        .coupon_name {
           grid-area: n;
           color: $headerColor;
           font-size: x-large;
         }
-        .coupon_description{
+
+        .coupon_description {
           grid-area: d;
           max-width: 60%;
         }
       }
 
-      .price{
+      .price {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -51,16 +54,17 @@ main {
       }
     }
 
-    .line{
+    .line {
       border-top: 2px solid $lineColor;
       margin: 20px 0;
     }
 
-    .total_container{
+    .total_container {
       display: flex;
       justify-content: flex-end;
       font-size: large;
-      .total{
+
+      .total {
         display: flex;
         justify-content: space-between;
         width: 20vw;
@@ -80,6 +84,13 @@ main {
         button {
           @include btnStyle();
           width: 30%;
+
+          a {
+            &:visited, & {
+              color: #828282;
+              text-decoration: none;
+            }
+          }
         }
 
         .transparent_bg {

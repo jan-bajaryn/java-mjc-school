@@ -132,6 +132,10 @@ main .main_container .btn_container .btn_place button {
   box-sizing: border-box;
   width: 30%;
 }
+main .main_container .btn_container .btn_place button a:visited, main .main_container .btn_container .btn_place button a {
+  color: #828282;
+  text-decoration: none;
+}
 main .main_container .btn_container .btn_place .transparent_bg {
   background: transparent;
   color: #828282;
