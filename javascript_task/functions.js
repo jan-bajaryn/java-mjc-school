@@ -151,36 +151,29 @@ function matrixMultiplication(matrix1, matrix2) {
  *      gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello"
  */
 function gather(str) {
-    return gatherHelper(str, []);
-}
+    let arr = [];
+    arr.push(str);
+    let orderArr = [];
 
-function gatherHelper(str, strs) {
-    let strings = [...strs, str];
-
-    return {
-        order: function (i) {
-            return order(i, strings, []);
-        },
-        gather: function (s) {
-            return gatherHelper(s, strings)
-        }
+    function gatherHelper(gatherStr) {
+        arr.push(gatherStr);
+        return gatherHelper;
     }
-}
 
-function order(i, ordStrings, orderInts) {
-    let newInts = [...orderInts, i];
-    return {
-        order: function (newInt) {
-            return order(newInt, ordStrings, newInts)
-        },
-        get: function () {
-            let resultStr = '';
-            for (let j = 0; j < newInts.length; j++) {
-                resultStr += ordStrings[newInts[j]];
-            }
-            return resultStr;
-        }
+    function orderHelper(orderNumber) {
+        orderArr.push(orderNumber);
+        return orderHelper;
     }
+
+    gatherHelper.order = (i) => orderHelper(i);
+    orderHelper.get = () => {
+        let resultStr = '';
+        for (let j = 0; j < orderArr.length; j++) {
+            resultStr += arr[orderArr[j]];
+        }
+        return resultStr;
+    }
+    return gatherHelper;
 }
 
 const expect = require('chai')
@@ -267,16 +260,15 @@ describe('towerHanoi', () => {
 
 describe('Gather', () => {
     it('gather("a")("b")("c").order(0)(1)(2).get() ➞ "abc"', () => {
-        expect(gather('a').gather('b').gather('c').order(0).order(1).order(2).get())
+        expect(gather('a')('b')('c').order(0)(1)(2).get())
             .to.equal('abc');
     });
     it('gather("a")("b")("c").order(2)(1)(0).get() ➞ "cba"', () => {
-        expect(gather('a').gather('b').gather('c').order(2).order(1).order(0).get())
+        expect(gather("a")("b")("c").order(2)(1)(0).get())
             .to.equal('cba');
     });
-    it('gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello"', () => {
-        expect(gather('e').gather('l').gather('o').gather("l").gather("!").gather("h")
-            .order(5).order(0).order(1).order(3).order(2).order(4).get())
+    it('gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get()  ➞ "hello!"', () => {
+        expect(gather("e")("l")("o")("l")("!")("h").order(5)(0)(1)(3)(2)(4).get())
             .to.equal('hello!');
     });
 });

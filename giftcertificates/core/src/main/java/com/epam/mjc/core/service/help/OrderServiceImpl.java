@@ -64,13 +64,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("userId = {}, pageNumber = {},pageSize={}", userId, pageNumber, pageSize);
         paginationValidator.validatePagination(pageNumber, pageSize);
         if (userId == null) {
-            return orderRepo.findAll(PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE)));
+            return orderRepo.findAll(PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE).descending()));
         }
 
         userValidator.validateIdNullable(userId);
         return orderRepo.findAllByUserId(
                 userId,
-                PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE))
+                PageRequest.of(pageNumber - 1, pageSize, Sort.by(Order_.CREATE_DATE).descending())
         );
     }
 

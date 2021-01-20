@@ -59,7 +59,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             pageSize: 5,
             totalPageCount: 1000,
             tagNames: [],
-            sort: 'LAST_UPDATE:asc',
+            sort: 'LAST_UPDATE:desc',
             filterString: []
         }
     }

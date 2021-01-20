@@ -1,6 +1,7 @@
 package com.epam.mjc.core.service.help;
 
 import com.epam.mjc.api.dao.GiftCertificateRepo;
+import com.epam.mjc.api.domain.GiftCertificate_;
 import com.epam.mjc.api.service.exception.GiftCertificateValidatorException;
 import com.epam.mjc.core.dao.specification.GiftCertificateSpecification;
 import com.epam.mjc.api.domain.GiftCertificate;
@@ -143,7 +144,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private Sort buildSort(SearchParams searchParams) {
         Sort sort = Sort.unsorted();
         if (searchParams == null || searchParams.getSortParams() == null) {
-            return sort;
+            return sort.and(Sort.by(GiftCertificate_.LAST_UPDATE_DATE).descending());
         }
         List<SortParam> sortParams = searchParams.getSortParams().getSortParams();
         for (SortParam sortParam : sortParams) {
