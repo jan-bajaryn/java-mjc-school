@@ -124,8 +124,10 @@ function filter() {
         filtered = filtered.filter(c => c.tags.includes(inputTag.value))
     }
 
-    filtered_coupons = [...filtered];
-    displayCoupons(filtered_coupons.slice(0, pageSize));
+    if (JSON.stringify(filtered) !== JSON.stringify(filtered_coupons)) {
+        filtered_coupons = [...filtered];
+        displayCoupons(filtered_coupons.slice(0, pageSize));
+    }
 }
 
 function loadMore(coupons_to_display) {

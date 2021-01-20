@@ -151,7 +151,7 @@ class RegisterPage extends Component<IProps, IState> {
 
                                 <div className="second_column">
                                     <div className="item">
-                                        <label htmlFor="first_name">First Name</label>
+                                        <label htmlFor="first_name">Your Name</label>
                                         {
                                             this.state.bad_name ?
                                                 <input type="text" id="first_name" ref={this.first_name}
