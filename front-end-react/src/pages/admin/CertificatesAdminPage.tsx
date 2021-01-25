@@ -11,7 +11,8 @@ import ChipInput from "material-ui-chip-input";
 import LocalStorageHelper from "../../services/LocalStorageHelper";
 import Parser from "../../services/Parser";
 import {Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import CreateOrEditModal from "../../components/CreateOrEditModal";
+import CreateOrEditModal from "../../components/modals/CreateOrEditModal";
+import ViewModal from "../../components/modals/ViewModal";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -41,7 +42,7 @@ interface IState {
 
     writeOrEditCaption?: string;
     showCreateOrEditModal: boolean;
-
+    showViewModal: boolean;
     filterString: string[]
 }
 
@@ -67,7 +68,8 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             tagNames: [],
             sort: 'LAST_UPDATE:desc',
             filterString: [],
-            showCreateOrEditModal: false
+            showCreateOrEditModal: false,
+            showViewModal: false,
         }
     }
 
@@ -120,8 +122,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             return (
                 <div>
                     <button className={'btn btn-primary'}
-                            onClick={() => this.setState({currentItem: row})}
-                            data-toggle="modal" data-target="#viewModal">
+                            onClick={() => this.setState({currentItem: row, showViewModal: true})}>
                         View
                     </button>
                     <button className={'btn btn-success'}
@@ -345,7 +346,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         editPrice={this.state.editPrice}
                         showCreateOrEditModal={this.state.showCreateOrEditModal}
                         writeOrEditCaption={this.state.writeOrEditCaption}
-                        toggle={() => this.toggle()}
+                        toggle={() => this.toggleCreateOrEditModal()}
                         onNameChange={event => {
                             if (event.target.value.length <= 255) {
                                 this.setState({editName: event.target.value})
@@ -366,93 +367,23 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         })}
                         handleCreateOrEdit={event => this.handleCreateOrEdit(event)}
                     />
-
-                    <div className="modal fade" id="viewModal" tabIndex={-1} role="dialog"
-                         aria-labelledby="viewModalLabel" aria-hidden="true">
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="viewModalLabel">
-                                        View certificate
-                                    </h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    <table className="table">
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">Name</th>
-                                            <td>{this.state.currentItem?.name}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Description</th>
-                                            <td>{this.state.currentItem?.description}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Price</th>
-                                            <td>{this.state.currentItem?.price}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Duration</th>
-                                            <td>{this.state.currentItem?.duration}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Created</th>
-                                            <td>
-                                                {
-                                                    this.state.currentItem &&
-                                                    <span>{Parser.dateParseString(this.state.currentItem.createDate)}</span>
-                                                }
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Updated</th>
-                                            <td>
-                                                {
-                                                    this.state.currentItem &&
-                                                    <span>{Parser.dateParseString(this.state.currentItem.lastUpdateDate)}</span>
-                                                }
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Tags</th>
-                                            <td className={'d-flex flex-wrap'}>
-                                                {
-                                                    this.state.currentItem &&
-                                                    this.state.currentItem.tags.map((value, index) => (
-                                                        <span className={'ml-1'}>
-                                                            <Link to={'/?tagNames=' + value}>
-                                                                #{value}
-                                                            </Link>
-                                                        </span>
-                                                    ))
-                                                }
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <ViewModal currentItem={this.state.currentItem} showModal={this.state.showViewModal}
+                               toggle={() => this.toggleViewModal()}/>
                 </main>
             </div>
         )
             ;
     }
 
-    private toggle() {
+    private toggleCreateOrEditModal() {
         this.setState(prev => ({
             showCreateOrEditModal: !prev.showCreateOrEditModal
+        }));
+    }
+
+    private toggleViewModal() {
+        this.setState(prev => ({
+            showViewModal: !prev.showViewModal
         }));
     }
 
