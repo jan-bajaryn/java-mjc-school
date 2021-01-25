@@ -1,10 +1,7 @@
 export default class LocalStorageHelper {
     static calcItemCount() {
-        let basket = this.getBasket();
         return Array.from(this.getBasket().values())
             .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-        // return 1;
-        // return 0;
     }
 
     static putItemBasket(id: number) {
@@ -72,5 +69,11 @@ export default class LocalStorageHelper {
 
     static getRole(): string | null {
         return localStorage.getItem('role');
+    }
+
+    static removeAllItemBasket(id: number) {
+        let basket = this.getBasket();
+        basket.delete(id);
+        this.saveBasket(basket);
     }
 }

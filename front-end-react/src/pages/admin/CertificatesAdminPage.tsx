@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import Header from "../../components/Header";
-// import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Certificate from "../../entity/Certificate";
@@ -11,6 +10,8 @@ import Pagination from "../../components/Pagination";
 import ChipInput from "material-ui-chip-input";
 import LocalStorageHelper from "../../services/LocalStorageHelper";
 import Parser from "../../services/Parser";
+import {Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import CreateOrEditModal from "../../components/CreateOrEditModal";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -39,6 +40,7 @@ interface IState {
     editTags: string[];
 
     writeOrEditCaption?: string;
+    showCreateOrEditModal: boolean;
 
     filterString: string[]
 }
@@ -50,7 +52,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            editDescription: "", editDuration: 0, editName: "", editPrice: 0, editTags: [],
+            editDescription: "",
+            editDuration: 0,
+            editName: "",
+            editPrice: 0,
+            editTags: [],
 
             items: [],
             partName: '',
@@ -60,7 +66,8 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             totalPageCount: 1000,
             tagNames: [],
             sort: 'LAST_UPDATE:desc',
-            filterString: []
+            filterString: [],
+            showCreateOrEditModal: false
         }
     }
 
@@ -126,10 +133,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                     editDuration: row.duration,
                                     editPrice: row.price,
                                     editTags: [...row.tags],
-                                    writeOrEditCaption: "Edit"
+                                    writeOrEditCaption: "Edit",
+                                    showCreateOrEditModal: true
                                 })
                             }}
-                            data-toggle="modal" data-target="#editModal">
+                    >
                         Edit
                     </button>
                     <button type="button" onClick={() => this.setState({currentItem: row})}
@@ -268,10 +276,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                             editDuration: 0,
                                             editPrice: 0,
                                             editTags: [],
-                                            writeOrEditCaption: "Create"
+                                            writeOrEditCaption: "Create",
+                                            showCreateOrEditModal: true
                                         })
                                     }}
-                                    data-toggle="modal" data-target="#editModal">
+                            >
                                 Create
                             </button>
                         </div>
@@ -327,91 +336,36 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         </div>
                     </div>
 
-                    <div className="modal fade" id="editModal" tabIndex={-1} role="dialog"
-                         aria-labelledby="editModalLabel" aria-hidden="true">
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="editModalLabel">
-                                        {
-                                            this.state.writeOrEditCaption &&
-                                            <span>{this.state.writeOrEditCaption}</span>
-                                        } certificate
-                                    </h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    <div className="form-group text-left">
-                                        <label htmlFor="name">Name</label>
-                                        <input type="text" className="form-control" placeholder="Enter Name"
-                                               value={this.state.editName}
-                                               onChange={event => {
-                                                   if (event.target.value.length <= 255) {
-                                                       this.setState({editName: event.target.value})
-                                                   }
-                                               }}
-                                               id="name"/>
-                                    </div>
-                                    <div className="form-group text-left">
-                                        <label htmlFor="description">Description:</label>
-                                        <textarea className="form-control" rows={5} id="description"
-                                                  value={this.state.editDescription}
-                                                  onChange={event => {
-                                                      if (event.target.value.length <= MAX_DESCRIPTION_LENGTH) {
-                                                          this.setState({editDescription: event.target.value})
-                                                      }
-                                                  }}
-                                                  placeholder={"Enter Description"}/>
-                                    </div>
 
-                                    <div className="form-group text-left">
-                                        <label htmlFor="price">Price</label>
-                                        <input type="number" step={'any'} className="form-control"
-                                               value={this.state.editPrice}
-                                               placeholder="Enter Price"
-                                               min={0}
-                                               onChange={event => this.setState({editPrice: Number.parseFloat(event.target.value)})}
-                                               id="price"/>
-                                    </div>
-
-                                    <div className="form-group text-left">
-                                        <label htmlFor="duration">Duration</label>
-                                        <input type="number" className="form-control" placeholder="Enter Duration"
-                                               value={this.state.editDuration}
-                                               min={0}
-                                               onChange={event => this.setState({editDuration: Number.parseFloat(event.target.value)})}
-                                               id="duration"/>
-                                    </div>
-
-                                    <div className="form-group text-left">
-                                        <ChipInput
-                                            label={'Tags'}
-                                            value={this.state.editTags}
-                                            onAdd={chip => this.setState(prev => ({
-                                                editTags: [...prev.editTags, chip]
-                                            }))}
-                                            onDelete={chip => this.setState({
-                                                editTags: this.state.editTags.filter((e) => e !== chip)
-                                            })}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close
-                                    </button>
-                                    <button type="button" className="btn btn-primary" data-dismiss="modal"
-                                            onClick={event => this.handleCreateOrEdit(event)}>
-                                        {
-                                            this.state.writeOrEditCaption &&
-                                            <span>{this.state.writeOrEditCaption}</span>
-                                        }
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <CreateOrEditModal
+                        editTags={this.state.editTags}
+                        editDescription={this.state.editDescription}
+                        editDuration={this.state.editDuration}
+                        editName={this.state.editName}
+                        editPrice={this.state.editPrice}
+                        showCreateOrEditModal={this.state.showCreateOrEditModal}
+                        writeOrEditCaption={this.state.writeOrEditCaption}
+                        toggle={() => this.toggle()}
+                        onNameChange={event => {
+                            if (event.target.value.length <= 255) {
+                                this.setState({editName: event.target.value})
+                            }
+                        }}
+                        onDescriptionChange={event => {
+                            if (event.target.value.length <= MAX_DESCRIPTION_LENGTH) {
+                                this.setState({editDescription: event.target.value})
+                            }
+                        }}
+                        onPriceChange={event => this.setState({editPrice: Number.parseFloat(event.target.value)})}
+                        onDurationChange={event => this.setState({editDuration: Number.parseFloat(event.target.value)})}
+                        onTagAdd={chip => this.setState(prev => ({
+                            editTags: [...prev.editTags, chip]
+                        }))}
+                        onTagDelete={chip => this.setState({
+                            editTags: this.state.editTags.filter((e) => e !== chip)
+                        })}
+                        handleCreateOrEdit={event => this.handleCreateOrEdit(event)}
+                    />
 
                     <div className="modal fade" id="viewModal" tabIndex={-1} role="dialog"
                          aria-labelledby="viewModalLabel" aria-hidden="true">
@@ -492,7 +446,14 @@ class CertificatesAdminPage extends Component<IProps, IState> {
 
                 </main>
             </div>
-        );
+        )
+            ;
+    }
+
+    private toggle() {
+        this.setState(prev => ({
+            showCreateOrEditModal: !prev.showCreateOrEditModal
+        }));
     }
 
     private handleDeleteItem(event: React.MouseEvent<HTMLButtonElement>) {
@@ -563,16 +524,12 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     }
 
     private handleCreateOrEdit(event: React.MouseEvent<HTMLButtonElement>) {
-
+        event.preventDefault();
         if (this.state.currentItem) {
             this.edit(event);
         } else {
             this.create(event);
         }
-
-        // if (!this.isFormValid(username, password, repeat_password, first_name)) {
-        //     return;
-        // }
     }
 
     private edit(event: React.MouseEvent<HTMLButtonElement>) {
@@ -595,7 +552,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             axios.patch(endpoint,
                 data
             ).then(() => {
-                this.filter();
+                this.setState({showCreateOrEditModal: false}, () => this.filter());
             }).catch((error) => {
                 // if (error.response.data.errorCode === '40026') {
                 //     this.setState({err_msg: 'User with so username already exists'})
@@ -631,7 +588,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         axios.post(endpoint,
             data
         ).then(() => {
-            this.setState({pageNumber: 1}, () => this.filter());
+            this.setState({pageNumber: 1, showCreateOrEditModal: false}, () => this.filter());
         }).catch((error) => {
             AuthorizationHandleService.handleTokenExpired(
                 error,

@@ -1,9 +1,9 @@
 package com.epam.mjc.core.controller.errhandle;
 
 public enum ErrorCodes {
+    REMAIN_CODE("0"),
     TAG_VALIDATOR("1"),
     GIFT_VALIDATOR("2"),
-    REMAIN_CODE("0"),
     GIFT_DUPLICATE("3"),
     GIFT_NOT_FOUND("4"),
     TAG_DUPLICATE("5"),

@@ -38,7 +38,8 @@ export default class CouponComp extends Component<IProps, IState> {
                             </button>
                         </div>
                         <div className="d-flex justify-content-end align-items-center">
-                            <div className="price">${this.props.certificate.price * this.props.size}</div>
+                            <div
+                                className="price">${Math.round((this.props.certificate.price * this.props.size) * 100) / 100}</div>
                         </div>
                     </div>
                 </div>

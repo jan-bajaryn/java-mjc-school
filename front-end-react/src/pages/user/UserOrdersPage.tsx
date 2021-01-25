@@ -142,7 +142,7 @@ class UserOrdersPage extends Component<IProps, IState> {
     private loadResource(search) {
         let role = LocalStorageHelper.getRole();
         if (role === null) {
-// TODO exception
+            this.props.history.push('/login');
         } else if (role === 'ADMIN') {
             this.loadAdmin(search);
         }

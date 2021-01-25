@@ -7,14 +7,12 @@ import LocalStorageHelper from "../../services/LocalStorageHelper";
 import CouponComp from "../../components/CouponComp";
 import axios from "axios";
 import AuthorizationHandleService from "../../services/AuthorizationHandleService";
-import RefExtractor from "../../services/RefExtractor";
 
 
 interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-    // coupons: Map<number, number>;
     coupons: Map<Certificate, number>;
 }
 
@@ -51,6 +49,11 @@ class BasketPage extends Component<IProps, IState> {
                 () => this.buildItem(resultBasket, id, size),
                 () => window.location.reload()
             )
+            if (error.response && error.response.data) {
+                if (error.response.data.errorCode === '4044') {
+                    LocalStorageHelper.removeAllItemBasket(id);
+                }
+            }
         });
     }
 
@@ -90,8 +93,8 @@ class BasketPage extends Component<IProps, IState> {
                                 <span>Total</span>
                                 <span>${
                                     Array.from(this.state.coupons.entries())
-                                        .map(value => value[0].price * value[1])
-                                        .reduce((p, c) => p + c, 0)
+                                        .map(value => Math.round((value[0].price * value[1]) * 100)/100)
+                                        .reduce((p, c) => Math.round((p + c) * 100)/100, 0)
                                 }</span>
                             </div>
                         </div>
@@ -179,8 +182,13 @@ class BasketPage extends Component<IProps, IState> {
             LocalStorageHelper.clearBasket();
             this.props.history.push("/orders");
         }).catch((error) => {
-            if (error.response.data.errorCode === '40128') {
-                this.props.history.push('/login');
+            if (error.response && error.response.data) {
+                if (error.response.data.errorCode === '40128') {
+                    this.props.history.push('/login');
+                }
+                if (error.response.data.errorCode === '4044') {
+                    window.location.reload();
+                }
             }
             AuthorizationHandleService.handleTokenExpired(
                 error,

@@ -17,7 +17,7 @@ export default class Pagination extends Component<IProps, IState> {
     render() {
         return (
             <div className={'row m-5 align-middle'}>
-                <ul className="pagination justify-content-center pagination-lg col-11">
+                <ul className="pagination justify-content-center pagination-lg col-10">
                     {
                         (!this.props.pageNumber || this.props.pageNumber <= 1) ?
                             <li className="page-item disabled"><a className="page-link"
@@ -100,7 +100,7 @@ export default class Pagination extends Component<IProps, IState> {
                     }
                 </ul>
 
-                <div className="form-group w-10 col-1">
+                <div className="form-group w-10 col-2">
                     <label>
                         <select className="form-control btn-lg" value={this.props.pageSize}
                                 onChange={event => this.props.changePageSize(event)}>
