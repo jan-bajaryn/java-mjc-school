@@ -10,7 +10,6 @@ import Pagination from "../components/Pagination";
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import '../styles/main-page.css'
 import QueryUrlParamHelper from "../services/QueryUrlParamHelper";
-import {Redirect} from "react-router-dom";
 
 
 interface IProps extends RouteComponentProps<any> {

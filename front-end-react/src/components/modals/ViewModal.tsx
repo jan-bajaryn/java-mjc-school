@@ -15,8 +15,8 @@ class ViewModal extends Component<IProps, any> {
     render() {
         return (
 
-            <Modal isOpen={this.props.showModal} toggle={() => this.props.toggle}>
-                <ModalHeader toggle={() => this.props.toggle}>
+            <Modal isOpen={this.props.showModal} toggle={() => this.props.toggle()}>
+                <ModalHeader toggle={() => this.props.toggle()}>
                     <h5 className="modal-title" id="viewModalLabel">
                         View certificate
                     </h5>

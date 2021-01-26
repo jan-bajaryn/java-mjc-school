@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import '../styles/login.css'
 import axios from "axios";
-import {withRouter, RouteComponentProps} from 'react-router-dom';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
 import Header from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.css';
 import LocalStorageHelper from "../services/LocalStorageHelper";

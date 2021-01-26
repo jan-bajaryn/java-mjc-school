@@ -10,9 +10,9 @@ import Pagination from "../../components/Pagination";
 import ChipInput from "material-ui-chip-input";
 import LocalStorageHelper from "../../services/LocalStorageHelper";
 import Parser from "../../services/Parser";
-import {Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import CreateOrEditModal from "../../components/modals/CreateOrEditModal";
 import ViewModal from "../../components/modals/ViewModal";
+import QueryUrlParamHelper from "../../services/QueryUrlParamHelper";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -43,10 +43,15 @@ interface IState {
     writeOrEditCaption?: string;
     showCreateOrEditModal: boolean;
     showViewModal: boolean;
-    filterString: string[]
+    filterString: string[];
+    wrongEditName: boolean;
+    wrongEditDescription: boolean;
+    errModalText?: string | null;
 }
 
 const MAX_DESCRIPTION_LENGTH = 500;
+const MAX_TAG_LENGTH = 255;
+const MAX_CERTIFICATE_NAME_LENGTH = 255;
 
 class CertificatesAdminPage extends Component<IProps, IState> {
 
@@ -70,6 +75,8 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             filterString: [],
             showCreateOrEditModal: false,
             showViewModal: false,
+            wrongEditName: false,
+            wrongEditDescription: false,
         }
     }
 
@@ -127,15 +134,18 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                     </button>
                     <button className={'btn btn-success'}
                             onClick={() => {
-                                this.setState({currentItem: row})
                                 this.setState({
+                                    currentItem: row,
                                     editDescription: row.description,
                                     editName: row.name,
                                     editDuration: row.duration,
                                     editPrice: row.price,
                                     editTags: [...row.tags],
                                     writeOrEditCaption: "Edit",
-                                    showCreateOrEditModal: true
+                                    showCreateOrEditModal: true,
+                                    wrongEditName: false,
+                                    wrongEditDescription: false,
+                                    errModalText: null
                                 })
                             }}
                     >
@@ -278,7 +288,10 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                                             editPrice: 0,
                                             editTags: [],
                                             writeOrEditCaption: "Create",
-                                            showCreateOrEditModal: true
+                                            showCreateOrEditModal: true,
+                                            wrongEditName: false,
+                                            wrongEditDescription: false,
+                                            errModalText: null
                                         })
                                     }}
                             >
@@ -348,25 +361,37 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                         writeOrEditCaption={this.state.writeOrEditCaption}
                         toggle={() => this.toggleCreateOrEditModal()}
                         onNameChange={event => {
-                            if (event.target.value.length <= 255) {
-                                this.setState({editName: event.target.value})
+                            if (event.target.value.length <= MAX_CERTIFICATE_NAME_LENGTH) {
+                                this.setState({editName: event.target.value, wrongEditName: false})
                             }
                         }}
                         onDescriptionChange={event => {
                             if (event.target.value.length <= MAX_DESCRIPTION_LENGTH) {
-                                this.setState({editDescription: event.target.value})
+                                this.setState({editDescription: event.target.value, wrongEditDescription: false})
                             }
                         }}
-                        onPriceChange={event => this.setState({editPrice: Number.parseFloat(event.target.value)})}
+                        onPriceChange={event => {
+                            console.log("price = ", Number.parseFloat(event.target.value))
+                            this.setState({editPrice: Number.parseFloat(event.target.value)})
+                        }}
                         onDurationChange={event => this.setState({editDuration: Number.parseFloat(event.target.value)})}
-                        onTagAdd={chip => this.setState(prev => ({
-                            editTags: [...prev.editTags, chip]
-                        }))}
+                        onTagAdd={chip => {
+                            if (chip.length < MAX_TAG_LENGTH) {
+                                this.setState(prev => ({
+                                    editTags: [...prev.editTags, chip]
+                                }))
+                            }
+                        }}
                         onTagDelete={chip => this.setState({
                             editTags: this.state.editTags.filter((e) => e !== chip)
                         })}
                         handleCreateOrEdit={event => this.handleCreateOrEdit(event)}
+                        wrongEditName={this.state.wrongEditName}
+                        wrongEditDescription={this.state.wrongEditDescription}
+                        errText={this.state.errModalText}
                     />
+
+
                     <ViewModal currentItem={this.state.currentItem} showModal={this.state.showViewModal}
                                toggle={() => this.toggleViewModal()}/>
                 </main>
@@ -424,38 +449,22 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             return;
         }
         const query = new URLSearchParams(this.props.location.search);
-        CertificatesAdminPage.setParamQuery(query, this.state.partName, 'partName');
-        CertificatesAdminPage.setParamQuery(query, this.state.partDescription, 'partDescription');
-        CertificatesAdminPage.setParamQuery(query, this.state.pageNumber, 'pageNumber');
-        CertificatesAdminPage.setParamQuery(query, this.state.pageSize, 'pageSize');
-        CertificatesAdminPage.setParamQuery(query, this.state.sort, 'sort');
-        CertificatesAdminPage.setParamQueryArray(query, this.state.tagNames, 'tagNames');
+        QueryUrlParamHelper.setParamQuery(query, this.state.partName, 'partName');
+        QueryUrlParamHelper.setParamQuery(query, this.state.partDescription, 'partDescription');
+        QueryUrlParamHelper.setParamQuery(query, this.state.pageNumber, 'pageNumber');
+        QueryUrlParamHelper.setParamQuery(query, this.state.pageSize, 'pageSize');
+        QueryUrlParamHelper.setParamQuery(query, this.state.sort, 'sort');
+        QueryUrlParamHelper.setParamQueryArray(query, this.state.tagNames, 'tagNames');
         let path = "?" + query.toString();
         this.props.history.replace(path);
         this.loadResources(path);
         this.buildSearch(path);
     }
 
-    private static setParamQueryArray(query: URLSearchParams, values: string[], name: string) {
-        console.log("enter method setParamQueryArray")
-        if (values.length !== 0) {
-            console.log("set something")
-            query.set(name, values.join(','));
-        } else {
-            query.delete(name);
-        }
-    }
-
-    private static setParamQuery(query: URLSearchParams, value: any, name: string) {
-        if (value) {
-            query.set(name, value);
-        } else {
-            query.delete(name);
-        }
-    }
-
     private handleCreateOrEdit(event: React.MouseEvent<HTMLButtonElement>) {
-        event.preventDefault();
+        if (!this.validateCreateOrEdit()) {
+            return;
+        }
         if (this.state.currentItem) {
             this.edit(event);
         } else {
@@ -485,17 +494,16 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             ).then(() => {
                 this.setState({showCreateOrEditModal: false}, () => this.filter());
             }).catch((error) => {
-                // if (error.response.data.errorCode === '40026') {
-                //     this.setState({err_msg: 'User with so username already exists'})
-                // }
-                // if (error.response.data.errorCode === '40019') {
-                //     this.setState({err_msg: error.response.data.message})
-                // }
                 AuthorizationHandleService.handleTokenExpired(
                     error,
                     () => this.edit(event),
                     () => window.location.reload()
                 )
+                if (error.response && error.response.data) {
+                    if (error.response.data.errorCode === '4008') {
+                        this.setState({errModalText: 'Gift certificate with so name already exists'})
+                    }
+                }
             });
         }
     }
@@ -526,6 +534,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
                 () => this.create(event),
                 () => window.location.reload()
             )
+            if (error.response && error.response.data) {
+                if (error.response.data.errorCode === '4003') {
+                    this.setState({errModalText: 'Gift certificate with so name already exists'})
+                }
+            }
         });
 
     }
@@ -546,6 +559,23 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             return true;
         }
         return false;
+    }
+
+    private validateCreateOrEdit(): boolean {
+        let result = true;
+        if (this.state.editName === '') {
+            this.setState({wrongEditName: true})
+            result = false;
+        }
+        if (this.state.editDescription === '') {
+            this.setState({wrongEditDescription: true})
+            result = false;
+        }
+
+        if (isNaN(this.state.editPrice) || isNaN(this.state.editDuration)) {
+            result = false;
+        }
+        return result;
     }
 }
 

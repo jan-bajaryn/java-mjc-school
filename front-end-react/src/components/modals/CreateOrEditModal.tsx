@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {Alert, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import ChipInput from "material-ui-chip-input";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 
@@ -19,9 +19,10 @@ interface IProps extends RouteComponentProps<any> {
     onDurationChange: any;
     onTagAdd: any;
     onTagDelete: any;
-    handleCreateOrEdit:any;
-
-
+    handleCreateOrEdit: any;
+    errText?: string | null;
+    wrongEditName: boolean;
+    wrongEditDescription: boolean;
 }
 
 
@@ -41,38 +42,81 @@ class CreateOrEditModal extends Component<IProps, IState> {
                     </h5>
                 </ModalHeader>
                 <ModalBody>
+                    {
+                        this.props.errText &&
+                        <Alert color="warning">
+                            {this.props.errText}
+                        </Alert>
+                    }
                     <div className="form-group text-left">
                         <label htmlFor="name">Name</label>
-                        <input type="text" className="form-control" placeholder="Enter Name"
-                               value={this.props.editName}
-                               onChange={event => this.props.onNameChange(event)}
-                               id="name"/>
+                        {
+                            this.props.wrongEditName ?
+                                <input type="text" className="form-control is-invalid" placeholder="Enter Name"
+                                       value={this.props.editName}
+                                       onChange={event => this.props.onNameChange(event)}
+                                       id="name"/>
+                                :
+                                <input type="text" className="form-control" placeholder="Enter Name"
+                                       value={this.props.editName}
+                                       onChange={event => this.props.onNameChange(event)}
+                                       id="name"/>
+                        }
                     </div>
                     <div className="form-group text-left">
                         <label htmlFor="description">Description:</label>
-                        <textarea className="form-control" rows={5} id="description"
-                                  value={this.props.editDescription}
-                                  onChange={event => this.props.onDescriptionChange(event)}
-                                  placeholder={"Enter Description"}/>
+                        {
+                            this.props.wrongEditDescription ?
+                                <textarea className="form-control is-invalid" rows={5} id="description"
+                                          value={this.props.editDescription}
+                                          onChange={event => this.props.onDescriptionChange(event)}
+                                          placeholder={"Enter Description"}/>
+                                :
+                                <textarea className="form-control" rows={5} id="description"
+                                          value={this.props.editDescription}
+                                          onChange={event => this.props.onDescriptionChange(event)}
+                                          placeholder={"Enter Description"}/>
+                        }
                     </div>
 
                     <div className="form-group text-left">
                         <label htmlFor="price">Price</label>
-                        <input type="number" step={'any'} className="form-control"
-                               value={this.props.editPrice}
-                               placeholder="Enter Price"
-                               min={0}
-                               onChange={event => this.props.onPriceChange(event)}
-                               id="price"/>
+                        {
+                            isNaN(this.props.editPrice) ?
+                                <input type="number" step={'any'} className="form-control is-invalid"
+                                       value={this.props.editPrice}
+                                       placeholder="Enter Price"
+                                       min={0}
+                                       onChange={event => this.props.onPriceChange(event)}
+                                       id="price"/>
+                                :
+                                <input type="number" step={'any'} className="form-control"
+                                       value={this.props.editPrice}
+                                       placeholder="Enter Price"
+                                       min={0}
+                                       onChange={event => this.props.onPriceChange(event)}
+                                       id="price"/>
+                        }
+
                     </div>
 
                     <div className="form-group text-left">
                         <label htmlFor="duration">Duration</label>
-                        <input type="number" className="form-control" placeholder="Enter Duration"
-                               value={this.props.editDuration}
-                               min={0}
-                               onChange={event => this.props.onDurationChange(event)}
-                               id="duration"/>
+                        {
+                            isNaN(this.props.editDuration) ?
+                                <input type="number" className="form-control is-invalid" placeholder="Enter Duration"
+                                       value={this.props.editDuration}
+                                       min={0}
+                                       onChange={event => this.props.onDurationChange(event)}
+                                       id="duration"/>
+                                :
+                                <input type="number" className="form-control" placeholder="Enter Duration"
+                                       value={this.props.editDuration}
+                                       min={0}
+                                       onChange={event => this.props.onDurationChange(event)}
+                                       id="duration"/>
+                        }
+
                     </div>
 
                     <div className="form-group text-left">

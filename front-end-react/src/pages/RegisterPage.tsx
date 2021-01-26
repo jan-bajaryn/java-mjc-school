@@ -1,4 +1,4 @@
-import React, {Component, RefObject} from "react";
+import React, {Component} from "react";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import '../styles/register.css'
 import axios from "axios";
