@@ -81,7 +81,7 @@ class LoginPage extends Component<IProps, IState> {
             result = false;
         }
 
-        if (!password || password === '' || password.length < 3 || password.length > 30) {
+        if (!password || password === '' || password.length < 4 || password.length > 30) {
             this.setState({bad_password: true});
             result = false;
         }
