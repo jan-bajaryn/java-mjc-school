@@ -26,7 +26,7 @@ class RegisterPage extends Component<IProps, IState> {
     private username = React.createRef<HTMLInputElement>();
     private password = React.createRef<HTMLInputElement>();
     private repeat_password = React.createRef<HTMLInputElement>();
-    private first_name = React.createRef<HTMLInputElement>();
+    private name = React.createRef<HTMLInputElement>();
 
 
     constructor(props: IProps) {
@@ -48,16 +48,16 @@ class RegisterPage extends Component<IProps, IState> {
         let username: string = RefExtractor.exctractRef(this.username);
         let password: string = RefExtractor.exctractRef(this.password);
         let repeat_password: string = RefExtractor.exctractRef(this.repeat_password);
-        let first_name: string = RefExtractor.exctractRef(this.first_name);
+        let name: string = RefExtractor.exctractRef(this.name);
 
-        if (!this.isFormValid(username, password, repeat_password, first_name)) {
+        if (!this.isFormValid(username, password, repeat_password, name)) {
             return;
         }
 
         let data = {
             username: username,
             password: password,
-            firstName: first_name
+            name: name
         }
 
         axios.post(endpoint,
@@ -81,7 +81,7 @@ class RegisterPage extends Component<IProps, IState> {
 
     };
 
-    private isFormValid(username: string, password: string, repeat_password: string, first_name: string): boolean {
+    private isFormValid(username: string, password: string, repeat_password: string, name: string): boolean {
         let result = true;
         if (!username || username === '' || username.length < 3 || username.length > 30) {
             this.setState({bad_username: true})
@@ -96,7 +96,7 @@ class RegisterPage extends Component<IProps, IState> {
             this.setState({bad_repeat_password: true});
             result = false;
         }
-        if (first_name && (/\s/.test(first_name) || first_name.length > 30)) {
+        if (name && (/\s/.test(name) || name.length > 20)) {
             this.setState({bad_name: true});
             result = false;
         }
@@ -151,14 +151,14 @@ class RegisterPage extends Component<IProps, IState> {
 
                                 <div className="second_column">
                                     <div className="item">
-                                        <label htmlFor="first_name">Your Name</label>
+                                        <label htmlFor="name">Your Name</label>
                                         {
                                             this.state.bad_name ?
-                                                <input type="text" id="first_name" ref={this.first_name}
+                                                <input type="text" id="name" ref={this.name}
                                                        className={'form-control is-invalid'}
                                                        onChange={() => this.setState({bad_name: false})}/>
                                                 :
-                                                <input type="text" id="first_name" ref={this.first_name}
+                                                <input type="text" id="name" ref={this.name}
                                                        className={'form-control'}/>
                                         }
 

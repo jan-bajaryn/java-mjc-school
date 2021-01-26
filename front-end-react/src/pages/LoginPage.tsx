@@ -63,7 +63,7 @@ class LoginPage extends Component<IProps, IState> {
                 headers: headers
             }
         ).then(res => {
-            LocalStorageHelper.login(res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username);
+            LocalStorageHelper.login(res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username, res.data.name);
 
             this.props.history.push("/");
 

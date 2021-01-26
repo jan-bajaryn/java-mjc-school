@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {RouteComponentProps, withRouter} from "react-router-dom";
+import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import Header from "../../components/Header";
 import BootstrapTable from 'react-bootstrap-table-next';
 import Order from "../../entity/Order";
@@ -108,18 +108,52 @@ class UserOrdersPage extends Component<IProps, IState> {
                 <div className={'mt-5 pt-5'}/>
                 <main>
                     <div className="container">
-                        <div className={'text-center mb-3'}>
-                            <h1>Orders</h1>
+                        <div className={'text-center mb-5'}>
+                            {
+                                LocalStorageHelper.getName() ?
+                                    <div>
+                                        <h1>Hello, <span>{LocalStorageHelper.getName()}</span></h1>
+                                        <h1>This is your orders:</h1>
+                                    </div>
+                                    :
+                                    <h1>Orders</h1>
+                            }
                         </div>
-                        <BootstrapTable bootstrap4={true} keyField='id'
-                                        data={this.state.orders}
-                                        columns={this.columns}
-                                        expandRow={this.expandRow}
-                        />
-                        <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
-                                    totalPageCount={this.state.totalPageCount}
-                                    onClickPagination={(event, input) => this.onClickPagination(event, input)}
-                                    changePageSize={(event) => this.changePageSize(event)}/>
+
+                        {
+                            this.state.orders.length === 0 ?
+                                <div>
+                                    <BootstrapTable bootstrap4={true} keyField='id'
+                                                    data={this.state.orders}
+                                                    columns={this.columns}
+                                                    expandRow={this.expandRow}
+                                    />
+                                    <div className={'text-center my-5 py-5'}>
+                                        <h5>
+                                            You have not any orders yet
+                                        </h5>
+                                        <h5>
+                                            You can <Link to={'/'}>make them</Link>
+                                        </h5>
+                                    </div>
+                                    <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
+                                                totalPageCount={this.state.totalPageCount}
+                                                onClickPagination={(event, input) => this.onClickPagination(event, input)}
+                                                changePageSize={(event) => this.changePageSize(event)}/>
+                                </div>
+                                :
+                                <div className={'mb-4'}>
+                                    <BootstrapTable bootstrap4={true} keyField='id'
+                                                    data={this.state.orders}
+                                                    columns={this.columns}
+                                                    expandRow={this.expandRow}
+                                    />
+                                    <Pagination pageNumber={this.state.pageNumber} pageSize={this.state.pageSize}
+                                                totalPageCount={this.state.totalPageCount}
+                                                onClickPagination={(event, input) => this.onClickPagination(event, input)}
+                                                changePageSize={(event) => this.changePageSize(event)}/>
+                                </div>
+                        }
                     </div>
                 </main>
             </div>

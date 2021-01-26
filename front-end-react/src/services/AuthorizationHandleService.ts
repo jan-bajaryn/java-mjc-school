@@ -32,7 +32,7 @@ export default class AuthorizationHandleService {
             ).then(res => {
                 console.log("refresh procedure success")
                 LocalStorageHelper.login(
-                    res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username
+                    res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username,res.data.name
                 );
                 successCallback();
             }).catch((error) => {

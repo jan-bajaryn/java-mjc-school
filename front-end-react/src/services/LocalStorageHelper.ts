@@ -40,14 +40,20 @@ export default class LocalStorageHelper {
         localStorage.removeItem("role");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
+        localStorage.removeItem("name");
     }
 
-    static login(access_token, refresh_token, role, id, username) {
+    static login(access_token, refresh_token, role, id, username, name) {
         localStorage.setItem("authorization", access_token);
         localStorage.setItem("refresh_token", refresh_token);
         localStorage.setItem("role", role);
         localStorage.setItem("userId", id);
         localStorage.setItem("username", username);
+        if (name) {
+            localStorage.setItem("name", name);
+        } else {
+            localStorage.removeItem("name");
+        }
     }
 
     static isLogged(): boolean {
@@ -69,6 +75,10 @@ export default class LocalStorageHelper {
 
     static getRole(): string | null {
         return localStorage.getItem('role');
+    }
+
+    static getName(): string | null {
+        return localStorage.getItem('name');
     }
 
     static removeAllItemBasket(id: number) {
