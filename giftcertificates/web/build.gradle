@@ -21,8 +21,6 @@ repositories {
 dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
-
-
     implementation project(':api')
     implementation project(':core')
 }
