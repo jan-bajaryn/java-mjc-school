@@ -6,8 +6,15 @@ plugins {
 }
 
 
+//bootJar {
+//    mainClassName = 'com.epam.mjc.Application'
+//}
 bootJar {
-    mainClassName = 'com.epam.mjc.Application'
+    enabled = false
+}
+
+jar {
+    enabled = true
 }
 
 group 'com.epam.mjc'

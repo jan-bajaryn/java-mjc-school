@@ -24,6 +24,9 @@ public class User implements UserDetails {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "password")
     private String password;
 
@@ -35,10 +38,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-
-    public User(Long id, String username, String password, Role role) {
+    public User(Long id, String username, String name, String password, Role role) {
         this.id = id;
         this.username = username;
+        this.name = name;
         this.password = password;
         this.role = role;
     }
@@ -101,6 +104,14 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,6 +122,7 @@ public class User implements UserDetails {
         if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
         if (getUsername() != null ? !getUsername().equals(user.getUsername()) : user.getUsername() != null)
             return false;
+        if (getName() != null ? !getName().equals(user.getName()) : user.getName() != null) return false;
         if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
             return false;
         return getRole() == user.getRole();
@@ -120,6 +132,7 @@ public class User implements UserDetails {
     public int hashCode() {
         int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
         return result;
@@ -130,6 +143,7 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 '}';

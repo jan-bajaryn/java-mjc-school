@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll(Integer pageNumber, Integer pageSize) {
         log.debug("findAll: pageSize = {}", pageSize);
         paginationValidator.validatePagination(pageNumber, pageSize);
-        return userRepo.findAll(PageRequest.of(pageNumber-1, pageSize)).getContent();
+        return userRepo.findAll(PageRequest.of(pageNumber - 1, pageSize)).getContent();
     }
 
     @Override
@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User signUp(User user) {
         userValidator.validateUserBeforeCreate(user);
+
+        if (user.getName() != null && user.getName().isEmpty()) {
+            user.setName(null);
+        }
+
         checkUsernameDuplicate(user);
         user.setRole(Role.USER);
         user.setPassword(customPasswordEncoder.encode(user.getPassword()));

@@ -15,9 +15,17 @@ repositories {
     mavenCentral()
 }
 
+//bootJar {
+//    mainClassName = 'com.epam.mjc.Application'
+//}
+//jar {
+//    enabled = true
+//}
+
 bootJar {
-    mainClassName = 'cpm.epam.mjc.Application'
+    enabled = false
 }
+
 jar {
     enabled = true
 }

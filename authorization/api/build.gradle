@@ -16,8 +16,9 @@ repositories {
 }
 
 bootJar {
-    mainClassName = 'cpm.epam.mjc.Application'
+    enabled = false
 }
+
 jar {
     enabled = true
 }

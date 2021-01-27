@@ -5,13 +5,15 @@ import org.springframework.hateoas.RepresentationModel;
 public class UserDto extends RepresentationModel<UserDto> {
     private Long id;
     private String username;
+    private String name;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String username) {
+    public UserDto(Long id, String username, String name) {
         this.id = id;
         this.username = username;
+        this.name = name;
     }
 
     public Long getId() {
@@ -30,21 +32,34 @@ public class UserDto extends RepresentationModel<UserDto> {
         this.username = username;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         UserDto userDto = (UserDto) o;
 
         if (getId() != null ? !getId().equals(userDto.getId()) : userDto.getId() != null) return false;
-        return getUsername() != null ? getUsername().equals(userDto.getUsername()) : userDto.getUsername() == null;
+        if (getUsername() != null ? !getUsername().equals(userDto.getUsername()) : userDto.getUsername() != null)
+            return false;
+        return getName() != null ? getName().equals(userDto.getName()) : userDto.getName() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         return result;
     }
 
@@ -53,6 +68,7 @@ public class UserDto extends RepresentationModel<UserDto> {
         return "UserDto{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

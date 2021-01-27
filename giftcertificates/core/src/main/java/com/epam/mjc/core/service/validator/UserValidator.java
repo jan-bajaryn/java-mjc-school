@@ -26,6 +26,13 @@ public class UserValidator {
         validateNotNull(user);
         validateUsername(user);
         validatePassword(user);
+        validateName(user);
+    }
+
+    private void validateName(User user) {
+        if ((user.getName() != null && !user.getName().isEmpty()) && !user.getName().matches("[\\S]{1,20}")){
+            throw new UserValidatorException("user.wrong-name");
+        }
     }
 
     private void validatePassword(User user) {

@@ -2,8 +2,6 @@ plugins {
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
     id 'java'
-    id 'war'
-
 }
 
 
@@ -11,10 +9,6 @@ group 'com.epam.mjc'
 version '1.0-SNAPSHOT'
 
 bootJar {
-    mainClassName = 'com.epam.mjc.Application'
-}
-
-bootWar {
     mainClassName = 'com.epam.mjc.Application'
 }
 
