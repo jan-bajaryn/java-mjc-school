@@ -22,10 +22,5 @@ task appNpmBuild(type: NpmTask) {
     args = ["run", "build"]
 }
 
-
-//task appNpmBuild(type: NpmTask) {
-//    args = ["run", "build"]
-//}
-
 appNpmBuild.dependsOn appNpmInstall
 assemble.dependsOn(appNpmBuild)
