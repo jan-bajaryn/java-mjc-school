@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class TemplateFile {
 
-    @RequestMapping(value = "/{p:^(?!index.html).*$}")
-    public String HomePage() {
-        return "index.html";
+    @RequestMapping(value = {"/{p:^(?!index.html).*$}", "/*/*/**"})
+    public String homePage() {
+        return "/index.html";
     }
 }
