@@ -7,6 +7,7 @@ import LocalStorageHelper from "../../services/LocalStorageHelper";
 import CouponComp from "../../components/CouponComp";
 import axios from "axios";
 import AuthorizationHandleService from "../../services/AuthorizationHandleService";
+import {config} from "../../Configuration";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -38,7 +39,7 @@ class BasketPage extends Component<IProps, IState> {
     }
 
     async buildItem(resultBasket: Map<Certificate, number>, id: number, size: number) {
-        const endpoint = "http://localhost:8080/certificates/" + id;
+        const endpoint = config.urlApi +"certificates/" + id;
         await axios.get(endpoint).then(res => {
             let data = res.data;
             resultBasket.set(Certificate.parse(data), size)
@@ -149,7 +150,7 @@ class BasketPage extends Component<IProps, IState> {
     }
 
     private onFormSubmit() {
-        const endpoint = "http://localhost:8080/orders";
+        const endpoint = config.urlApi +"orders";
 
 
         let retCerts = Array.from(this.state.coupons.entries())

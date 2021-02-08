@@ -10,6 +10,8 @@ import Pagination from "../components/Pagination";
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import '../styles/main-page.css'
 import QueryUrlParamHelper from "../services/QueryUrlParamHelper";
+import {log} from "util";
+import {config} from "../Configuration";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -33,7 +35,9 @@ interface IState {
 
 
 class MainPage extends Component<IProps, IState> {
-
+    private readonly LAST_UPDATE_SORT = 'LAST_UPDATE:desc';
+    private readonly NAME_SORT = 'NAME:asc';
+    private readonly DEFAULT_PAGE_SIZE = 5;
 
     constructor(props: IProps) {
         super(props);
@@ -45,10 +49,10 @@ class MainPage extends Component<IProps, IState> {
             partDescription: '',
             itemCount: LocalStorageHelper.calcItemCount(),
             pageNumber: 1,
-            pageSize: 5,
+            pageSize: this.DEFAULT_PAGE_SIZE,
             totalPageCount: 1000,
             tagNames: [],
-            sort: 'LAST_UPDATE:asc'
+            sort: this.LAST_UPDATE_SORT
         })
         console.log('before build search')
     }
@@ -61,11 +65,12 @@ class MainPage extends Component<IProps, IState> {
         }
         let pageSize = query.get('pageSize');
         if (pageSize) {
-            this.setState({pageSize: Number.parseInt(pageSize)})
+            this.saveSetPageSize(pageSize);
         }
         let pageNumber = query.get('pageNumber');
         if (pageNumber) {
-            this.setState({pageNumber: Number.parseInt(pageNumber)})
+            console.log('pageNumber exists!!!')
+            this.saveSetPageNumber(pageNumber);
         }
         let partName = query.get('partName');
         console.log('partName in buildSearch = ' + partName)
@@ -78,18 +83,53 @@ class MainPage extends Component<IProps, IState> {
         }
         let sort = query.get('sort');
         if (sort) {
-            this.setState({sort: sort})
+            this.saveSetSort(sort);
         }
     }
 
-    componentDidMount() {
-        this.loadResources(this.props.location.search);
+
+    private saveSetSort(sort: string) {
+        if (sort === this.NAME_SORT || sort === this.LAST_UPDATE_SORT) {
+            this.setState({sort: sort})
+        } else {
+            this.setState({sort: this.LAST_UPDATE_SORT})
+        }
+
+    }
+
+    private saveSetPageNumber(pageNumber: string) {
+        let ps = Number.parseInt(pageNumber);
+        console.log('ps = ', ps);
+        if (!isNaN(ps) && ps > 1) {
+            console.log('pageNumber exists and set!!!')
+            this.setState({pageNumber: ps})
+        } else {
+            this.setState({pageNumber: 1})
+        }
+    }
+
+    private saveSetPageSize(pageSize: string) {
+        let ps = Number.parseInt(pageSize);
+        if (!isNaN(ps) && ps > 1) {
+            this.setState({pageSize: ps})
+        } else {
+            this.setState({pageSize: this.DEFAULT_PAGE_SIZE})
+        }
+    }
+
+    componentWillMount() {
         this.buildSearch(this.props.location.search);
+    }
+
+    componentDidMount() {
+        console.log("pageNumber = ", this.state.pageNumber);
+        // this.loadResources(this.props.location.search);
+        this.filter();
     }
 
 
     private loadResources(location: string) {
-        const endpoint = "http://localhost:8080/certificates" + location;
+        const endpoint = config.urlApi + "certificates" + location;
         console.log("loadResources, location = " + location);
 
         axios.get(endpoint).then(res => {
@@ -163,9 +203,9 @@ class MainPage extends Component<IProps, IState> {
                                     <div className={'radio text-left'}>
                                         <div className="form-check">
                                             <input className="form-check-input" type="radio" name="sort"
-                                                   id="exampleRadios1" value="LAST_UPDATE:asc"
-                                                   checked={this.state.sort === 'LAST_UPDATE:asc'}
-                                                   onChange={() => this.setState({sort: 'LAST_UPDATE:asc'})}/>
+                                                   id="exampleRadios1" value="LAST_UPDATE:desc"
+                                                   checked={this.state.sort === this.LAST_UPDATE_SORT}
+                                                   onChange={() => this.setState({sort: this.LAST_UPDATE_SORT})}/>
                                             <label className="form-check-label" htmlFor="exampleRadios1">
                                                 Sort by last update
                                             </label>
@@ -173,8 +213,8 @@ class MainPage extends Component<IProps, IState> {
                                         <div className="form-check">
                                             <input className="form-check-input" type="radio" name="sort"
                                                    id="exampleRadios2" value="NAME:asc"
-                                                   checked={this.state.sort === 'NAME:asc'}
-                                                   onChange={() => this.setState({sort: 'NAME:asc'})}/>
+                                                   checked={this.state.sort === this.NAME_SORT}
+                                                   onChange={() => this.setState({sort: this.NAME_SORT})}/>
                                             <label className="form-check-label" htmlFor="exampleRadios2">
                                                 Sort by name
                                             </label>
@@ -221,7 +261,7 @@ class MainPage extends Component<IProps, IState> {
                                                                   tagNames: [value],
                                                                   partName: '',
                                                                   partDescription: '',
-                                                                  sort: 'LAST_UPDATE:asc',
+                                                                  sort: this.LAST_UPDATE_SORT,
                                                                   pageNumber: 1
                                                               },
                                                               () => this.filter())}>

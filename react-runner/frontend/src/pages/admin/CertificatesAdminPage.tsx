@@ -13,6 +13,7 @@ import Parser from "../../services/Parser";
 import CreateOrEditModal from "../../components/modals/CreateOrEditModal";
 import ViewModal from "../../components/modals/ViewModal";
 import QueryUrlParamHelper from "../../services/QueryUrlParamHelper";
+import {config} from "../../Configuration";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -55,6 +56,13 @@ const MAX_CERTIFICATE_NAME_LENGTH = 255;
 
 class CertificatesAdminPage extends Component<IProps, IState> {
 
+    private readonly DEFAULT_PAGE_SIZE = 5;
+
+
+    private readonly DEFAULT_SORT = 'LAST_UPDATE:desc';
+    private readonly LAST_UPDATE_NAME = 'LAST_UPDATE:';
+    private readonly NAME_NAME = 'NAME:';
+
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -68,10 +76,10 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             partName: '',
             partDescription: '',
             pageNumber: 1,
-            pageSize: 5,
+            pageSize: this.DEFAULT_PAGE_SIZE,
             totalPageCount: 1000,
             tagNames: [],
-            sort: 'LAST_UPDATE:desc',
+            sort: this.DEFAULT_SORT,
             filterString: [],
             showCreateOrEditModal: false,
             showViewModal: false,
@@ -104,14 +112,14 @@ class CertificatesAdminPage extends Component<IProps, IState> {
             }
         },
         onSort: (field, order) => {
-            this.setState({sort: 'LAST_UPDATE:' + order}, () => this.filter())
+            this.setState({sort: this.LAST_UPDATE_NAME + order}, () => this.filter())
         }
     }, {
         dataField: '_name',
         text: 'Name',
         sort: true,
         onSort: (field, order) => {
-            this.setState({sort: 'NAME:' + order}, () => this.filter())
+            this.setState({sort: this.NAME_NAME + order}, () => this.filter())
         }
     }, {
         dataField: '_tags',
@@ -162,10 +170,14 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     }];
 
 
+    componentWillMount() {
+        this.buildSearch(this.props.location.search);
+    }
+
     componentDidMount() {
         this.checkForAdmin();
-        this.loadResources(this.props.location.search);
-        this.buildSearch(this.props.location.search);
+        // this.loadResources(this.props.location.search);
+        this.filter();
     }
 
 
@@ -198,11 +210,11 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         }
         let pageSize = query.get('pageSize');
         if (pageSize) {
-            this.setState({pageSize: Number.parseInt(pageSize)})
+            this.saveSetPageSize(pageSize);
         }
         let pageNumber = query.get('pageNumber');
         if (pageNumber) {
-            this.setState({pageNumber: Number.parseInt(pageNumber)})
+            this.saveSetPageNumber(pageNumber);
         }
         let partName = query.get('partName');
         console.log('partName in buildSearch = ' + partName)
@@ -215,12 +227,39 @@ class CertificatesAdminPage extends Component<IProps, IState> {
         }
         let sort = query.get('sort');
         if (sort) {
+            this.saveSetSort(sort);
+        }
+    }
+
+
+    private saveSetSort(sort: string) {
+        if (sort.match(new RegExp('^(NAME:|LAST_UPDATE:)(asc|desc)$'))) {
             this.setState({sort: sort})
+        } else {
+            this.setState({sort: this.DEFAULT_SORT})
+        }
+
+    }
+    private saveSetPageNumber(pageNumber: string) {
+        let ps = Number.parseInt(pageNumber);
+        if (!isNaN(ps) && ps > 1) {
+            this.setState({pageNumber: ps})
+        } else {
+            this.setState({pageNumber: 1})
+        }
+    }
+
+    private saveSetPageSize(pageSize: string) {
+        let ps = Number.parseInt(pageSize);
+        if (!isNaN(ps) && ps > 1) {
+            this.setState({pageSize: ps})
+        } else {
+            this.setState({pageSize: this.DEFAULT_PAGE_SIZE})
         }
     }
 
     private loadResources(location: string) {
-        const endpoint = "http://localhost:8080/certificates" + location;
+        const endpoint = config.urlApi +"certificates" + location;
         console.log("loadResources, location = " + location);
 
         axios.get(endpoint).then(res => {
@@ -415,7 +454,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     private handleDeleteItem(event: React.MouseEvent<HTMLButtonElement>) {
         if (this.state.currentItem) {
 
-            const endpoint = "http://localhost:8080/certificates/" + this.state.currentItem.id;
+            const endpoint = config.urlApi +"certificates/" + this.state.currentItem.id;
 
             axios.delete(endpoint).then(() => {
                 this.filter();
@@ -475,7 +514,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
     private edit(event: React.MouseEvent<HTMLButtonElement>) {
         if (this.state.currentItem) {
 
-            const endpoint = 'http://localhost:8080/certificates/' + this.state.currentItem.id;
+            const endpoint = config.urlApi +'certificates/' + this.state.currentItem.id;
             let data = {
                 name: this.state.editName,
                 description: this.state.editDescription,
@@ -510,7 +549,7 @@ class CertificatesAdminPage extends Component<IProps, IState> {
 
     private create(event: React.MouseEvent<HTMLButtonElement>) {
 
-        const endpoint = 'http://localhost:8080/certificates';
+        const endpoint = config.urlApi +'certificates';
         let data = {
             name: this.state.editName,
             description: this.state.editDescription,

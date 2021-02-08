@@ -1,5 +1,6 @@
 import axios from "axios";
 import LocalStorageHelper from "./LocalStorageHelper";
+import {config} from "../Configuration";
 
 export default class AuthorizationHandleService {
     static handleTokenExpired(error, successCallback, badCallback) {
@@ -15,7 +16,7 @@ export default class AuthorizationHandleService {
         console.log("refresh token to use = " + refresh)
         if (refresh) {
             console.log("enter refresh procedure");
-            const endpoint = "http://localhost:9000/oauth/token";
+            const endpoint = config.urlAuth + "oauth/token";
             const headers = {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Basic Y2xpZW50aWQ6cGFzc3dvcmQ='
@@ -32,7 +33,7 @@ export default class AuthorizationHandleService {
             ).then(res => {
                 console.log("refresh procedure success")
                 LocalStorageHelper.login(
-                    res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username,res.data.name
+                    res.data.access_token, res.data.refresh_token, res.data.role, res.data.id, res.data.username, res.data.name
                 );
                 successCallback();
             }).catch((error) => {

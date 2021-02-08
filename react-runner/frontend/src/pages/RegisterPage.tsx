@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import AuthorizationHandleService from "../services/AuthorizationHandleService";
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import RefExtractor from "../services/RefExtractor";
+import {config} from "../Configuration";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -43,7 +44,7 @@ class RegisterPage extends Component<IProps, IState> {
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         e.preventDefault();
-        const endpoint = "http://localhost:8080/users";
+        const endpoint = config.urlApi + "users";
 
         let username: string = RefExtractor.exctractRef(this.username);
         let password: string = RefExtractor.exctractRef(this.password);

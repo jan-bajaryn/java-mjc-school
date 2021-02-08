@@ -28,4 +28,4 @@ task copyWebApp(type: Copy) {
 }
 
 bootJar.dependsOn(copyWebApp)
-//compileJava.dependsOn ":frontend:build"
+compileJava.dependsOn ":frontend:build"

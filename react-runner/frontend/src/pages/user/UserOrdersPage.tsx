@@ -9,6 +9,7 @@ import LocalStorageHelper from "../../services/LocalStorageHelper";
 import Parser from "../../services/Parser";
 import QueryUrlParamHelper from "../../services/QueryUrlParamHelper";
 import Pagination from "../../components/Pagination";
+import {config} from "../../Configuration";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -22,6 +23,8 @@ interface IState {
 
 class UserOrdersPage extends Component<IProps, IState> {
 
+    private readonly DEFAULT_PAGE_SIZE = 5;
+
 
     constructor(props) {
         super(props);
@@ -29,13 +32,18 @@ class UserOrdersPage extends Component<IProps, IState> {
             orders: [],
             totalPageCount: 0,
             pageNumber: 1,
-            pageSize: 5,
+            pageSize: this.DEFAULT_PAGE_SIZE,
         }
     }
 
-    componentDidMount() {
-        this.loadResource(this.props.location.search);
+    componentWillMount() {
         this.buildSearch(this.props.location.search);
+    }
+
+    componentDidMount() {
+        this.checkForLogin();
+        // this.loadResource(this.props.location.search);
+        this.filter();
     }
 
     private columns = [{
@@ -101,6 +109,24 @@ class UserOrdersPage extends Component<IProps, IState> {
         }
     };
 
+    private saveSetPageNumber(pageNumber: string) {
+        let ps = Number.parseInt(pageNumber);
+        if (!isNaN(ps) && ps > 1) {
+            this.setState({pageNumber: ps})
+        } else {
+            this.setState({pageNumber: 1})
+        }
+    }
+
+    private saveSetPageSize(pageSize: string) {
+        let ps = Number.parseInt(pageSize);
+        if (!isNaN(ps) && ps > 1) {
+            this.setState({pageSize: ps})
+        } else {
+            this.setState({pageSize: this.DEFAULT_PAGE_SIZE})
+        }
+    }
+
     render() {
         return (
             <div>
@@ -165,11 +191,17 @@ class UserOrdersPage extends Component<IProps, IState> {
         const query = new URLSearchParams(location);
         let pageSize = query.get('pageSize');
         if (pageSize) {
-            this.setState({pageSize: Number.parseInt(pageSize)})
+            this.saveSetPageSize(pageSize);
         }
         let pageNumber = query.get('pageNumber');
         if (pageNumber) {
-            this.setState({pageNumber: Number.parseInt(pageNumber)})
+            this.saveSetPageNumber(pageNumber);
+        }
+    }
+
+    private checkForLogin() {
+        if (!LocalStorageHelper.isLogged()) {
+            this.props.history.push('/login');
         }
     }
 
@@ -188,7 +220,7 @@ class UserOrdersPage extends Component<IProps, IState> {
     private loadAdmin(search: any) {
         console.log('loadAdmin')
 
-        const endpoint = "http://localhost:8080/orders?userId=" + LocalStorageHelper.getUserId() + '&' + search;
+        const endpoint = config.urlApi +"orders?userId=" + LocalStorageHelper.getUserId() + '&' + search;
 
         axios.get(endpoint).then(res => {
             let data = res.data.items;
@@ -209,7 +241,7 @@ class UserOrdersPage extends Component<IProps, IState> {
     }
 
     private loadUser(search: any) {
-        const endpoint = "http://localhost:8080/orders?" + search;
+        const endpoint = config.urlApi +"orders?" + search;
 
         axios.get(endpoint).then(res => {
             let data = res.data.items;

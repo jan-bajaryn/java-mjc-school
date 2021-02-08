@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import 'bootstrap/dist/css/bootstrap.css';
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import RefExtractor from "../services/RefExtractor";
+import {config} from "../Configuration";
 
 interface IProps extends RouteComponentProps<any> {
 }
@@ -35,7 +36,7 @@ class LoginPage extends Component<IProps, IState> {
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         e.preventDefault();
-        const endpoint = "http://localhost:9000/oauth/token";
+        const endpoint = config.urlAuth + "oauth/token";
 
         let username: string = RefExtractor.exctractRef(this.username);
         let password: string = RefExtractor.exctractRef(this.password);
