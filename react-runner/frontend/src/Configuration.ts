@@ -1,6 +1,6 @@
 const prod = {
-    urlApi: 'http://localhost:8081/',
-    urlAuth: 'http://localhost:9001/'
+    urlApi: 'http://ec2-100-25-21-39.compute-1.amazonaws.com:8080/',
+    urlAuth: 'http://ec2-100-25-21-39.compute-1.amazonaws.com:9000/'
 }
 const dev = {
     urlApi: 'http://localhost:8080/',

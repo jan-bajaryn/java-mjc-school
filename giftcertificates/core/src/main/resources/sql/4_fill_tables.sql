@@ -19,9 +19,9 @@ VALUES (1, 1),
        (5, 2);
 
 INSERT INTO usr(username, password, role)
-VALUES ('Antuan', '$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK', 1),
-       ('Valeri', '$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK', 0),
-       ('Kabal', '$2a$10$Ak.z4i8yWYgqZYF3LewuFehjmruqJC6xbuX2WL2h.JZs/48XX3nrK', 0);
+VALUES ('Antuan', '$2a$10$PiBQxAyKVJUgFkJ46tc6Fu10wpLIhM80GkrgNgbuXjM8lxzRJVULm', 1),
+       ('Valeri', '$2a$10$PiBQxAyKVJUgFkJ46tc6Fu10wpLIhM80GkrgNgbuXjM8lxzRJVULm', 0),
+       ('Kabal', '$2a$10$PiBQxAyKVJUgFkJ46tc6Fu10wpLIhM80GkrgNgbuXjM8lxzRJVULm', 0);
 
 
 INSERT INTO orders(createdate, price, user_id)
